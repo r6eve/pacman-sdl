@@ -1,6 +1,6 @@
+#include "food.h"
 #include "def_global.h"
 #include "enemy.h"
-#include "food.h"
 #include "image_manager.h"
 #include "main_chara.h"
 #include "map.h"

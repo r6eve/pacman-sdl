@@ -1,5 +1,5 @@
-#include "def_global.h"
 #include "main_chara.h"
+#include "def_global.h"
 #include "image_manager.h"
 #include "input.h"
 #include "map.h"
@@ -45,14 +45,17 @@ void update_main_chara(int index) {
 
 void draw_main_chara() {
   SDL_Surface *p_surface = get_img("pacman");
-  SDL_Rect src = {BLOCK_SIZE * Main_chara.dir, BLOCK_SIZE * Main_chara.anime_count, BLOCK_SIZE, BLOCK_SIZE};
+  SDL_Rect src = {BLOCK_SIZE * Main_chara.dir,
+                  BLOCK_SIZE * Main_chara.anime_count, BLOCK_SIZE, BLOCK_SIZE};
   SDL_Rect dst;
   dst.x = Main_chara.pos_x;
   dst.y = Main_chara.pos_y;
   SDL_BlitSurface(p_surface, &src, Screen, &dst);
   if (Game_mode == GAME_MODE_BATTLE) {
     SDL_Surface *p_rival = get_img("rival");
-    SDL_Rect src_rival = {BLOCK_SIZE * Rival_chara.dir, BLOCK_SIZE * Rival_chara.anime_count, BLOCK_SIZE, BLOCK_SIZE};
+    SDL_Rect src_rival = {BLOCK_SIZE * Rival_chara.dir,
+                          BLOCK_SIZE * Rival_chara.anime_count, BLOCK_SIZE,
+                          BLOCK_SIZE};
     SDL_Rect dst_rival;
     dst_rival.x = Rival_chara.pos_x;
     dst_rival.y = Rival_chara.pos_y;
@@ -133,7 +136,7 @@ void mv_main_chara() {
     int dst_pos_x = Rival_chara.nextblock_x * BLOCK_SIZE;
     int dst_pos_y = Rival_chara.nextblock_y * BLOCK_SIZE;
 
-    if ((Rival_chara.pos_x==dst_pos_x) && (Rival_chara.pos_y==dst_pos_y)) {
+    if ((Rival_chara.pos_x == dst_pos_x) && (Rival_chara.pos_y == dst_pos_y)) {
       is_mving = 0;
     } else {
       is_mving = 1;
@@ -209,34 +212,18 @@ void add_rival_chara_pos(int x, int y) {
   Rival_chara.pos_y += y;
 }
 
-int get_main_chara_pos_x() {
-  return Main_chara.pos_x;
-}
+int get_main_chara_pos_x() { return Main_chara.pos_x; }
 
-int get_rival_chara_pos_x() {
-  return Rival_chara.pos_x;
-}
+int get_rival_chara_pos_x() { return Rival_chara.pos_x; }
 
-int get_main_chara_pos_y() {
-  return Main_chara.pos_y;
-}
+int get_main_chara_pos_y() { return Main_chara.pos_y; }
 
-int get_rival_chara_pos_y() {
-  return Rival_chara.pos_y;
-}
+int get_rival_chara_pos_y() { return Rival_chara.pos_y; }
 
-int get_main_chara_block_x() {
-  return Main_chara.block_x;
-}
+int get_main_chara_block_x() { return Main_chara.block_x; }
 
-int get_rival_chara_block_x() {
-  return Rival_chara.block_x;
-}
+int get_rival_chara_block_x() { return Rival_chara.block_x; }
 
-int get_main_chara_block_y() {
-  return Main_chara.block_y;
-}
+int get_main_chara_block_y() { return Main_chara.block_y; }
 
-int get_rival_chara_block_y() {
-  return Rival_chara.block_y;
-}
+int get_rival_chara_block_y() { return Rival_chara.block_y; }

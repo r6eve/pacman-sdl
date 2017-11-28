@@ -9,10 +9,8 @@
 static int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
 
 void init_map() {
-  /*
-   * 0: can move, 1: cannot move, 2: enemy house
-   * 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
-   */
+  // 0: can move, 1: cannot move, 2: enemy house
+  // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
   int block_src[NUM_BLOCK_Y][NUM_BLOCK_X] = {
   // 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0
@@ -51,7 +49,7 @@ void init_map() {
     Block[18][14] = 8;
   }
 
-  /* 1:enemy house, 0:cannot move */
+  // 1: enemy house, 0: cannot move
   int way_to_home[NUM_BLOCK_Y][NUM_BLOCK_X] = {
    // 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, //99
@@ -87,9 +85,7 @@ void init_map() {
   }
 }
 
-int check_map_state(int x, int y) {
-  return Block[y][x];
-}
+int check_map_state(int x, int y) { return Block[y][x]; }
 
 void draw_map() {
   Uint32 black = 0x00000000;
@@ -97,13 +93,13 @@ void draw_map() {
   SDL_FillRect(Screen, &dst, black);
 
   SDL_Surface *p_surface = NULL;
-  if ((Game_level%4) == 1) {
+  if ((Game_level % 4) == 1) {
     p_surface = get_img("bg");
-  } else if ((Game_level%4) == 2) {
+  } else if ((Game_level % 4) == 2) {
     p_surface = get_img("bg_red");
-  } else if ((Game_level%4) == 3) {
+  } else if ((Game_level % 4) == 3) {
     p_surface = get_img("bg_green");
-  } else if ((Game_level%4) == 0) {
+  } else if ((Game_level % 4) == 0) {
     p_surface = get_img("bg_blue");
   }
 
@@ -134,16 +130,17 @@ void draw_map() {
     for (int y = 0; y < NUM_BLOCK_Y - 1; ++y) {
       for (int x = 0; x < NUM_BLOCK_X; ++x) {
         int block = Block[y][x];
-        int under_block = Block[y+1][x];
+        int under_block = Block[y + 1][x];
         if ((under_block == 2) || (under_block == 3) || (under_block == 4) ||
-            (under_block == 5) || (under_block == 6) || (under_block == 7) || (under_block == 8)) {
+            (under_block == 5) || (under_block == 6) || (under_block == 7) ||
+            (under_block == 8)) {
           under_block = 0;
         }
 
         if ((block == 1) && (under_block == 0)) {
           SDL_Rect dst;
-          dst.x = BLOCK_SIZE*x;
-          dst.y = BLOCK_SIZE*y + BLOCK_SIZE/2;
+          dst.x = BLOCK_SIZE * x;
+          dst.y = BLOCK_SIZE * y + BLOCK_SIZE / 2;
           SDL_BlitSurface(p_surface, &src, Screen, &dst);
         }
       }

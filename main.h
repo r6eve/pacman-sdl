@@ -22,4 +22,4 @@ void end_music();
 void draw_translucence();
 int get_distance(int x1, int y1, int x2, int y2);
 
-#endif /* MAIN_H */
+#endif

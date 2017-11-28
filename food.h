@@ -6,4 +6,4 @@ void update_food();
 void draw_food();
 void check_food_state();
 
-#endif /* FOOD_H */
+#endif

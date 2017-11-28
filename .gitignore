@@ -1,2 +1,5 @@
 pacman-sdl
 *.o
+GPATH
+GRTAGS
+GTAGS

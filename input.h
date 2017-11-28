@@ -5,4 +5,4 @@ void init_joystick();
 void update_input();
 void end_joystick();
 
-#endif /* INPUT_H */
+#endif

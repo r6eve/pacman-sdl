@@ -13,4 +13,4 @@ SDL_Surface *get_img(const char *name);
 void del_img(const char *name);
 void del_all_img();
 
-#endif /* IMAGE_MANAGER_H */
+#endif

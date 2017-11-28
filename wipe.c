@@ -1,5 +1,5 @@
-#include "def_global.h"
 #include "wipe.h"
+#include "def_global.h"
 
 static int Wipe_variation;
 static int Wipe_count;
@@ -32,7 +32,7 @@ void draw_wipe(int end_x) {
   dst.x = 0;
   dst.w = end_x;
   dst.h = Wipe_count;
-  for (dst.y = 0; dst.y < SCREEN_HEIGHT; dst.y += (SCREEN_HEIGHT/10)) {
+  for (dst.y = 0; dst.y < SCREEN_HEIGHT; dst.y += (SCREEN_HEIGHT / 10)) {
     SDL_FillRect(Screen, &dst, black);
   }
 }

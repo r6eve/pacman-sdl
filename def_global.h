@@ -20,8 +20,8 @@ enum {
   PRESS_KEY_DOWN,
   PRESS_KEY_LEFT,
   PRESS_KEY_RIGHT,
-  PRESS_KEY_BUTTON_0, // `x` key
-  PRESS_KEY_BUTTON_1, // `c` key
+  PRESS_KEY_BUTTON_0,  // `x` key
+  PRESS_KEY_BUTTON_1,  // `c` key
   PRESS_KEY_BUTTON_2,
   PRESS_KEY_BUTTON_3,
   PRESS_KEY_BUTTON_4,
@@ -32,7 +32,7 @@ enum {
   PRESS_KEY_BUTTON_9,
   PRESS_KEY_BUTTON_10,
   PRESS_KEY_BUTTON_11,
-  PRESS_KEY_BUTTON_B, // Debug key: Enemys back home.
+  PRESS_KEY_BUTTON_B,  // Debug key: Enemys back home.
   PRESS_KEY_SPACE,
   NUM_PRESS_KEY,
   GAME_STATE_TITLE = 0,
@@ -81,4 +81,4 @@ GLOBAL Mix_Chunk *Se[4];
 GLOBAL int Num_player;
 GLOBAL int Choice_hit;
 
-#endif /* DEF_GLOBAL_H */
+#endif

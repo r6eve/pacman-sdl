@@ -1,6 +1,6 @@
+#include "input.h"
 #include <SDL_image.h>
 #include "def_global.h"
-#include "input.h"
 
 #define DEBUG
 
@@ -15,7 +15,7 @@ void init_joystick() {
 }
 
 void update_input() {
-  int new_press_key[2][NUM_PRESS_KEY]; // 1:press, 0:not
+  int new_press_key[2][NUM_PRESS_KEY];  // 1: press, 0: not
   for (int i = 0; i < 2; ++i) {
     for (int j = 0; j < NUM_PRESS_KEY; ++j) {
       new_press_key[i][j] = 0;

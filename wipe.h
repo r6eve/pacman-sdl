@@ -6,4 +6,4 @@ void set_wipe_out();
 int update_wipe();
 void draw_wipe(int end_x);
 
-#endif /* WIPE_H */
+#endif

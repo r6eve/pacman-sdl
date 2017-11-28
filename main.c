@@ -1,5 +1,6 @@
 #define MAIN
 
+#include "main.h"
 #include <SDL_image.h>
 #include <math.h>
 #include <stdio.h>
@@ -12,18 +13,15 @@
 #include "image_manager.h"
 #include "input.h"
 #include "main_chara.h"
-#include "main.h"
 #include "map.h"
 #include "wipe.h"
 
 // #define DEBUG
 
 static Kanji_Font *Font[2];
-enum {
-  FONT_SIZE_16,
-  FONT_SIZE_24,
-  NUM_FONT
-};
+
+enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
+
 static int Blink_count;
 
 int main() {
@@ -58,7 +56,8 @@ int init_sdl() {
     return 0;
   }
   SDL_WM_SetCaption("pacman-sdl", NULL);
-  Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+  Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
+                            SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
   if (!Screen) {
     fprintf(stderr, "cannot initialize screen. : %s\n", SDL_GetError());
     SDL_Quit();
@@ -134,11 +133,13 @@ int init_game() {
     return 0;
   }
 
-  if (!(Music[0] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3"))) {
+  if (!(Music[0] =
+            Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3"))) {
     fprintf(stderr, "cannot initialize music. : %s\n", Mix_GetError());
-    exit(EXIT_FAILURE); // TODO: Call end() instead of exit().
+    exit(EXIT_FAILURE);  // TODO: Call end() instead of exit().
   }
-  if (!(Music[1] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3"))) {
+  if (!(Music[1] =
+            Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3"))) {
     fprintf(stderr, "cannot initialize music. : %s\n", Mix_GetError());
     exit(EXIT_FAILURE);
   }
@@ -174,27 +175,27 @@ void main_loop() {
   for (;;) {
     update_input();
     switch (Game_state) {
-    case GAME_STATE_TITLE:
-      title();
-      break;
-    case GAME_STATE_START:
-      game_start();
-      break;
-    case GAME_STATE_GAME:
-      play_game();
-      break;
-    case GAME_STATE_CLEAR:
-      game_clear();
-      break;
-    case GAME_STATE_MISS:
-      game_miss();
-      break;
-    case GAME_STATE_OVER:
-      game_over();
-      break;
-    case GAME_STATE_PAUSE:
-      game_pause();
-      break;
+      case GAME_STATE_TITLE:
+        title();
+        break;
+      case GAME_STATE_START:
+        game_start();
+        break;
+      case GAME_STATE_GAME:
+        play_game();
+        break;
+      case GAME_STATE_CLEAR:
+        game_clear();
+        break;
+      case GAME_STATE_MISS:
+        game_miss();
+        break;
+      case GAME_STATE_OVER:
+        game_over();
+        break;
+      case GAME_STATE_PAUSE:
+        game_pause();
+        break;
     }
     if (!poll_event()) {
       return;
@@ -219,121 +220,130 @@ void title() {
 
   // TODO: case default:
   switch (Game_count) {
-  case 0:
-    set_wipe_in();
-    draw_wipe(SCREEN_WIDTH);
-    ++Game_count;
-    break;
-  case 1:
-    Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK, "P a c - M a n");
-    draw_wipe(SCREEN_WIDTH);
-    if (update_wipe()) {
-      ++Game_count;
-    }
-    break;
-  case 2:
-    Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK, "P a c - M a n");
-    if (Blink_count < 30) {
-      Kanji_PutText(Screen, 205, 300, Font[FONT_SIZE_16], BLACK, "P r e s s  S p a c e  K e y");
-      ++Blink_count;
-    } else if (Blink_count < 60) {
-      ++Blink_count;
-    } else {
-      Blink_count = 0;
-    }
-
-    if (Edge_key[0][PRESS_KEY_BUTTON_0] || Edge_key[1][PRESS_KEY_BUTTON_0] || Edge_key[0][PRESS_KEY_SPACE]) {
-      ++Game_count;
-      Blink_count = 0;
-    }
-    break;
-  case 3:
-    Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK, "P a c - M a n");
-    if (!Press_key[0][PRESS_KEY_BUTTON_0] && !Press_key[1][PRESS_KEY_BUTTON_0] && !Press_key[0][PRESS_KEY_SPACE]) {
-      ++Game_count;
-    }
-    break;
-  case 4:
-    Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK, "P a c - M a n");
-
-    if (Game_mode == GAME_MODE_1P) {
-      dst_select.x = 250;
-      dst_select.y = 300;
-      dst_select.w = 96;
-      dst_select.h = 16;
-      SDL_FillRect(Screen, &dst_select, black);
-      Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
-      Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
-    } else if (Game_mode == GAME_MODE_BATTLE) {
-      dst_select.x = 250;
-      dst_select.y = 350;
-      dst_select.w = 96;
-      dst_select.h = 16;
-      SDL_FillRect(Screen, &dst_select, black);
-      Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
-      Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
-    }
-
-    if (Press_key[0][PRESS_KEY_BUTTON_0] || Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
-      set_wipe_out();
+    case 0:
+      set_wipe_in();
       draw_wipe(SCREEN_WIDTH);
       ++Game_count;
-    }
-
-    if (Press_key[0][PRESS_KEY_BUTTON_2] || Press_key[1][PRESS_KEY_BUTTON_2]) {
-      Game_count -= 2;
-      Game_mode = GAME_MODE_1P;
-    }
-
-    if (Press_key[0][PRESS_KEY_DOWN] || Press_key[1][PRESS_KEY_DOWN]) {
-      Game_mode = GAME_MODE_BATTLE;
-    } else if (Press_key[0][PRESS_KEY_UP] || Press_key[1][PRESS_KEY_UP]) {
-      Game_mode = GAME_MODE_1P;
-    }
-    break;
-  case 5:
-    if (Game_mode == GAME_MODE_1P) {
-      dst_select.x = 250;
-      dst_select.y = 300;
-      dst_select.w = 96;
-      dst_select.h = 16;
-      SDL_FillRect(Screen, &dst_select, black);
-      Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
-      Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
-    } else if (Game_mode == GAME_MODE_BATTLE) {
-      dst_select.x = 250;
-      dst_select.y = 350;
-      dst_select.w = 96;
-      dst_select.h = 16;
-      SDL_FillRect(Screen, &dst_select, black);
-      Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
-      Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
-    }
-
-    draw_wipe(SCREEN_WIDTH);
-
-    if (update_wipe()) {
-      init_map();
-      init_food();
-      init_main_chara();
-      init_enemy();
-
-      Game_count = 0;
-      Game_state = GAME_STATE_START;
-      Game_level = 1;
-      Main_chara_life = 2;
-
-      if (Game_mode == GAME_MODE_BATTLE) {
-        Num_player = 2;
+      break;
+    case 1:
+      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
+                    "P a c - M a n");
+      draw_wipe(SCREEN_WIDTH);
+      if (update_wipe()) {
+        ++Game_count;
+      }
+      break;
+    case 2:
+      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
+                    "P a c - M a n");
+      if (Blink_count < 30) {
+        Kanji_PutText(Screen, 205, 300, Font[FONT_SIZE_16], BLACK,
+                      "P r e s s  S p a c e  K e y");
+        ++Blink_count;
+      } else if (Blink_count < 60) {
+        ++Blink_count;
+      } else {
+        Blink_count = 0;
       }
 
-      for (int i = 0; i < Num_player; ++i) {
-        Now_score[i] = 0;
+      if (Edge_key[0][PRESS_KEY_BUTTON_0] || Edge_key[1][PRESS_KEY_BUTTON_0] ||
+          Edge_key[0][PRESS_KEY_SPACE]) {
+        ++Game_count;
+        Blink_count = 0;
+      }
+      break;
+    case 3:
+      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
+                    "P a c - M a n");
+      if (!Press_key[0][PRESS_KEY_BUTTON_0] &&
+          !Press_key[1][PRESS_KEY_BUTTON_0] && !Press_key[0][PRESS_KEY_SPACE]) {
+        ++Game_count;
+      }
+      break;
+    case 4:
+      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
+                    "P a c - M a n");
+
+      if (Game_mode == GAME_MODE_1P) {
+        dst_select.x = 250;
+        dst_select.y = 300;
+        dst_select.w = 96;
+        dst_select.h = 16;
+        SDL_FillRect(Screen, &dst_select, black);
+        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
+        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
+      } else if (Game_mode == GAME_MODE_BATTLE) {
+        dst_select.x = 250;
+        dst_select.y = 350;
+        dst_select.w = 96;
+        dst_select.h = 16;
+        SDL_FillRect(Screen, &dst_select, black);
+        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
+        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
       }
 
-      srand((unsigned int)time(NULL));
-    }
-    break;
+      if (Press_key[0][PRESS_KEY_BUTTON_0] ||
+          Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
+        set_wipe_out();
+        draw_wipe(SCREEN_WIDTH);
+        ++Game_count;
+      }
+
+      if (Press_key[0][PRESS_KEY_BUTTON_2] ||
+          Press_key[1][PRESS_KEY_BUTTON_2]) {
+        Game_count -= 2;
+        Game_mode = GAME_MODE_1P;
+      }
+
+      if (Press_key[0][PRESS_KEY_DOWN] || Press_key[1][PRESS_KEY_DOWN]) {
+        Game_mode = GAME_MODE_BATTLE;
+      } else if (Press_key[0][PRESS_KEY_UP] || Press_key[1][PRESS_KEY_UP]) {
+        Game_mode = GAME_MODE_1P;
+      }
+      break;
+    case 5:
+      if (Game_mode == GAME_MODE_1P) {
+        dst_select.x = 250;
+        dst_select.y = 300;
+        dst_select.w = 96;
+        dst_select.h = 16;
+        SDL_FillRect(Screen, &dst_select, black);
+        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
+        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
+      } else if (Game_mode == GAME_MODE_BATTLE) {
+        dst_select.x = 250;
+        dst_select.y = 350;
+        dst_select.w = 96;
+        dst_select.h = 16;
+        SDL_FillRect(Screen, &dst_select, black);
+        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
+        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+      }
+
+      draw_wipe(SCREEN_WIDTH);
+
+      if (update_wipe()) {
+        init_map();
+        init_food();
+        init_main_chara();
+        init_enemy();
+
+        Game_count = 0;
+        Game_state = GAME_STATE_START;
+        Game_level = 1;
+        Main_chara_life = 2;
+
+        if (Game_mode == GAME_MODE_BATTLE) {
+          Num_player = 2;
+        }
+
+        for (int i = 0; i < Num_player; ++i) {
+          Now_score[i] = 0;
+        }
+
+        srand((unsigned int)time(NULL));
+      }
+      break;
   }
 }
 
@@ -344,26 +354,27 @@ void game_start() {
   draw_main_chara();
   draw_score();
   switch (Game_count) {
-  case 0:
-    if ((Main_chara_life == 2) && (Rival_chara_life == 2)) {
-      Mix_PlayMusic(Music[2], 0);
-    }
-    set_wipe_in();
-    draw_wipe(OFFSET_X);
-    ++Game_count;
-    break;
-  case 1:
-    draw_wipe(OFFSET_X);
-    if (update_wipe()) {
+    case 0:
+      if ((Main_chara_life == 2) && (Rival_chara_life == 2)) {
+        Mix_PlayMusic(Music[2], 0);
+      }
+      set_wipe_in();
+      draw_wipe(OFFSET_X);
       ++Game_count;
-    }
-    break;
-  default:
-    ++Game_count;
-    break;
+      break;
+    case 1:
+      draw_wipe(OFFSET_X);
+      if (update_wipe()) {
+        ++Game_count;
+      }
+      break;
+    default:
+      ++Game_count;
+      break;
   }
   if (Game_count < 130) {
-    Kanji_PutText(Screen, 220, 200, Font[FONT_SIZE_24], RED, "S t a g e %d", Game_level);
+    Kanji_PutText(Screen, 220, 200, Font[FONT_SIZE_24], RED, "S t a g e %d",
+                  Game_level);
   } else if (Game_count < 200) {
     Kanji_PutText(Screen, 220, 200, Font[FONT_SIZE_24], RED, "S t a r t");
   }
@@ -474,7 +485,7 @@ void game_miss() {
           Game_state = GAME_STATE_OVER;
         }
       }
-    } else if (Choice_hit == 1) { // TODO: else?
+    } else if (Choice_hit == 1) {  // TODO: else?
       add_rival_chara_pos(0, -1);
       if (update_wipe()) {
         --Rival_chara_life;
@@ -501,94 +512,108 @@ void game_over() {
   if (Game_mode == GAME_MODE_1P) {
     // TODO: case default:
     switch (Game_count) {
-    case 0:
-      Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED, "G a m e O v e r");
-      set_wipe_in();
-      draw_wipe(SCREEN_WIDTH);
-      ++Game_count;
-      break;
-    case 1:
-      Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED, "G a m e O v e r");
-      draw_wipe(SCREEN_WIDTH);
-      if (update_wipe()) {
-        ++Game_count;
-      }
-      break;
-    case 2:
-      Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED, "G a m e O v e r");
-      Kanji_PutText(Screen, 180, 300, Font[FONT_SIZE_24], BLACK, "Y o u r  S c o r e :  %d", Now_score[0]);
-
-      if (Blink_count < 30) {
-        Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK, "P r e s s  K e y");
-        ++Blink_count;
-      } else if (Blink_count < 60) {
-        ++Blink_count;
-      } else {
-        Blink_count = 0;
-      }
-
-      if (Press_key[0][PRESS_KEY_BUTTON_0] || Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
-        ++Game_count;
-        set_wipe_out();
+      case 0:
+        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                      "G a m e O v e r");
+        set_wipe_in();
         draw_wipe(SCREEN_WIDTH);
-      }
-      break;
-    case 3:
-      draw_wipe(SCREEN_WIDTH);
-      if (update_wipe()) {
-        Blink_count = 0;
-        Game_count = 0;
-        Game_state = GAME_STATE_TITLE;
-      }
+        ++Game_count;
+        break;
+      case 1:
+        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                      "G a m e O v e r");
+        draw_wipe(SCREEN_WIDTH);
+        if (update_wipe()) {
+          ++Game_count;
+        }
+        break;
+      case 2:
+        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                      "G a m e O v e r");
+        Kanji_PutText(Screen, 180, 300, Font[FONT_SIZE_24], BLACK,
+                      "Y o u r  S c o r e :  %d", Now_score[0]);
+
+        if (Blink_count < 30) {
+          Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK,
+                        "P r e s s  K e y");
+          ++Blink_count;
+        } else if (Blink_count < 60) {
+          ++Blink_count;
+        } else {
+          Blink_count = 0;
+        }
+
+        if (Press_key[0][PRESS_KEY_BUTTON_0] ||
+            Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
+          ++Game_count;
+          set_wipe_out();
+          draw_wipe(SCREEN_WIDTH);
+        }
+        break;
+      case 3:
+        draw_wipe(SCREEN_WIDTH);
+        if (update_wipe()) {
+          Blink_count = 0;
+          Game_count = 0;
+          Game_state = GAME_STATE_TITLE;
+        }
     }
   } else if (Game_mode == GAME_MODE_BATTLE) {
     switch (Game_count) {
-    case 0:
-      Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED, "G a m e O v e r");
-      set_wipe_in();
-      draw_wipe(SCREEN_WIDTH);
-      ++Game_count;
-      break;
-    case 1:
-      Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED, "G a m e O v e r");
-      draw_wipe(SCREEN_WIDTH);
-      if (update_wipe()) {
-        ++Game_count;
-      }
-      break;
-    case 2:
-      Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED, "G a m e O v e r");
-      if (Now_score[0] > Now_score[1]) {
-        Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK, "1 P  W I N :  %d", Now_score[0]);
-      } else if (Now_score[1] > Now_score[0]) {
-        Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK, "2 P  W I N :  %d", Now_score[1]);
-      } else {
-        Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK, "D R A W :  %d", Now_score[0]);
-      }
-
-      if (Blink_count < 30) {
-        Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK, "P r e s s  K e y");
-        ++Blink_count;
-      } else if (Blink_count < 60) {
-        ++Blink_count;
-      } else {
-        Blink_count = 0;
-      }
-
-      if (Press_key[0][PRESS_KEY_BUTTON_0] || Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
-        ++Game_count;
-        set_wipe_out();
+      case 0:
+        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                      "G a m e O v e r");
+        set_wipe_in();
         draw_wipe(SCREEN_WIDTH);
-      }
-      break;
-    case 3:
-      draw_wipe(SCREEN_WIDTH);
-      if (update_wipe()) {
-        Blink_count = 0;
-        Game_count = 0;
-        Rival_chara_life = 2;
-        Game_state = GAME_STATE_TITLE;
-      }
+        ++Game_count;
+        break;
+      case 1:
+        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                      "G a m e O v e r");
+        draw_wipe(SCREEN_WIDTH);
+        if (update_wipe()) {
+          ++Game_count;
+        }
+        break;
+      case 2:
+        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                      "G a m e O v e r");
+        if (Now_score[0] > Now_score[1]) {
+          Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
+                        "1 P  W I N :  %d", Now_score[0]);
+        } else if (Now_score[1] > Now_score[0]) {
+          Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
+                        "2 P  W I N :  %d", Now_score[1]);
+        } else {
+          Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
+                        "D R A W :  %d", Now_score[0]);
+        }
+
+        if (Blink_count < 30) {
+          Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK,
+                        "P r e s s  K e y");
+          ++Blink_count;
+        } else if (Blink_count < 60) {
+          ++Blink_count;
+        } else {
+          Blink_count = 0;
+        }
+
+        if (Press_key[0][PRESS_KEY_BUTTON_0] ||
+            Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
+          ++Game_count;
+          set_wipe_out();
+          draw_wipe(SCREEN_WIDTH);
+        }
+        break;
+      case 3:
+        draw_wipe(SCREEN_WIDTH);
+        if (update_wipe()) {
+          Blink_count = 0;
+          Game_count = 0;
+          Rival_chara_life = 2;
+          Game_state = GAME_STATE_TITLE;
+        }
     }
   }
 }
@@ -614,7 +639,8 @@ void draw_score() {
     SDL_BlitSurface(p_surface, NULL, Screen, &dst);
   }
   {
-    Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT/6, Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[0]);
+    Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
+                  WHITE, "Score: %6d", Now_score[0]);
     SDL_Surface *p_surface = get_img("pacman");
     SDL_Rect src, dst;
     src.x = BLOCK_SIZE;
@@ -622,11 +648,13 @@ void draw_score() {
     src.w = BLOCK_SIZE;
     src.h = BLOCK_SIZE;
     dst.x = OFFSET_X + 60;
-    dst.y = (SCREEN_HEIGHT/6 + 32) - 5;
+    dst.y = (SCREEN_HEIGHT / 6 + 32) - 5;
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
-    Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT/6 + 32, Font[FONT_SIZE_16], WHITE, " x %d", Main_chara_life);
+    Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 32,
+                  Font[FONT_SIZE_16], WHITE, " x %d", Main_chara_life);
     if (Game_mode == GAME_MODE_BATTLE) {
-      Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT/6 + 80, Font[FONT_SIZE_16], WHITE, "NowScore: %6d", Now_score[1]);
+      Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
+                    Font[FONT_SIZE_16], WHITE, "NowScore: %6d", Now_score[1]);
       SDL_Surface *p_surface = get_img("rival");
       SDL_Rect src, dst;
       src.x = BLOCK_SIZE;
@@ -634,9 +662,10 @@ void draw_score() {
       src.w = BLOCK_SIZE;
       src.h = BLOCK_SIZE;
       dst.x = OFFSET_X + 60;
-      dst.y = (SCREEN_HEIGHT/6 + 112) - 5;
+      dst.y = (SCREEN_HEIGHT / 6 + 112) - 5;
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT/6 + 112, Font[FONT_SIZE_16], WHITE, " x %d", Rival_chara_life);
+      Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 112,
+                    Font[FONT_SIZE_16], WHITE, " x %d", Rival_chara_life);
     }
   }
   {
@@ -645,7 +674,7 @@ void draw_score() {
       SDL_Rect dst;
 
       dst.x = OFFSET_X + 10;
-      dst.y = SCREEN_HEIGHT/6 * 4;
+      dst.y = SCREEN_HEIGHT / 6 * 4;
       dst.w = Power_chara_mode[0] / 4;
       dst.h = BLOCK_SIZE;
       SDL_FillRect(Screen, &dst, yellow);
@@ -656,7 +685,7 @@ void draw_score() {
       SDL_Rect dst;
 
       dst.x = OFFSET_X + 10;
-      dst.y = SCREEN_HEIGHT/6 * 4 + 30;
+      dst.y = SCREEN_HEIGHT / 6 * 4 + 30;
       dst.w = Power_chara_mode[1] / 4;
       dst.h = BLOCK_SIZE;
       SDL_FillRect(Screen, &dst, gray);
@@ -670,13 +699,13 @@ int poll_event() {
   while (SDL_PollEvent(&event)) {
     // TODO: case default:
     switch (event.type) {
-    case SDL_QUIT:
-      return 0;
-    case SDL_KEYDOWN:
-      if (event.key.keysym.sym == SDLK_ESCAPE) {
+      case SDL_QUIT:
         return 0;
-      }
-      break;
+      case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+          return 0;
+        }
+        break;
     }
   }
   return 1;
@@ -711,7 +740,8 @@ void draw_fps() {
       frame_rate = 1000.0 / interval;
     }
 
-    Kanji_PutText(Screen, OFFSET_X + 20, 16, Font[FONT_SIZE_16], WHITE, "FrameRate[%0.2f]", frame_rate);
+    Kanji_PutText(Screen, OFFSET_X + 20, 16, Font[FONT_SIZE_16], WHITE,
+                  "FrameRate[%0.2f]", frame_rate);
   }
   pre_count = now_count;
 }
@@ -756,7 +786,8 @@ void draw_translucence() {
   dst_back.x = 0;
   dst_back.y = 0;
 
-  SDL_Surface *trans_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
+  SDL_Surface *trans_surface = SDL_CreateRGBSurface(
+      SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
   if (trans_surface == NULL) {
     fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
     exit(EXIT_FAILURE);

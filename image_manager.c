@@ -1,7 +1,7 @@
+#include "image_manager.h"
 #include <SDL_image.h>
 #include <stdio.h>
 #include <string.h>
-#include "image_manager.h"
 
 static Img_list *Img_list_top = NULL;
 
@@ -19,7 +19,7 @@ int load_img(const char *path, const char *name) {
     return 0;
   }
   strcpy(new->name, name);
-  new->img  = img;
+  new->img = img;
   new->prev = NULL;
   new->next = Img_list_top;
   if (Img_list_top != NULL) {
@@ -65,7 +65,7 @@ void del_all_img() {
   while (Img_list_top != NULL) {
     Img_list *p = Img_list_top->next;
     SDL_FreeSurface(Img_list_top->img);
-    free(Img_list_top); // TODO: Correct code of freeing dynamic memory?
+    free(Img_list_top);  // TODO: Correct code of freeing dynamic memory?
     Img_list_top = p;
     if (Img_list_top != NULL) {
       Img_list_top->prev = NULL;

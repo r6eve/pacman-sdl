@@ -8,8 +8,8 @@ typedef struct {
   int block_y;
   int nextblock_x;
   int nextblock_y;
-  int dir;  /* 0:down, 1:left, 2:up, 3:right */
-  int anime_count;  /* 0 or 1 */
+  int dir;          // 0:down, 1:left, 2:up, 3:right
+  int anime_count;  // 0 or 1
   int anime_weight;
 } Chara;
 
@@ -28,4 +28,4 @@ int get_rival_chara_block_x();
 int get_main_chara_block_y();
 int get_rival_chara_block_y();
 
-#endif /* MAIN_CHARA_H */
+#endif
