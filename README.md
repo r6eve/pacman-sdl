@@ -1,7 +1,7 @@
 Pacman-SDL
 ==========
 
-Pacman written in C.
+Pacman written in C++.
 
 ## Demo
 
@@ -26,7 +26,7 @@ $ ./pacman-sdl
 
 ## Requirement
 
-* gcc
+* g++
 * [SDL(Ver. 1)][sdl_ver_1]
 
 Some libraries are downloaded from
