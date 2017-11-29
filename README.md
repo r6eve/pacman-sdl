@@ -42,6 +42,7 @@ Sound are downloaded from
 * Support Version 2 of SDL
 * Record Score
 
+[Build Status]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
 [CI Results]: https://travis-ci.org/r6eve/pacman-sdl
 [pacman-sdl-demo]: https://raw.githubusercontent.com/r6eve/screenshots/master/pacman-sdl/pacman-sdl.gif
 [sdl_ver_1]: http://www.libsdl.org/
