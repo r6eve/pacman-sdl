@@ -1,0 +1,19 @@
+language: c++
+dist: trusty
+
+matrix:
+  include:
+    - compiler: g++
+    - compiler: clang++
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -y install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev
+
+script:
+  - make
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
