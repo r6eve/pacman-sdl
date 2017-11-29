@@ -45,17 +45,22 @@ void update_main_chara(int index) {
 
 void draw_main_chara() {
   SDL_Surface *p_surface = get_img("pacman");
-  SDL_Rect src = {BLOCK_SIZE * Main_chara.dir,
-                  BLOCK_SIZE * Main_chara.anime_count, BLOCK_SIZE, BLOCK_SIZE};
+  SDL_Rect src;
+  src.x = BLOCK_SIZE * Main_chara.dir;
+  src.y = BLOCK_SIZE * Main_chara.anime_count;
+  src.w = BLOCK_SIZE;
+  src.h = BLOCK_SIZE;
   SDL_Rect dst;
   dst.x = Main_chara.pos_x;
   dst.y = Main_chara.pos_y;
   SDL_BlitSurface(p_surface, &src, Screen, &dst);
   if (Game_mode == GAME_MODE_BATTLE) {
     SDL_Surface *p_rival = get_img("rival");
-    SDL_Rect src_rival = {BLOCK_SIZE * Rival_chara.dir,
-                          BLOCK_SIZE * Rival_chara.anime_count, BLOCK_SIZE,
-                          BLOCK_SIZE};
+    SDL_Rect src_rival;
+    src_rival.x = BLOCK_SIZE * Rival_chara.dir;
+    src_rival.y = BLOCK_SIZE * Rival_chara.anime_count;
+    src_rival.w = BLOCK_SIZE;
+    src_rival.h = BLOCK_SIZE;
     SDL_Rect dst_rival;
     dst_rival.x = Rival_chara.pos_x;
     dst_rival.y = Rival_chara.pos_y;

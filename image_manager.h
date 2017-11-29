@@ -1,6 +1,8 @@
 #ifndef IMAGE_MANAGER_H
 #define IMAGE_MANAGER_H
 
+#include <SDL_image.h>
+
 typedef struct Img_list_rec {
   char name[64];
   SDL_Surface *img;

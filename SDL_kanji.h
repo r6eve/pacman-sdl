@@ -58,7 +58,7 @@ void Kanji_CloseFont(Kanji_Font* font);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif
