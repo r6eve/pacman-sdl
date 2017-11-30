@@ -77,49 +77,49 @@ void update_input() {
   }
 
   Uint8 *keys = SDL_GetKeyState(NULL);
-  if ((keys[SDLK_UP] == SDL_PRESSED) || (keys['k'] == SDL_PRESSED)) {
+  if ((keys[SDLK_UP] == SDL_PRESSED) || (keys[(unsigned int)'k'] == SDL_PRESSED)) {
     new_press_key[0][PRESS_KEY_UP] = 1;
   }
-  if ((keys[SDLK_DOWN] == SDL_PRESSED) || (keys['j'] == SDL_PRESSED)) {
+  if ((keys[SDLK_DOWN] == SDL_PRESSED) || (keys[(unsigned int)'j'] == SDL_PRESSED)) {
     new_press_key[0][PRESS_KEY_DOWN] = 1;
   }
-  if ((keys[SDLK_LEFT] == SDL_PRESSED) || (keys['h'] == SDL_PRESSED)) {
+  if ((keys[SDLK_LEFT] == SDL_PRESSED) || (keys[(unsigned int)'h'] == SDL_PRESSED)) {
     new_press_key[0][PRESS_KEY_LEFT] = 1;
   }
-  if ((keys[SDLK_RIGHT] == SDL_PRESSED) || (keys['l'] == SDL_PRESSED)) {
+  if ((keys[SDLK_RIGHT] == SDL_PRESSED) || (keys[(unsigned int)'l'] == SDL_PRESSED)) {
     new_press_key[0][PRESS_KEY_RIGHT] = 1;
   }
-  if (keys['c'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'c'] == SDL_PRESSED) {
     new_press_key[0][PRESS_KEY_BUTTON_2] = 1;
   }
 #ifdef DEBUG
-  if (keys['b'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'b'] == SDL_PRESSED) {
     new_press_key[0][PRESS_KEY_BUTTON_B] = 1;
   }
 #endif
   if (keys[SDLK_SPACE] == SDL_PRESSED) {
     new_press_key[0][PRESS_KEY_SPACE] = 1;
   }
-  if (keys['w'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'w'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_UP] = 1;
   }
-  if (keys['z'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'z'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_DOWN] = 1;
   }
-  if (keys['a'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'a'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_LEFT] = 1;
   }
-  if (keys['s'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'s'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_RIGHT] = 1;
   }
-  if (keys['x'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'x'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_BUTTON_0] = 1;
   }
-  if (keys['c'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'c'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_BUTTON_1] = 1;
   }
 #ifdef DEBUG
-  if (keys['b'] == SDL_PRESSED) {
+  if (keys[(unsigned int)'b'] == SDL_PRESSED) {
     new_press_key[1][PRESS_KEY_BUTTON_B] = 1;
   }
 #endif
