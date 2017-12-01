@@ -34,6 +34,7 @@ int main() {
 }
 
 int init() {
+  // TODO: use error handling
   if (!init_sdl()) {
     return 0;
   }

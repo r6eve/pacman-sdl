@@ -15,6 +15,7 @@
 #define ANIME_RATE 1
 #define HIT_DISTANCE BLOCK_SIZE / 2
 
+// keyboard
 enum {
   PRESS_KEY_UP = 0,
   PRESS_KEY_DOWN,
@@ -35,6 +36,10 @@ enum {
   PRESS_KEY_BUTTON_B,  // Debug key: Enemys back home.
   PRESS_KEY_SPACE,
   NUM_PRESS_KEY,
+};
+
+// game state
+enum {
   GAME_STATE_TITLE = 0,
   GAME_STATE_START,
   GAME_STATE_CLEAR,
@@ -43,17 +48,29 @@ enum {
   GAME_STATE_OVER,
   GAME_STATE_PAUSE,
   NUM_GAME_STATE,
+};
+
+// enemys
+enum {
   ENEMY_AKABEI = 0,
   ENEMY_PINKY,
   ENEMY_AOSUKE,
   ENEMY_GUZUTA,
   NUM_ENEMY,
+};
+
+// enemy state
+enum {
   ENEMY_STATE_NORMAL = 0,
   ENEMY_STATE_LOSE,
   NUM_ENEMY_STATE,
+};
+
+// game mode
+enum {
   GAME_MODE_1P,
   GAME_MODE_BATTLE,
-  NUM_GAME_BATTLE
+  NUM_GAME_MODE,
 };
 
 #ifdef MAIN
