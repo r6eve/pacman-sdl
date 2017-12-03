@@ -1,5 +1,5 @@
-#include "wipe.h"
-#include "def_global.h"
+#include "wipe.hpp"
+#include "def_global.hpp"
 
 static int Wipe_variation;
 static int Wipe_count;

@@ -1,6 +1,6 @@
-#include "input.h"
+#include "input.hpp"
 #include <SDL_image.h>
-#include "def_global.h"
+#include "def_global.hpp"
 
 #define DEBUG
 

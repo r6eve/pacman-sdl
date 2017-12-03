@@ -1,9 +1,9 @@
-#include "food.h"
-#include "def_global.h"
-#include "enemy.h"
-#include "image_manager.h"
-#include "main_chara.h"
-#include "map.h"
+#include "food.hpp"
+#include "def_global.hpp"
+#include "enemy.hpp"
+#include "image_manager.hpp"
+#include "main_chara.hpp"
+#include "map.hpp"
 
 // -1: no food, 0: counter food, 1: food, 2: get food
 static int food[NUM_BLOCK_Y][NUM_BLOCK_X];

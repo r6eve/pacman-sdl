@@ -1,4 +1,4 @@
-#include "image_manager.h"
+#include "image_manager.hpp"
 #include <stdio.h>
 #include <string.h>
 

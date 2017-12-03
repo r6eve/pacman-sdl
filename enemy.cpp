@@ -1,9 +1,9 @@
-#include "enemy.h"
-#include "def_global.h"
-#include "image_manager.h"
-#include "main.h"
-#include "main_chara.h"
-#include "map.h"
+#include "enemy.hpp"
+#include "def_global.hpp"
+#include "image_manager.hpp"
+#include "main.hpp"
+#include "main_chara.hpp"
+#include "map.hpp"
 
 static Enemy_data Enemy[NUM_ENEMY];
 

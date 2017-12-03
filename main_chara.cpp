@@ -1,8 +1,8 @@
-#include "main_chara.h"
-#include "def_global.h"
-#include "image_manager.h"
-#include "input.h"
-#include "map.h"
+#include "main_chara.hpp"
+#include "def_global.hpp"
+#include "image_manager.hpp"
+#include "input.hpp"
+#include "map.hpp"
 
 static Chara Main_chara;
 static Chara Rival_chara;

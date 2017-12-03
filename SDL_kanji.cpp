@@ -15,7 +15,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
-#include "SDL_kanji.h"
+#include "SDL_kanji.hpp"
 
 #define BUF 256
 

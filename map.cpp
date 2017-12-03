@@ -1,10 +1,10 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include "def_global.h"
-#include "image_manager.h"
-#include "main.h"
-#include "map.h"
+#include "def_global.hpp"
+#include "image_manager.hpp"
+#include "main.hpp"
+#include "map.hpp"
 
 static int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
 

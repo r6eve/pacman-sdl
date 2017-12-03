@@ -18,16 +18,16 @@ $(TARGET): $(OBJS)
 clean:
 	-rm -f $(OBJS) $(TARGET)
 
-SDL_kanji.o: SDL_kanji.cpp SDL_kanji.h
-enemy.o: enemy.cpp def_global.h enemy.h image_manager.h main.h main_chara.h \
- map.h
-food.o: food.cpp def_global.h enemy.h food.h image_manager.h main_chara.h \
- map.h
-image_manager.o: image_manager.cpp image_manager.h
-input.o: input.cpp def_global.h input.h
-main.o: main.cpp SDL_kanji.h def_global.h enemy.h food.h image_manager.h \
- input.h main_chara.h main.h map.h wipe.h
-main_chara.o: main_chara.cpp def_global.h main_chara.h image_manager.h \
- input.h map.h
-map.o: map.cpp def_global.h image_manager.h main.h map.h
-wipe.o: wipe.cpp def_global.h wipe.h
+SDL_kanji.o: SDL_kanji.cpp SDL_kanji.hpp
+enemy.o: enemy.cpp def_global.hpp enemy.hpp image_manager.hpp main.hpp main_chara.hpp \
+ map.hpp
+food.o: food.cpp def_global.hpp enemy.hpp food.hpp image_manager.hpp main_chara.hpp \
+ map.hpp
+image_manager.o: image_manager.cpp image_manager.hpp
+input.o: input.cpp def_global.hpp input.hpp
+main.o: main.cpp SDL_kanji.hpp def_global.hpp enemy.hpp food.hpp image_manager.hpp \
+ input.hpp main_chara.hpp main.hpp map.hpp wipe.hpp
+main_chara.o: main_chara.cpp def_global.hpp main_chara.hpp image_manager.hpp \
+ input.hpp map.hpp
+map.o: map.cpp def_global.hpp image_manager.hpp main.hpp map.hpp
+wipe.o: wipe.cpp def_global.hpp wipe.hpp

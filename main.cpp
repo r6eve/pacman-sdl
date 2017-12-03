@@ -1,20 +1,20 @@
 #define MAIN
 
-#include "main.h"
+#include "main.hpp"
 #include <SDL_image.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "SDL_kanji.h"
-#include "def_global.h"
-#include "enemy.h"
-#include "food.h"
-#include "image_manager.h"
-#include "input.h"
-#include "main_chara.h"
-#include "map.h"
-#include "wipe.h"
+#include "SDL_kanji.hpp"
+#include "def_global.hpp"
+#include "enemy.hpp"
+#include "food.hpp"
+#include "image_manager.hpp"
+#include "input.hpp"
+#include "main_chara.hpp"
+#include "map.hpp"
+#include "wipe.hpp"
 
 // #define DEBUG
 
