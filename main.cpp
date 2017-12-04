@@ -197,6 +197,9 @@ void main_loop() {
       case GAME_STATE_PAUSE:
         game_pause();
         break;
+      default:
+        fprintf(stderr, "error: undefined state.\n");
+        return;
     }
     if (!poll_event()) {
       return;
@@ -510,112 +513,127 @@ void game_over() {
   Uint32 white = 0xffffffff;
   SDL_FillRect(Screen, &dst_back, white);
 
-  if (Game_mode == GAME_MODE_1P) {
-    // TODO: case default:
-    switch (Game_count) {
-      case 0:
-        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                      "G a m e O v e r");
-        set_wipe_in();
-        draw_wipe(SCREEN_WIDTH);
-        ++Game_count;
-        break;
-      case 1:
-        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                      "G a m e O v e r");
-        draw_wipe(SCREEN_WIDTH);
-        if (update_wipe()) {
-          ++Game_count;
-        }
-        break;
-      case 2:
-        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                      "G a m e O v e r");
-        Kanji_PutText(Screen, 180, 300, Font[FONT_SIZE_24], BLACK,
-                      "Y o u r  S c o r e :  %d", Now_score[0]);
-
-        if (Blink_count < 30) {
-          Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK,
-                        "P r e s s  K e y");
-          ++Blink_count;
-        } else if (Blink_count < 60) {
-          ++Blink_count;
-        } else {
-          Blink_count = 0;
-        }
-
-        if (Press_key[0][PRESS_KEY_BUTTON_0] ||
-            Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
-          ++Game_count;
-          set_wipe_out();
+  switch (Game_mode) {
+    case GAME_MODE_1P:
+      switch (Game_count) {
+        case 0:
+          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                        "G a m e O v e r");
+          set_wipe_in();
           draw_wipe(SCREEN_WIDTH);
-        }
-        break;
-      case 3:
-        draw_wipe(SCREEN_WIDTH);
-        if (update_wipe()) {
-          Blink_count = 0;
-          Game_count = 0;
-          Game_state = GAME_STATE_TITLE;
-        }
-    }
-  } else if (Game_mode == GAME_MODE_BATTLE) {
-    switch (Game_count) {
-      case 0:
-        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                      "G a m e O v e r");
-        set_wipe_in();
-        draw_wipe(SCREEN_WIDTH);
-        ++Game_count;
-        break;
-      case 1:
-        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                      "G a m e O v e r");
-        draw_wipe(SCREEN_WIDTH);
-        if (update_wipe()) {
           ++Game_count;
-        }
-        break;
-      case 2:
-        Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                      "G a m e O v e r");
-        if (Now_score[0] > Now_score[1]) {
-          Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
-                        "1 P  W I N :  %d", Now_score[0]);
-        } else if (Now_score[1] > Now_score[0]) {
-          Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
-                        "2 P  W I N :  %d", Now_score[1]);
-        } else {
-          Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
-                        "D R A W :  %d", Now_score[0]);
-        }
-
-        if (Blink_count < 30) {
-          Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK,
-                        "P r e s s  K e y");
-          ++Blink_count;
-        } else if (Blink_count < 60) {
-          ++Blink_count;
-        } else {
-          Blink_count = 0;
-        }
-
-        if (Press_key[0][PRESS_KEY_BUTTON_0] ||
-            Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
-          ++Game_count;
-          set_wipe_out();
+          break;
+        case 1:
+          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                        "G a m e O v e r");
           draw_wipe(SCREEN_WIDTH);
-        }
-        break;
-      case 3:
-        draw_wipe(SCREEN_WIDTH);
-        if (update_wipe()) {
-          Blink_count = 0;
-          Game_count = 0;
-          Rival_chara_life = 2;
-          Game_state = GAME_STATE_TITLE;
-        }
-    }
+          if (update_wipe()) {
+            ++Game_count;
+          }
+          break;
+        case 2:
+          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                        "G a m e O v e r");
+          Kanji_PutText(Screen, 150, 225, Font[FONT_SIZE_24], BLACK,
+                        "Y o u r  S c o r e :  %d", Now_score[0]);
+
+          if (Blink_count < 30) {
+            Kanji_PutText(Screen, 205, 300, Font[FONT_SIZE_16], BLACK,
+                          "P r e s s  S p a c e  K e y");
+            ++Blink_count;
+          } else if (Blink_count < 60) {
+            ++Blink_count;
+          } else {
+            Blink_count = 0;
+          }
+
+          if (Press_key[0][PRESS_KEY_BUTTON_0] ||
+              Press_key[1][PRESS_KEY_BUTTON_0] ||
+              Press_key[0][PRESS_KEY_SPACE]) {
+            ++Game_count;
+            set_wipe_out();
+            draw_wipe(SCREEN_WIDTH);
+          }
+          break;
+        case 3:
+          draw_wipe(SCREEN_WIDTH);
+          if (update_wipe()) {
+            Blink_count = 0;
+            Game_count = 0;
+            Game_state = GAME_STATE_TITLE;
+          }
+          break;
+        default:
+          fprintf(stderr, "error: undefined game count.\n");
+          break;
+      }
+      break;
+    case GAME_MODE_BATTLE:
+      switch (Game_count) {
+        case 0:
+          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                        "G a m e O v e r");
+          set_wipe_in();
+          draw_wipe(SCREEN_WIDTH);
+          ++Game_count;
+          break;
+        case 1:
+          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                        "G a m e O v e r");
+          draw_wipe(SCREEN_WIDTH);
+          if (update_wipe()) {
+            ++Game_count;
+          }
+          break;
+        case 2:
+          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
+                        "G a m e O v e r");
+          if (Now_score[0] > Now_score[1]) {
+            Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
+                          "1 P  W I N :  %d", Now_score[0]);
+          } else if (Now_score[1] > Now_score[0]) {
+            Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
+                          "2 P  W I N :  %d", Now_score[1]);
+          } else {
+            Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
+                          "D R A W :  %d", Now_score[0]);
+          }
+
+          if (Blink_count < 30) {
+            Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK,
+                          "P r e s s  K e y");
+            ++Blink_count;
+          } else if (Blink_count < 60) {
+            ++Blink_count;
+          } else {
+            Blink_count = 0;
+          }
+
+          if (Press_key[0][PRESS_KEY_BUTTON_0] ||
+              Press_key[1][PRESS_KEY_BUTTON_0] ||
+              Press_key[0][PRESS_KEY_SPACE]) {
+            ++Game_count;
+            set_wipe_out();
+            draw_wipe(SCREEN_WIDTH);
+          }
+          break;
+        case 3:
+          draw_wipe(SCREEN_WIDTH);
+          if (update_wipe()) {
+            Blink_count = 0;
+            Game_count = 0;
+            Rival_chara_life = 2;
+            Game_state = GAME_STATE_TITLE;
+          }
+          break;
+        default:
+          fprintf(stderr, "error: undefined game count.\n");
+          break;
+      }
+      break;
+    default:
+      fprintf(stderr, "error: undefined game state.\n");
+      break;
   }
 }
 
@@ -655,7 +673,7 @@ void draw_score() {
                   Font[FONT_SIZE_16], WHITE, " x %d", Main_chara_life);
     if (Game_mode == GAME_MODE_BATTLE) {
       Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
-                    Font[FONT_SIZE_16], WHITE, "NowScore: %6d", Now_score[1]);
+                    Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
       SDL_Surface *p_surface = get_img("rival");
       SDL_Rect src, dst;
       src.x = BLOCK_SIZE;
@@ -698,7 +716,6 @@ void draw_score() {
 int poll_event() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
-    // TODO: case default:
     switch (event.type) {
       case SDL_QUIT:
         return 0;
@@ -706,6 +723,9 @@ int poll_event() {
         if (event.key.keysym.sym == SDLK_ESCAPE) {
           return 0;
         }
+        break;
+      default:
+        // do nothing
         break;
     }
   }

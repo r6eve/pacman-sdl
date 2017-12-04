@@ -40,22 +40,28 @@ void draw_enemy() {
   p_surface[3] = get_img("guzuta");
   p_surface[4] = get_img("mon_run");
   for (int i = 0; i < NUM_ENEMY; ++i) {
-    if (Enemy_state[i] == ENEMY_STATE_NORMAL) {
-      src.x = BLOCK_SIZE * Enemy[i].dir;
-      src.y = BLOCK_SIZE * Enemy[i].anime_count;
-      src.w = BLOCK_SIZE;
-      src.h = BLOCK_SIZE;
-      dst.x = Enemy[i].pos_x;
-      dst.y = Enemy[i].pos_y;
-      SDL_BlitSurface(p_surface[i], &src, Screen, &dst);
-    } else if (Enemy_state[i] == ENEMY_STATE_LOSE) {
-      src.x = 0;
-      src.y = BLOCK_SIZE * Enemy[i].anime_count;
-      src.w = BLOCK_SIZE;
-      src.h = BLOCK_SIZE;
-      dst.x = Enemy[i].pos_x;
-      dst.y = Enemy[i].pos_y;
-      SDL_BlitSurface(p_surface[4], &src, Screen, &dst);
+    switch (Enemy_state[i]) {
+      case ENEMY_STATE_NORMAL:
+        src.x = BLOCK_SIZE * Enemy[i].dir;
+        src.y = BLOCK_SIZE * Enemy[i].anime_count;
+        src.w = BLOCK_SIZE;
+        src.h = BLOCK_SIZE;
+        dst.x = Enemy[i].pos_x;
+        dst.y = Enemy[i].pos_y;
+        SDL_BlitSurface(p_surface[i], &src, Screen, &dst);
+        break;
+      case ENEMY_STATE_LOSE:
+        src.x = 0;
+        src.y = BLOCK_SIZE * Enemy[i].anime_count;
+        src.w = BLOCK_SIZE;
+        src.h = BLOCK_SIZE;
+        dst.x = Enemy[i].pos_x;
+        dst.y = Enemy[i].pos_y;
+        SDL_BlitSurface(p_surface[4], &src, Screen, &dst);
+        break;
+      default:
+        fprintf(stderr, "error: undefined enemy state.\n");
+        break;
     }
   }
 }
