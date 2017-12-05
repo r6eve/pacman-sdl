@@ -26,10 +26,10 @@ void update_input() {
     if (Joystick[i]) {
       SDL_JoystickUpdate();
       if (SDL_JoystickGetButton(Joystick[i], 0) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_0] = 1;
+        new_press_key[i][PRESS_KEY_X] = 1;
       }
       if (SDL_JoystickGetButton(Joystick[i], 1) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_1] = 1;
+        new_press_key[i][PRESS_KEY_C] = 1;
       }
       if (SDL_JoystickGetButton(Joystick[i], 2) == SDL_PRESSED) {
         new_press_key[i][PRESS_KEY_BUTTON_2] = 1;
@@ -56,10 +56,10 @@ void update_input() {
         new_press_key[i][PRESS_KEY_BUTTON_9] = 1;
       }
       if (SDL_JoystickGetButton(Joystick[i], 10) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_10] = 1;
+        new_press_key[i][PRESS_KEY_START] = 1;
       }
       if (SDL_JoystickGetButton(Joystick[i], 11) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_11] = 1;
+        new_press_key[i][PRESS_KEY_SELECT] = 1;
       }
       if (SDL_JoystickGetAxis(Joystick[i], 1) < -256) {
         new_press_key[i][PRESS_KEY_UP] = 1;
@@ -90,11 +90,11 @@ void update_input() {
     new_press_key[0][PRESS_KEY_RIGHT] = 1;
   }
   if (keys[(unsigned int)'c'] == SDL_PRESSED) {
-    new_press_key[0][PRESS_KEY_BUTTON_2] = 1;
+    new_press_key[0][PRESS_KEY_C] = 1;
   }
 #ifdef DEBUG
   if (keys[(unsigned int)'b'] == SDL_PRESSED) {
-    new_press_key[0][PRESS_KEY_BUTTON_B] = 1;
+    new_press_key[0][PRESS_KEY_B] = 1;
   }
 #endif
   if (keys[SDLK_SPACE] == SDL_PRESSED) {
@@ -113,14 +113,14 @@ void update_input() {
     new_press_key[1][PRESS_KEY_RIGHT] = 1;
   }
   if (keys[(unsigned int)'x'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_BUTTON_0] = 1;
+    new_press_key[1][PRESS_KEY_X] = 1;
   }
   if (keys[(unsigned int)'c'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_BUTTON_1] = 1;
+    new_press_key[1][PRESS_KEY_C] = 1;
   }
 #ifdef DEBUG
   if (keys[(unsigned int)'b'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_BUTTON_B] = 1;
+    new_press_key[1][PRESS_KEY_B] = 1;
   }
 #endif
   if (keys[SDLK_SPACE] == SDL_PRESSED) {

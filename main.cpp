@@ -250,7 +250,7 @@ void title() {
         Blink_count = 0;
       }
 
-      if (Edge_key[0][PRESS_KEY_BUTTON_0] || Edge_key[1][PRESS_KEY_BUTTON_0] ||
+      if (Edge_key[0][PRESS_KEY_X] || Edge_key[1][PRESS_KEY_X] ||
           Edge_key[0][PRESS_KEY_SPACE]) {
         ++Game_count;
         Blink_count = 0;
@@ -259,8 +259,8 @@ void title() {
     case 3:
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
-      if (!Press_key[0][PRESS_KEY_BUTTON_0] &&
-          !Press_key[1][PRESS_KEY_BUTTON_0] && !Press_key[0][PRESS_KEY_SPACE]) {
+      if (!Press_key[0][PRESS_KEY_X] && !Press_key[1][PRESS_KEY_X] &&
+          !Press_key[0][PRESS_KEY_SPACE]) {
         ++Game_count;
       }
       break;
@@ -286,8 +286,8 @@ void title() {
         Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
       }
 
-      if (Press_key[0][PRESS_KEY_BUTTON_0] ||
-          Press_key[1][PRESS_KEY_BUTTON_0] || Press_key[0][PRESS_KEY_SPACE]) {
+      if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
+          Press_key[0][PRESS_KEY_SPACE]) {
         set_wipe_out();
         draw_wipe(SCREEN_WIDTH);
         ++Game_count;
@@ -417,7 +417,7 @@ void play_game() {
     Game_state = GAME_STATE_PAUSE;
   }
 
-  if (Edge_key[0][PRESS_KEY_BUTTON_B]) {
+  if (Edge_key[0][PRESS_KEY_B]) {
     Enemy_run_debug = !Enemy_run_debug;
   }
 }
@@ -547,8 +547,7 @@ void game_over() {
             Blink_count = 0;
           }
 
-          if (Press_key[0][PRESS_KEY_BUTTON_0] ||
-              Press_key[1][PRESS_KEY_BUTTON_0] ||
+          if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
               Press_key[0][PRESS_KEY_SPACE]) {
             ++Game_count;
             set_wipe_out();
@@ -609,8 +608,7 @@ void game_over() {
             Blink_count = 0;
           }
 
-          if (Press_key[0][PRESS_KEY_BUTTON_0] ||
-              Press_key[1][PRESS_KEY_BUTTON_0] ||
+          if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
               Press_key[0][PRESS_KEY_SPACE]) {
             ++Game_count;
             set_wipe_out();
