@@ -81,7 +81,7 @@ enum {
 #endif
 
 GLOBAL SDL_Surface *Screen;
-GLOBAL int Now_score[2];
+GLOBAL int Now_score[2];  // 0: 1P, 1: 2P
 GLOBAL int Main_chara_life;
 GLOBAL int Rival_chara_life;
 GLOBAL int Game_count;
@@ -90,8 +90,8 @@ GLOBAL int Game_state;
 GLOBAL int Game_mode;
 GLOBAL int Enemy_state[NUM_ENEMY];
 GLOBAL int Power_chara_mode[2];
-GLOBAL int Press_key[2][NUM_PRESS_KEY];
-GLOBAL int Edge_key[2][NUM_PRESS_KEY];
+GLOBAL bool Press_key[2][NUM_PRESS_KEY];
+GLOBAL bool Edge_key[2][NUM_PRESS_KEY];
 GLOBAL int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
 GLOBAL int Enemy_run_debug;
 GLOBAL Mix_Music *Music[5];

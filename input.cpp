@@ -15,123 +15,74 @@ void init_joystick() {
 }
 
 void update_input() {
-  int new_press_key[2][NUM_PRESS_KEY];  // 1: press, 0: not
+  bool new_press_key[2][NUM_PRESS_KEY];
   for (int i = 0; i < 2; ++i) {
     for (int j = 0; j < NUM_PRESS_KEY; ++j) {
-      new_press_key[i][j] = 0;
+      new_press_key[i][j] = false;
     }
   }
 
   for (int i = 0; i < Num_joysticks; ++i) {
     if (Joystick[i]) {
       SDL_JoystickUpdate();
-      if (SDL_JoystickGetButton(Joystick[i], 0) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_X] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 1) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_C] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 2) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_2] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 3) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_3] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 4) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_4] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 5) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_5] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 6) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_6] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 7) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_7] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 8) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_8] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 9) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_BUTTON_9] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 10) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_START] = 1;
-      }
-      if (SDL_JoystickGetButton(Joystick[i], 11) == SDL_PRESSED) {
-        new_press_key[i][PRESS_KEY_SELECT] = 1;
-      }
-      if (SDL_JoystickGetAxis(Joystick[i], 1) < -256) {
-        new_press_key[i][PRESS_KEY_UP] = 1;
-      }
-      if (SDL_JoystickGetAxis(Joystick[i], 1) > 256) {
-        new_press_key[i][PRESS_KEY_DOWN] = 1;
-      }
-      if (SDL_JoystickGetAxis(Joystick[i], 0) < -256) {
-        new_press_key[i][PRESS_KEY_LEFT] = 1;
-      }
-      if (SDL_JoystickGetAxis(Joystick[i], 0) > 256) {
-        new_press_key[i][PRESS_KEY_RIGHT] = 1;
-      }
+      new_press_key[i][PRESS_KEY_X] =
+          SDL_JoystickGetButton(Joystick[i], 0) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_C] =
+          SDL_JoystickGetButton(Joystick[i], 1) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_2] =
+          SDL_JoystickGetButton(Joystick[i], 2) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_3] =
+          SDL_JoystickGetButton(Joystick[i], 3) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_4] =
+          SDL_JoystickGetButton(Joystick[i], 4) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_5] =
+          SDL_JoystickGetButton(Joystick[i], 5) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_6] =
+          SDL_JoystickGetButton(Joystick[i], 6) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_7] =
+          SDL_JoystickGetButton(Joystick[i], 7) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_8] =
+          SDL_JoystickGetButton(Joystick[i], 8) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_BUTTON_9] =
+          SDL_JoystickGetButton(Joystick[i], 9) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_START] =
+          SDL_JoystickGetButton(Joystick[i], 10) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_SELECT] =
+          SDL_JoystickGetButton(Joystick[i], 11) == SDL_PRESSED;
+      new_press_key[i][PRESS_KEY_UP] =
+          SDL_JoystickGetAxis(Joystick[i], 1) < -256;
+      new_press_key[i][PRESS_KEY_DOWN] =
+          SDL_JoystickGetAxis(Joystick[i], 1) > 256;
+      new_press_key[i][PRESS_KEY_LEFT] =
+          SDL_JoystickGetAxis(Joystick[i], 0) < -256;
+      new_press_key[i][PRESS_KEY_RIGHT] =
+          SDL_JoystickGetAxis(Joystick[i], 0) > 256;
     }
   }
 
   Uint8 *keys = SDL_GetKeyState(NULL);
-  if ((keys[SDLK_UP] == SDL_PRESSED) || (keys[(unsigned int)'k'] == SDL_PRESSED)) {
-    new_press_key[0][PRESS_KEY_UP] = 1;
-  }
-  if ((keys[SDLK_DOWN] == SDL_PRESSED) || (keys[(unsigned int)'j'] == SDL_PRESSED)) {
-    new_press_key[0][PRESS_KEY_DOWN] = 1;
-  }
-  if ((keys[SDLK_LEFT] == SDL_PRESSED) || (keys[(unsigned int)'h'] == SDL_PRESSED)) {
-    new_press_key[0][PRESS_KEY_LEFT] = 1;
-  }
-  if ((keys[SDLK_RIGHT] == SDL_PRESSED) || (keys[(unsigned int)'l'] == SDL_PRESSED)) {
-    new_press_key[0][PRESS_KEY_RIGHT] = 1;
-  }
-  if (keys[(unsigned int)'c'] == SDL_PRESSED) {
-    new_press_key[0][PRESS_KEY_C] = 1;
-  }
+  new_press_key[0][PRESS_KEY_UP] =
+      (keys[SDLK_UP] == SDL_PRESSED) || (keys[SDLK_k] == SDL_PRESSED);
+  new_press_key[0][PRESS_KEY_DOWN] =
+      (keys[SDLK_DOWN] == SDL_PRESSED) || (keys[SDLK_j] == SDL_PRESSED);
+  new_press_key[0][PRESS_KEY_LEFT] =
+      (keys[SDLK_LEFT] == SDL_PRESSED) || (keys[SDLK_h] == SDL_PRESSED);
+  new_press_key[0][PRESS_KEY_RIGHT] =
+      (keys[SDLK_RIGHT] == SDL_PRESSED) || (keys[SDLK_l] == SDL_PRESSED);
+  new_press_key[1][PRESS_KEY_UP] = keys[SDLK_w] == SDL_PRESSED;
+  new_press_key[1][PRESS_KEY_DOWN] = keys[SDLK_z] == SDL_PRESSED;
+  new_press_key[1][PRESS_KEY_LEFT] = keys[SDLK_a] == SDL_PRESSED;
+  new_press_key[1][PRESS_KEY_RIGHT] = keys[SDLK_s] == SDL_PRESSED;
+
+  new_press_key[0][PRESS_KEY_SPACE] = keys[SDLK_SPACE] == SDL_PRESSED;
+  new_press_key[1][PRESS_KEY_SPACE] = keys[SDLK_SPACE] == SDL_PRESSED;
 #ifdef DEBUG
-  if (keys[(unsigned int)'b'] == SDL_PRESSED) {
-    new_press_key[0][PRESS_KEY_B] = 1;
-  }
+  new_press_key[0][PRESS_KEY_B] = keys[SDLK_b] == SDL_PRESSED;
+  new_press_key[1][PRESS_KEY_B] = keys[SDLK_b] == SDL_PRESSED;
 #endif
-  if (keys[SDLK_SPACE] == SDL_PRESSED) {
-    new_press_key[0][PRESS_KEY_SPACE] = 1;
-  }
-  if (keys[(unsigned int)'w'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_UP] = 1;
-  }
-  if (keys[(unsigned int)'z'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_DOWN] = 1;
-  }
-  if (keys[(unsigned int)'a'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_LEFT] = 1;
-  }
-  if (keys[(unsigned int)'s'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_RIGHT] = 1;
-  }
-  if (keys[(unsigned int)'x'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_X] = 1;
-  }
-  if (keys[(unsigned int)'c'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_C] = 1;
-  }
-#ifdef DEBUG
-  if (keys[(unsigned int)'b'] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_B] = 1;
-  }
-#endif
-  if (keys[SDLK_SPACE] == SDL_PRESSED) {
-    new_press_key[1][PRESS_KEY_SPACE] = 1;
-  }
   for (int i = 0; i < 2; ++i) {
     for (int j = 0; j < NUM_PRESS_KEY; ++j) {
-      Edge_key[i][j] = 0;
-      if (!Press_key[i][j] && new_press_key[i][j]) {
-        Edge_key[i][j] = 1;
-      }
+      Edge_key[i][j] = !Press_key[i][j] && new_press_key[i][j];
       Press_key[i][j] = new_press_key[i][j];
     }
   }
