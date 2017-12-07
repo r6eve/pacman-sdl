@@ -14,6 +14,7 @@
 #define FPS_MAX 60
 #define ANIME_RATE 1
 #define HIT_DISTANCE BLOCK_SIZE / 2
+#define NUM_DEVICES 2
 
 // keyboard
 enum {

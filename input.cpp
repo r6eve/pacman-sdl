@@ -15,8 +15,8 @@ void init_joystick() {
 }
 
 void update_input() {
-  bool new_press_key[2][NUM_PRESS_KEY];
-  for (int i = 0; i < 2; ++i) {
+  bool new_press_key[NUM_DEVICES][NUM_PRESS_KEY];
+  for (int i = 0; i < NUM_DEVICES; ++i) {
     for (int j = 0; j < NUM_PRESS_KEY; ++j) {
       new_press_key[i][j] = false;
     }
@@ -80,7 +80,7 @@ void update_input() {
   new_press_key[0][PRESS_KEY_B] = keys[SDLK_b] == SDL_PRESSED;
   new_press_key[1][PRESS_KEY_B] = keys[SDLK_b] == SDL_PRESSED;
 #endif
-  for (int i = 0; i < 2; ++i) {
+  for (int i = 0; i < NUM_DEVICES; ++i) {
     for (int j = 0; j < NUM_PRESS_KEY; ++j) {
       Edge_key[i][j] = !Press_key[i][j] && new_press_key[i][j];
       Press_key[i][j] = new_press_key[i][j];
