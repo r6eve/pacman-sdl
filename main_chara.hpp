@@ -8,7 +8,7 @@ typedef struct {
   int block_y;
   int nextblock_x;
   int nextblock_y;
-  int dir;          // 0:down, 1:left, 2:up, 3:right
+  int dir;          // 0: down, 1: left, 2: up, 3: right
   int anime_count;  // 0 or 1
   int anime_weight;
 } Chara;
