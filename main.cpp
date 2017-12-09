@@ -225,7 +225,6 @@ void title() {
   dst_back.h = SCREEN_HEIGHT;
   SDL_FillRect(Screen, &dst_back, white);
 
-  // TODO: case default:
   switch (Game_count) {
     case 0:
       set_wipe_in();
@@ -271,22 +270,28 @@ void title() {
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
 
-      if (Game_mode == GAME_MODE_1P) {
-        dst_select.x = 250;
-        dst_select.y = 300;
-        dst_select.w = 96;
-        dst_select.h = 16;
-        SDL_FillRect(Screen, &dst_select, black);
-        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
-        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
-      } else if (Game_mode == GAME_MODE_BATTLE) {
-        dst_select.x = 250;
-        dst_select.y = 350;
-        dst_select.w = 96;
-        dst_select.h = 16;
-        SDL_FillRect(Screen, &dst_select, black);
-        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
-        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+      switch (Game_mode) {
+        case GAME_MODE_1P:
+          dst_select.x = 250;
+          dst_select.y = 300;
+          dst_select.w = 96;
+          dst_select.h = 16;
+          SDL_FillRect(Screen, &dst_select, black);
+          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
+          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
+          break;
+        case GAME_MODE_BATTLE:
+          dst_select.x = 250;
+          dst_select.y = 350;
+          dst_select.w = 96;
+          dst_select.h = 16;
+          SDL_FillRect(Screen, &dst_select, black);
+          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
+          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+          break;
+        default:
+          cerr << "error: undefined game mode." << '\n';
+          break;
       }
 
       if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
@@ -309,22 +314,28 @@ void title() {
       }
       break;
     case 5:
-      if (Game_mode == GAME_MODE_1P) {
-        dst_select.x = 250;
-        dst_select.y = 300;
-        dst_select.w = 96;
-        dst_select.h = 16;
-        SDL_FillRect(Screen, &dst_select, black);
-        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
-        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
-      } else if (Game_mode == GAME_MODE_BATTLE) {
-        dst_select.x = 250;
-        dst_select.y = 350;
-        dst_select.w = 96;
-        dst_select.h = 16;
-        SDL_FillRect(Screen, &dst_select, black);
-        Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
-        Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+      switch (Game_mode) {
+        case GAME_MODE_1P:
+          dst_select.x = 250;
+          dst_select.y = 300;
+          dst_select.w = 96;
+          dst_select.h = 16;
+          SDL_FillRect(Screen, &dst_select, black);
+          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
+          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
+          break;
+        case GAME_MODE_BATTLE:
+          dst_select.x = 250;
+          dst_select.y = 350;
+          dst_select.w = 96;
+          dst_select.h = 16;
+          SDL_FillRect(Screen, &dst_select, black);
+          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
+          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+          break;
+        default:
+          cerr << "error: undefined game mode." << "\n";
+          break;
       }
 
       draw_wipe(SCREEN_WIDTH);
