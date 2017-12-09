@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
 #include "SDL_kanji.hpp"
 #include "def_global.hpp"
 #include "enemy.hpp"
@@ -15,6 +16,8 @@
 #include "main_chara.hpp"
 #include "map.hpp"
 #include "wipe.hpp"
+
+using namespace std;
 
 // #define DEBUG
 
@@ -198,7 +201,7 @@ void main_loop() {
         game_pause();
         break;
       default:
-        fprintf(stderr, "error: undefined state.\n");
+        cerr << "error: undefined state." << '\n';
         return;
     }
     if (!poll_event()) {
@@ -347,6 +350,9 @@ void title() {
 
         srand((unsigned int)time(NULL));
       }
+      break;
+    default:
+      cerr << "error: undefined game count." << '\n';
       break;
   }
 }
@@ -563,7 +569,7 @@ void game_over() {
           }
           break;
         default:
-          fprintf(stderr, "error: undefined game count.\n");
+          cerr << "error: undefined game count." << '\n';
           break;
       }
       break;
@@ -625,12 +631,12 @@ void game_over() {
           }
           break;
         default:
-          fprintf(stderr, "error: undefined game count.\n");
+          cerr << "error: undefined game count." << '\n';
           break;
       }
       break;
     default:
-      fprintf(stderr, "error: undefined game state.\n");
+      cerr << "error: undefined game state." << '\n';
       break;
   }
 }
@@ -808,7 +814,7 @@ void draw_translucence() {
   SDL_Surface *trans_surface = SDL_CreateRGBSurface(
       SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
   if (trans_surface == NULL) {
-    fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+    cerr << "CreateRGBSurface failed: " <<  SDL_GetError() << '\n';
     exit(EXIT_FAILURE);
   }
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
