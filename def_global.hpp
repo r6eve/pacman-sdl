@@ -70,7 +70,7 @@ enum {
 
 // game mode
 enum {
-  GAME_MODE_1P,
+  GAME_MODE_1P = 0,
   GAME_MODE_BATTLE,
   NUM_GAME_MODE,
 };
