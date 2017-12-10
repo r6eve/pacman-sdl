@@ -52,6 +52,8 @@ int init() {
   init_color();
   init_joystick();
   return 1;
+
+  Enemy_run_debug = false;
 }
 
 int init_sdl() {
@@ -165,7 +167,6 @@ int init_game() {
 
   Blink_count = 0;
 
-  Enemy_run_debug = 0;
 
   Game_mode = GAME_MODE_1P;
   Num_player = 1;
@@ -491,7 +492,7 @@ void game_miss() {
       draw_wipe(OFFSET_X);
     }
 
-    if (Choice_hit == 0) {
+    if (Choice_hit) {
       add_main_chara_pos(0, -1);
       if (update_wipe()) {
         --Main_chara_life;
@@ -506,7 +507,7 @@ void game_miss() {
           Game_state = GAME_STATE_OVER;
         }
       }
-    } else if (Choice_hit == 1) {  // TODO: else?
+    } else {
       add_rival_chara_pos(0, -1);
       if (update_wipe()) {
         --Rival_chara_life;

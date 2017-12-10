@@ -94,10 +94,10 @@ GLOBAL int Power_chara_mode[2];
 GLOBAL bool Press_key[2][NUM_PRESS_KEY];
 GLOBAL bool Edge_key[2][NUM_PRESS_KEY];
 GLOBAL int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
-GLOBAL int Enemy_run_debug;
+GLOBAL bool Enemy_run_debug;
 GLOBAL Mix_Music *Music[5];
 GLOBAL Mix_Chunk *Se[4];
 GLOBAL int Num_player;
-GLOBAL int Choice_hit;
+GLOBAL bool Choice_hit;  // true: 1P, false: 2P
 
 #endif

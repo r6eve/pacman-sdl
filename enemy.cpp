@@ -303,7 +303,7 @@ void check_hit_enemy() {
                          Enemy[i].pos_y);
     if (d < HIT_DISTANCE) {
       if (!Power_chara_mode[0]) {
-        Choice_hit = 0;
+        Choice_hit = true;
         Game_state = GAME_STATE_MISS;
       } else {
         if (Enemy_state[i] != ENEMY_STATE_LOSE) {
@@ -321,7 +321,7 @@ void check_hit_enemy() {
                            Enemy[i].pos_y);
       if (d < HIT_DISTANCE) {
         if (!Power_chara_mode[1]) {
-          Choice_hit = 1;
+          Choice_hit = false;
           Game_state = GAME_STATE_MISS;
         } else {
           if (Enemy_state[i] != ENEMY_STATE_LOSE) {
