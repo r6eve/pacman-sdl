@@ -1,10 +1,11 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-int init();
-int init_sdl();
-int init_font();
-int init_game();
+bool init();
+void init_sdl();
+void init_font();
+void init_img();
+void init_music();
 void main_loop();
 void title();
 void game_start();

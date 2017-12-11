@@ -10,7 +10,7 @@ typedef struct Img_list_rec {
   struct Img_list_rec *next;
 } Img_list;
 
-int load_img(const char *path, const char *name);
+void load_img(const char *path, const char *name);
 SDL_Surface *get_img(const char *name);
 void del_img(const char *name);
 void del_all_img();

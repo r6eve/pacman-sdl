@@ -3,8 +3,6 @@
 #include "main.hpp"
 #include <SDL_image.h>
 #include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 #include <iostream>
 #include "SDL_kanji.hpp"
@@ -36,144 +34,100 @@ int main() {
   return EXIT_SUCCESS;
 }
 
-int init() {
-  // TODO: use error handling
-  if (!init_sdl()) {
-    return 0;
+bool init() {
+  try {
+    init_sdl();
+  } catch (char *e) {
+    cerr << "error: " << e << '\n';
+    atexit(SDL_Quit);
+    return false;
   }
-  if (!init_font()) {
+
+  try {
+    init_font();
+    init_img();
+    init_music();
+  } catch (char *e) {
+    cerr << "error: " << e << '\n';
     end();
-    return 0;
+    return false;
   }
-  if (!init_game()) {
-    end();
-    return 0;
-  }
+
   init_color();
   init_joystick();
-  return 1;
 
+  Blink_count = 0;
   Enemy_run_debug = false;
+  Game_count = 0;
+  Game_mode = GAME_MODE_1P;
+  Game_state = GAME_STATE_TITLE;
+  Num_player = 1;
+  Rival_chara_life = 2;
+
+  return true;
 }
 
-int init_sdl() {
+void init_sdl() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-    fprintf(stderr, "cannot initialize sdl. : %s\n", SDL_GetError());
-    return 0;
+    throw SDL_GetError();
   }
   SDL_WM_SetCaption("pacman-sdl", NULL);
   Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
                             SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
   if (!Screen) {
-    fprintf(stderr, "cannot initialize screen. : %s\n", SDL_GetError());
-    SDL_Quit();
-    return 0;
+    throw SDL_GetError();
   }
 
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
-    fprintf(stderr, "cannot initialize sdl_mixer. : %s\n", Mix_GetError());
-    SDL_Quit();
-    return 0;
+    throw Mix_GetError();
   }
-  SDL_ShowCursor(SDL_DISABLE);
 
-  return 1;
+  SDL_ShowCursor(SDL_DISABLE);
 }
 
-int init_font() {
+void init_font() {
   Font[FONT_SIZE_16] = Kanji_OpenFont("./data/jiskan16.bdf", 16);
   Kanji_AddFont(Font[FONT_SIZE_16], "./data/8x16.bdf");
   Font[FONT_SIZE_24] = Kanji_OpenFont("./data/jiskan24.bdf", 24);
   Kanji_AddFont(Font[FONT_SIZE_24], "./data/12x24.bdf");
   for (int i = 0; i < NUM_FONT; ++i) {
     if (!Font[i]) {
-      fprintf(stderr, "cannot initialize Font[%d]. : %s\n", i, SDL_GetError());
-      return 0;
+      throw SDL_GetError();
     }
     Kanji_SetCodingSystem(Font[i], KANJI_EUC);
   }
-  return 1;
 }
 
-int init_game() {
-  if (!load_img("./data/pacman.png", "pacman")) {
-    return 0;
+void init_img() {
+  try {
+    load_img("./data/pacman.png", "pacman");
+    load_img("./data/rival.png", "rival");
+    load_img("./data/bg.png", "bg");
+    load_img("./data/bg_red.png", "bg_red");
+    load_img("./data/bg_green.png", "bg_green");
+    load_img("./data/bg_blue.png", "bg_blue");
+    load_img("./data/food.png", "food");
+    load_img("./data/food_counter.png", "food_counter");
+    load_img("./data/akabei.png", "akabei");
+    load_img("./data/pinky.png", "pinky");
+    load_img("./data/aosuke.png", "aosuke");
+    load_img("./data/guzuta.png", "guzuta");
+    load_img("./data/mon_run.png", "mon_run");
+    load_img("./data/plate.png", "plate");
+  } catch (char *e) {
+    throw e;
   }
-  if (!load_img("./data/rival.png", "rival")) {
-    return 0;
-  }
-  if (!load_img("./data/bg.png", "bg")) {
-    return 0;
-  }
-  if (!load_img("./data/bg_red.png", "bg_red")) {
-    return 0;
-  }
-  if (!load_img("./data/bg_green.png", "bg_green")) {
-    return 0;
-  }
-  if (!load_img("./data/bg_blue.png", "bg_blue")) {
-    return 0;
-  }
-  if (!load_img("./data/food.png", "food")) {
-    return 0;
-  }
-  if (!load_img("./data/food_counter.png", "food_counter")) {
-    return 0;
-  }
-  if (!load_img("./data/akabei.png", "akabei")) {
-    return 0;
-  }
-  if (!load_img("./data/pinky.png", "pinky")) {
-    return 0;
-  }
-  if (!load_img("./data/aosuke.png", "aosuke")) {
-    return 0;
-  }
-  if (!load_img("./data/guzuta.png", "guzuta")) {
-    return 0;
-  }
-  if (!load_img("./data/mon_run.png", "mon_run")) {
-    return 0;
-  }
-  if (!load_img("./data/plate.png", "plate")) {
-    return 0;
-  }
+}
 
-  if (!(Music[0] =
-            Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3"))) {
-    fprintf(stderr, "cannot initialize music. : %s\n", Mix_GetError());
-    exit(EXIT_FAILURE);  // TODO: Call end() instead of exit().
+void init_music() {
+  Music[0] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
+  Music[1] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
+  Music[2] = Mix_LoadMUS("./data/pacman_beginning.wav");
+  Music[3] = Mix_LoadMUS("./data/pacman_death.wav");
+  Se[0] = Mix_LoadWAV("./data/pacman_chomp.wav");
+  if (!Music[0] || !Music[1] || !Music[2] || !Music[3] || !Se[0]) {
+    throw Mix_GetError();
   }
-  if (!(Music[1] =
-            Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3"))) {
-    fprintf(stderr, "cannot initialize music. : %s\n", Mix_GetError());
-    exit(EXIT_FAILURE);
-  }
-  if (!(Music[2] = Mix_LoadMUS("./data/pacman_beginning.wav"))) {
-    fprintf(stderr, "cannot initialize music. : %s\n", Mix_GetError());
-    exit(EXIT_FAILURE);
-  }
-  if (!(Music[3] = Mix_LoadMUS("./data/pacman_death.wav"))) {
-    fprintf(stderr, "cannot initialize music. : %s\n", Mix_GetError());
-    exit(EXIT_FAILURE);
-  }
-  if (!(Se[0] = Mix_LoadWAV("./data/pacman_chomp.wav"))) {
-    fprintf(stderr, "cannot initialize se. : %s\n", Mix_GetError());
-    exit(EXIT_FAILURE);
-  }
-
-  Game_count = 0;
-  Game_state = GAME_STATE_TITLE;
-
-  Blink_count = 0;
-
-
-  Game_mode = GAME_MODE_1P;
-  Num_player = 1;
-
-  Rival_chara_life = 2;
-
-  return 1;
 }
 
 void main_loop() {
@@ -790,12 +744,13 @@ void end() {
   }
   end_joystick();
   end_music();
-  SDL_Quit();
+  atexit(SDL_Quit);
 }
 
 void end_music() {
   Mix_HaltMusic();
   Mix_HaltChannel(-1);
+  // TODO: What's the number of 2?
   for (int i = 0; i < 2; ++i) {
     Mix_FreeMusic(Music[i]);
   }

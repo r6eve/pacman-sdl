@@ -4,18 +4,16 @@
 
 static Img_list *Img_list_top = NULL;
 
-int load_img(const char *path, const char *name) {
+void load_img(const char *path, const char *name) {
   SDL_Surface *img;
   if ((img = IMG_Load(path)) == NULL) {
-    fprintf(stderr, "cannot open [%s]: %s.\n", path, IMG_GetError());
-    return 0;
+    throw IMG_GetError();
   }
 
   Img_list *list;
   if ((list = new Img_list) == NULL) {
-    fprintf(stderr, "[%s]: out of memory.\n", path);
     SDL_FreeSurface(img);
-    return 0;
+    throw "out of memory";
   }
   strcpy(list->name, name);
   list->img = img;
@@ -25,7 +23,6 @@ int load_img(const char *path, const char *name) {
     Img_list_top->prev = list;
   }
   Img_list_top = list;
-  return 1;
 }
 
 SDL_Surface *get_img(const char *name) {
