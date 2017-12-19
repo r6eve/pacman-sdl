@@ -1,8 +1,8 @@
 #ifndef DEF_GLOBAL_H
 #define DEF_GLOBAL_H
 
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480

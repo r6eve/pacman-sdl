@@ -12,7 +12,7 @@
  *
  */
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus

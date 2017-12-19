@@ -1,7 +1,7 @@
 #define MAIN
 
 #include "main.hpp"
-#include <SDL_image.h>
+#include <SDL/SDL_image.h>
 #include <math.h>
 #include <time.h>
 #include <iostream>

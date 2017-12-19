@@ -1,5 +1,5 @@
 #include "input.hpp"
-#include <SDL_image.h>
+#include <SDL/SDL_image.h>
 #include "def_global.hpp"
 
 #define DEBUG

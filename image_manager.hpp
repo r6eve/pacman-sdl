@@ -1,7 +1,7 @@
 #ifndef IMAGE_MANAGER_H
 #define IMAGE_MANAGER_H
 
-#include <SDL_image.h>
+#include <SDL/SDL_image.h>
 
 typedef struct Img_list_rec {
   char name[64];
