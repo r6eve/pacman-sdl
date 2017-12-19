@@ -2,22 +2,14 @@ language: c++
 
 dist: trusty
 
-compiler:
-  - g++
-  - clang++
-
 matrix:
   include:
-    - os: linux
-      env: TARGET=x86_64-unknown-linux-gnu
-      before_install:
-        - sudo apt-get -qq update
-        - sudo apt-get -y install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev
-    - os: osx
-      env: TARGET=x86_64-apple-darwin
-      before_install:
-        - brew update
-        - brew install sdl sdl_image sdl_mixer
+    - compiler: g++
+    - compiler: clang++
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -y install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev
 
 script:
   - make
