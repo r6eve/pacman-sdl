@@ -25,7 +25,7 @@ enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
 
 static int Blink_count;
 
-int main() {
+int main(int argc, char **argv) {
   if (!init()) {
     return EXIT_FAILURE;
   }
