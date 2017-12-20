@@ -22,10 +22,6 @@ before_install:
 script:
   - make
 
-matrix:
-  allow_failures:
-    - osx
-
 notifications:
   email:
     on_success: never
