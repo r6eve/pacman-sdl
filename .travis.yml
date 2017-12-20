@@ -4,14 +4,22 @@ matrix:
   include:
     - os: linux
       env: TARGET=x86_64-unknown-linux-gnu
+      compiler: g++
+    - os: linux
+      env: TARGET=x86_64-unknown-linux-gnu
+      compiler: clang++
     - os: linux
       env: TARGET=i686-unknown-linux-gnu
+      compiler: g++
+    - os: linux
+      env: TARGET=i686-unknown-linux-gnu
+      compiler: clang++
     - os: osx
       env: TARGET=x86_64-apple-darwin
-
-compiler:
-  - g++
-  - clang++
+      compiler: g++
+    - os: osx
+      env: TARGET=x86_64-apple-darwin
+      compiler: clang++
 
 addons:
   apt:
