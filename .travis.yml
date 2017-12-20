@@ -15,7 +15,9 @@ matrix:
       env: TARGET=i686-unknown-linux-gnu
       compiler: clang++
     - os: osx
-      env: TARGET=x86_64-apple-darwin
+      env:
+        - TARGET=x86_64-apple-darwin
+        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
       compiler: g++
     - os: osx
       env: TARGET=x86_64-apple-darwin
