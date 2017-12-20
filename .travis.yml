@@ -1,8 +1,13 @@
 language: c++
 
-os:
-  - linux
-  - osx
+matrix:
+  include:
+    - os: linux
+      env: TARGET=x86_64-unknown-linux-gnu
+    - os: linux
+      env: TARGET=i686-unknown-linux-gnu
+    - os: osx
+      env: TARGET=x86_64-apple-darwin
 
 compiler:
   - g++
