@@ -6,7 +6,7 @@ Pacman written in C++.
 
 ## Demo
 
-![pacman-sdl-demo][pacman-sdl-demo]
+![pacman-sdl-demo][]
 
 ## Installation
 
@@ -33,14 +33,14 @@ $ ./pacman-sdl
 ## Requirement
 
 * g++
-* [SDL(Ver. 1)][sdl_ver_1]
+* [SDL(Ver. 1)][]
 
 Some libraries are downloaded from
-* [SDL_kanji][sdl_kanji]
+* [SDL_kanji][]
 
 Sound are downloaded from
-* [Classic Gaming][classic_gaming]
-* [Sound FX Center][sound_fx_center]
+* [Classic Gaming][]
+* [Sound FX Center][]
 
 ## TODO
 
@@ -50,7 +50,7 @@ Sound are downloaded from
 [Build Status]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
 [CI Results]: https://travis-ci.org/r6eve/pacman-sdl
 [pacman-sdl-demo]: https://raw.githubusercontent.com/r6eve/screenshots/master/pacman-sdl/pacman-sdl.gif
-[sdl_ver_1]: http://www.libsdl.org/
-[sdl_kanji]: http://shinh.skr.jp/sdlkanji/
-[classic_gaming]: http://www.classicgaming.cc/classics/pac-man/sounds.php
-[sound_fx_center]: http://soundfxcenter.com/download-sound/pacman-siren-sound-effect/
+[SDL(Ver. 1)]: http://www.libsdl.org/
+[SDL_kanji]: http://shinh.skr.jp/sdlkanji/
+[Classic Gaming]: http://www.classicgaming.cc/classics/pac-man/sounds.php
+[Sound FX Center]: http://soundfxcenter.com/download-sound/pacman-siren-sound-effect/
