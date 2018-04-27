@@ -5,13 +5,13 @@ clone_depth: 1
 install:
   - IF NOT EXIST SDL-1.2.15.tar.gz curl -fsS -O https://libsdl.org/release/SDL-1.2.15.tar.gz
   - tar xf SDL-1.2.15.tar.gz
-  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/SDL-1.2.15; configure && make && make install")
+  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/SDL-1.2.15; ./configure && make && make install")
   - IF NOT EXIST SDL_mixer-1.2.12.tar.gz curl -fsS -O https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz
   - tar xf SDL_mixer-1.2.12.tar.gz
-  - c:\cygwin\bin\sh -lc ("cd C:\projects\pacman-sdl\SDL_mixer-1.2.12; configure && make && make install")
+  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/SDL_mixer-1.2.12; ./configure && make && make install")
   - IF NOT EXIST SDL_image-1.2.12.tar.gz curl -fsS -O https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12.tar.gz
   - tar xf SDL_image-1.2.12.tar.gz
-  - c:\cygwin\bin\sh -lc ("cd C:\projects\pacman-sdl\SDL_image-1.2.12; configure && make && make install")
+  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/SDL_image-1.2.12; ./configure && make && make install")
 
 build_script:
   - make
