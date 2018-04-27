@@ -8,7 +8,7 @@ platform:
 install:
   - IF NOT EXIST SDL-1.2.15.tar.gz curl -fsS -O https://libsdl.org/release/SDL-1.2.15.tar.gz
   - tar xf SDL-1.2.15.tar.gz
-  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/SDL-1.2.15; ./autogen.sh && ./configure && make && make install")
+  - c:\cygwin\bin\sh -lc ("ls -l -d /usr/include/w32api; ls -l -d /usr/include/mingw; cd /cygdrive/c/projects/pacman-sdl/SDL-1.2.15; ./autogen.sh && ./configure && make && make install")
   - IF NOT EXIST SDL_mixer-1.2.12.tar.gz curl -fsS -O https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz
   - tar xf SDL_mixer-1.2.12.tar.gz
   - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/SDL_mixer-1.2.12; ./autogen.sh && ./configure && make && make install")
