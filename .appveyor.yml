@@ -2,6 +2,9 @@ version: "{build}"
 
 clone_depth: 1
 
+platform:
+  - x64
+
 install:
   - IF NOT EXIST SDL-1.2.15.tar.gz curl -fsS -O https://libsdl.org/release/SDL-1.2.15.tar.gz
   - tar xf SDL-1.2.15.tar.gz
