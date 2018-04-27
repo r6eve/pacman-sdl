@@ -5,19 +5,15 @@ clone_depth: 1
 install:
   - IF NOT EXIST SDL-1.2.15.tar.gz curl -fsS -O https://libsdl.org/release/SDL-1.2.15.tar.gz
   - tar xf SDL-1.2.15.tar.gz
-  - cd SDL-1.2.15
-  - configure && make && make install
-  - cd ..
+  - c:\cygwin\bin\sh -lc ("cd SDL-1.2.15; configure && make && make install")
   - IF NOT EXIST SDL_mixer-1.2.12.tar.gz curl -fsS -O https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz
   - tar xf SDL_mixer-1.2.12.tar.gz
-  - cd SDL_mixer-1.2.12
+  - c:\cygwin\bin\sh -lc ("cd SDL_mixer-1.2.12; configure && make && make install")
   - configure && make && make install
-  - cd ..
   - IF NOT EXIST SDL_image-1.2.12.tar.gz curl -fsS -O https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12.tar.gz
   - tar xf SDL_image-1.2.12.tar.gz
-  - cd SDL_image-1.2.12
+  - c:\cygwin\bin\sh -lc ("cd SDL_image-1.2.12; configure && make && make install")
   - configure && make && make install
-  - cd ..
 
 build_script:
   - make
