@@ -1,6 +1,7 @@
 Pacman-SDL
 ==========
-[![Build Status][]][CI Results]
+[![Build Status on Travis CI][]][Travis CI Results]
+[![Build Status on AppVeyor][]][AppVeyor Results]
 
 Pacman written in C++.
 
@@ -47,8 +48,10 @@ Sound are downloaded from
 * Support Version 2 of SDL
 * Record Score
 
-[Build Status]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
-[CI Results]: https://travis-ci.org/r6eve/pacman-sdl
+[Build Status on Travis CI]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
+[Travis CI Results]: https://travis-ci.org/r6eve/pacman-sdl
+[Build Status on AppVeyor]: https://ci.appveyor.com/api/projects/status/9u5v21c5ycwv9h8b?svg=true
+[AppVeyor Results]: https://ci.appveyor.com/project/r6eve/pacman-sdl
 [pacman-sdl-demo]: https://raw.githubusercontent.com/r6eve/screenshots/master/pacman-sdl/pacman-sdl.gif
 [SDL(Ver. 1)]: http://www.libsdl.org/
 [SDL_kanji]: http://shinh.skr.jp/sdlkanji/
