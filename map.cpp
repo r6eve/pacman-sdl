@@ -92,7 +92,7 @@ void draw_map() {
   SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
   SDL_FillRect(Screen, &dst, black);
 
-  SDL_Surface *p_surface = NULL;
+  SDL_Surface *p_surface = nullptr;
   if ((Game_level % 4) == 1) {
     p_surface = get_img("bg");
   } else if ((Game_level % 4) == 2) {

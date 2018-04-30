@@ -2,8 +2,6 @@
 #include <SDL/SDL_image.h>
 #include "def_global.hpp"
 
-#define DEBUG
-
 static SDL_Joystick *Joystick[2];
 static int Num_joysticks;
 
@@ -60,7 +58,7 @@ void update_input() {
     }
   }
 
-  Uint8 *keys = SDL_GetKeyState(NULL);
+  Uint8 *keys = SDL_GetKeyState(nullptr);
   new_press_key[0][PRESS_KEY_UP] =
       (keys[SDLK_UP] == SDL_PRESSED) || (keys[SDLK_k] == SDL_PRESSED);
   new_press_key[0][PRESS_KEY_DOWN] =

@@ -17,15 +17,13 @@
 
 using namespace std;
 
-// #define DEBUG
-
 static Kanji_Font *Font[2];
 
 enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
 
 static int Blink_count;
 
-int main(int argc, char **argv) {
+int main(int, char **) {
   if (!init()) {
     return EXIT_FAILURE;
   }
@@ -68,17 +66,22 @@ bool init() {
 }
 
 void init_sdl() {
-  if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     throw SDL_GetError();
   }
   SDL_WM_SetCaption("pacman-sdl", NULL);
+#ifdef DEBUG
+  Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
+                            SDL_HWSURFACE | SDL_DOUBLEBUF);
+#else
   Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
                             SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+#endif
   if (!Screen) {
     throw SDL_GetError();
   }
 
-  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
+  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
     throw Mix_GetError();
   }
 
@@ -314,7 +317,7 @@ void title() {
           Now_score[i] = 0;
         }
 
-        srand((unsigned int)time(NULL));
+        srand((unsigned int)time(nullptr));
       }
       break;
     default:
@@ -625,7 +628,7 @@ void draw_score() {
     SDL_Rect dst;
     dst.x = OFFSET_X;
     dst.y = 0;
-    SDL_BlitSurface(p_surface, NULL, Screen, &dst);
+    SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
   {
     Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
@@ -763,29 +766,31 @@ int get_distance(int x1, int y1, int x2, int y2) {
 }
 
 void draw_translucence() {
-  Uint32 rmask, gmask, bmask;
+  Uint32 rmask, gmask, bmask, amask;
   Uint8 alpha = 128;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   rmask = 0xff000000;
   gmask = 0x00ff0000;
   bmask = 0x0000ff00;
+  amask = 0x000000ff;
 #else
   rmask = 0x000000ff;
   gmask = 0x0000ff00;
   bmask = 0x00ff0000;
+  amask = 0xff000000;
 #endif
   SDL_Rect dst_back;
   dst_back.x = 0;
   dst_back.y = 0;
 
   SDL_Surface *trans_surface = SDL_CreateRGBSurface(
-      SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
-  if (trans_surface == NULL) {
+      SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, amask);
+  if (!trans_surface) {
     cerr << "CreateRGBSurface failed: " <<  SDL_GetError() << '\n';
     exit(EXIT_FAILURE);
   }
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
-  SDL_BlitSurface(trans_surface, NULL, Screen, &dst_back);
+  SDL_BlitSurface(trans_surface, nullptr, Screen, &dst_back);
   if (Blink_count < 30) {
     Kanji_PutText(Screen, 240, 200, Font[FONT_SIZE_24], WHITE, "P a u s e");
     ++Blink_count;
