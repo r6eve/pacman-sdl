@@ -18,6 +18,7 @@
 #define HIT_DISTANCE BLOCK_SIZE / 2
 #define NUM_DEVICES 2
 
+// TODO: enum class
 // keyboard
 enum {
   PRESS_KEY_UP = 0,
@@ -97,8 +98,8 @@ GLOBAL bool Press_key[2][NUM_PRESS_KEY];
 GLOBAL bool Edge_key[2][NUM_PRESS_KEY];
 GLOBAL int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
 GLOBAL bool Enemy_run_debug;
-GLOBAL Mix_Music *Music[5];
-GLOBAL Mix_Chunk *Se[4];
+GLOBAL Mix_Music *Music[5]; // TODO: enum class
+GLOBAL Mix_Chunk *Se[4]; // TODO: enum class
 GLOBAL int Num_player;
 GLOBAL bool Choice_hit;  // true: 1P, false: 2P
 

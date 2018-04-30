@@ -27,7 +27,6 @@ void init_main_chara() {
 }
 
 void update_main_chara(int index) {
-  // TODO: else?
   if (index == 0) {
     ++Main_chara.anime_weight;
     if (Main_chara.anime_weight > 4) {
@@ -40,7 +39,7 @@ void update_main_chara(int index) {
       Rival_chara.anime_count = 1 - Rival_chara.anime_count;
       Rival_chara.anime_weight = 0;
     }
-  }
+  } // TODO: else
 }
 
 void draw_main_chara() {
@@ -68,6 +67,7 @@ void draw_main_chara() {
   }
 }
 
+// TODO: reduce magic numbers
 void mv_main_chara() {
   int is_mving;
   int dst_pos_x = Main_chara.nextblock_x * BLOCK_SIZE;

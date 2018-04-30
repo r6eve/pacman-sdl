@@ -33,7 +33,7 @@ void update_enemy() {
 
 void draw_enemy() {
   SDL_Rect src, dst;
-  SDL_Surface *p_surface[5];
+  SDL_Surface *p_surface[5]; // TODO: 5
   p_surface[0] = get_img("akabei");
   p_surface[1] = get_img("pinky");
   p_surface[2] = get_img("aosuke");

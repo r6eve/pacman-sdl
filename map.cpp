@@ -9,6 +9,7 @@
 static int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
 
 void init_map() {
+  // TODO: use enum class
   // 0: can move, 1: cannot move, 2: enemy house
   // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
   int block_src[NUM_BLOCK_Y][NUM_BLOCK_X] = {
@@ -87,19 +88,21 @@ void init_map() {
 
 int check_map_state(int x, int y) { return Block[y][x]; }
 
+// reduce magic numbers
 void draw_map() {
   Uint32 black = 0x00000000;
   SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
   SDL_FillRect(Screen, &dst, black);
 
   SDL_Surface *p_surface = nullptr;
-  if ((Game_level % 4) == 1) {
+  const unsigned int mod = Game_level % 4;
+  if (mod == 1) {
     p_surface = get_img("bg");
-  } else if ((Game_level % 4) == 2) {
+  } else if (mod == 2) {
     p_surface = get_img("bg_red");
-  } else if ((Game_level % 4) == 3) {
+  } else if (mod == 3) {
     p_surface = get_img("bg_green");
-  } else if ((Game_level % 4) == 0) {
+  } else {
     p_surface = get_img("bg_blue");
   }
 

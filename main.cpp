@@ -19,6 +19,7 @@ using namespace std;
 
 static Kanji_Font *Font[2];
 
+// TODO: enum class
 enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
 
 static int Blink_count;
@@ -33,6 +34,7 @@ int main(int, char **) {
 }
 
 bool init() {
+  // TODO: exit() here
   try {
     init_sdl();
   } catch (char *e) {
@@ -54,6 +56,7 @@ bool init() {
   init_color();
   init_joystick();
 
+  // initialize global variables
   Blink_count = 0;
   Enemy_run_debug = false;
   Game_count = 0;
@@ -69,7 +72,7 @@ void init_sdl() {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     throw SDL_GetError();
   }
-  SDL_WM_SetCaption("pacman-sdl", NULL);
+  SDL_WM_SetCaption("pacman-sdl", nullptr);
 #ifdef DEBUG
   Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
                             SDL_HWSURFACE | SDL_DOUBLEBUF);
@@ -174,6 +177,7 @@ void main_loop() {
 }
 
 void title() {
+  // TODO: narrow scope
   SDL_Rect dst_back, dst_select;
   Uint32 white = 0xffffffff;
   Uint32 black = 0x00000000;
@@ -298,6 +302,7 @@ void title() {
 
       draw_wipe(SCREEN_WIDTH);
 
+      // initialize globals
       if (update_wipe()) {
         init_map();
         init_food();
@@ -423,7 +428,7 @@ void game_clear() {
         init_main_chara();
       }
     }
-  }
+  } // TODO: else
 }
 
 void game_miss() {
@@ -480,7 +485,7 @@ void game_miss() {
         }
       }
     }
-  }
+  } // TODO: else
 }
 
 void game_over() {
@@ -600,11 +605,13 @@ void game_over() {
           }
           break;
         default:
+          // TODO: exit or throw exception
           cerr << "error: undefined game count." << '\n';
           break;
       }
       break;
     default:
+      // TODO: exit or throw exception
       cerr << "error: undefined game state." << '\n';
       break;
   }
@@ -622,6 +629,8 @@ void game_pause() {
   }
 }
 
+// TODO: reduce magic numbers
+// TODO: delete meanigneless block scopes
 void draw_score() {
   {
     SDL_Surface *p_surface = get_img("plate");
@@ -761,6 +770,7 @@ void end_music() {
   Mix_CloseAudio();
 }
 
+// TODO: utils.cpp utils.hpp
 int get_distance(int x1, int y1, int x2, int y2) {
   return (int)hypot((double)(x1 - x2), (double)(y1 - y2));
 }

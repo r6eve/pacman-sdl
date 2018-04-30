@@ -5,6 +5,7 @@
 #include "main_chara.hpp"
 #include "map.hpp"
 
+// TODO: enum class
 // -1: no food, 0: counter food, 1: food, 2: get food
 static int food[NUM_BLOCK_Y][NUM_BLOCK_X];
 
@@ -14,9 +15,9 @@ void init_food() {
       food[y][x] = -1;
       if (check_map_state(x, y) == 0) {
         food[y][x] = 1;
-      } else if (check_map_state(x, y) == 4) {
+      } else if (check_map_state(x, y) == 4) { // TODO: What's 4?
         food[y][x] = 0;
-      }
+      } // TODO: else
     }
   }
 }
@@ -44,7 +45,7 @@ void draw_food() {
       } else if (food[y][x] == 0) {
         SDL_Surface *p_surface = get_img("food_counter");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      }
+      } // TODO: else
     }
   }
 }

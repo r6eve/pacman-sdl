@@ -2,7 +2,7 @@
 #include <SDL/SDL_image.h>
 #include "def_global.hpp"
 
-static SDL_Joystick *Joystick[2];
+static SDL_Joystick *Joystick[2]; // TODO: 2
 static int Num_joysticks;
 
 void init_joystick() {
@@ -58,6 +58,7 @@ void update_input() {
     }
   }
 
+  // TODO: enum class 0: player 1, 1: player 2
   Uint8 *keys = SDL_GetKeyState(nullptr);
   new_press_key[0][PRESS_KEY_UP] =
       (keys[SDLK_UP] == SDL_PRESSED) || (keys[SDLK_k] == SDL_PRESSED);

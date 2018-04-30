@@ -32,7 +32,8 @@ void draw_wipe(int end_x) {
   dst.x = 0;
   dst.w = end_x;
   dst.h = Wipe_count;
-  for (dst.y = 0; dst.y < SCREEN_HEIGHT; dst.y += (SCREEN_HEIGHT / 10)) {
+  const unsigned int dy = SCREEN_HEIGHT / 10;
+  for (dst.y = 0; dst.y < SCREEN_HEIGHT; dst.y += dy) {
     SDL_FillRect(Screen, &dst, black);
   }
 }
