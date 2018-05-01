@@ -18,8 +18,7 @@
 #define HIT_DISTANCE BLOCK_SIZE / 2
 #define NUM_DEVICES 2
 
-// TODO: enum class
-// keyboard
+// Keyboard and Joystick
 enum {
   PRESS_KEY_UP = 0,
   PRESS_KEY_DOWN,
@@ -29,7 +28,7 @@ enum {
   PRESS_KEY_C,
   PRESS_KEY_B,  // Debug key: Enemys back home.
   PRESS_KEY_SPACE,
-  // for Joystick
+  // used by only Joystick
   PRESS_KEY_BUTTON_2,
   PRESS_KEY_BUTTON_3,
   PRESS_KEY_BUTTON_4,
