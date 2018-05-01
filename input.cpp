@@ -13,9 +13,9 @@ void init_joystick() {
 }
 
 void update_input() {
-  bool new_press_key[NUM_DEVICES][NUM_PRESS_KEY];
+  bool new_press_key[NUM_DEVICES][input_device::count];
   for (int i = 0; i < NUM_DEVICES; ++i) {
-    for (int j = 0; j < NUM_PRESS_KEY; ++j) {
+    for (int j = 0; j < input_device::count; ++j) {
       new_press_key[i][j] = false;
     }
   }
@@ -23,64 +23,64 @@ void update_input() {
   for (int i = 0; i < Num_joysticks; ++i) {
     if (Joystick[i]) {
       SDL_JoystickUpdate();
-      new_press_key[i][PRESS_KEY_X] =
+      new_press_key[i][input_device::x] =
           SDL_JoystickGetButton(Joystick[i], 0) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_C] =
+      new_press_key[i][input_device::c] =
           SDL_JoystickGetButton(Joystick[i], 1) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_2] =
+      new_press_key[i][input_device::bUTTON_2] =
           SDL_JoystickGetButton(Joystick[i], 2) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_3] =
+      new_press_key[i][input_device::bUTTON_3] =
           SDL_JoystickGetButton(Joystick[i], 3) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_4] =
+      new_press_key[i][input_device::bUTTON_4] =
           SDL_JoystickGetButton(Joystick[i], 4) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_5] =
+      new_press_key[i][input_device::bUTTON_5] =
           SDL_JoystickGetButton(Joystick[i], 5) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_6] =
+      new_press_key[i][input_device::bUTTON_6] =
           SDL_JoystickGetButton(Joystick[i], 6) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_7] =
+      new_press_key[i][input_device::bUTTON_7] =
           SDL_JoystickGetButton(Joystick[i], 7) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_8] =
+      new_press_key[i][input_device::bUTTON_8] =
           SDL_JoystickGetButton(Joystick[i], 8) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_BUTTON_9] =
+      new_press_key[i][input_device::bUTTON_9] =
           SDL_JoystickGetButton(Joystick[i], 9) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_START] =
+      new_press_key[i][input_device::start] =
           SDL_JoystickGetButton(Joystick[i], 10) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_SELECT] =
+      new_press_key[i][input_device::select] =
           SDL_JoystickGetButton(Joystick[i], 11) == SDL_PRESSED;
-      new_press_key[i][PRESS_KEY_UP] =
+      new_press_key[i][input_device::up] =
           SDL_JoystickGetAxis(Joystick[i], 1) < -256;
-      new_press_key[i][PRESS_KEY_DOWN] =
+      new_press_key[i][input_device::down] =
           SDL_JoystickGetAxis(Joystick[i], 1) > 256;
-      new_press_key[i][PRESS_KEY_LEFT] =
+      new_press_key[i][input_device::left] =
           SDL_JoystickGetAxis(Joystick[i], 0) < -256;
-      new_press_key[i][PRESS_KEY_RIGHT] =
+      new_press_key[i][input_device::right] =
           SDL_JoystickGetAxis(Joystick[i], 0) > 256;
     }
   }
 
   // TODO: enum class 0: player 1, 1: player 2
   Uint8 *keys = SDL_GetKeyState(nullptr);
-  new_press_key[0][PRESS_KEY_UP] =
+  new_press_key[0][input_device::up] =
       (keys[SDLK_UP] == SDL_PRESSED) || (keys[SDLK_k] == SDL_PRESSED);
-  new_press_key[0][PRESS_KEY_DOWN] =
+  new_press_key[0][input_device::down] =
       (keys[SDLK_DOWN] == SDL_PRESSED) || (keys[SDLK_j] == SDL_PRESSED);
-  new_press_key[0][PRESS_KEY_LEFT] =
+  new_press_key[0][input_device::left] =
       (keys[SDLK_LEFT] == SDL_PRESSED) || (keys[SDLK_h] == SDL_PRESSED);
-  new_press_key[0][PRESS_KEY_RIGHT] =
+  new_press_key[0][input_device::right] =
       (keys[SDLK_RIGHT] == SDL_PRESSED) || (keys[SDLK_l] == SDL_PRESSED);
-  new_press_key[1][PRESS_KEY_UP] = keys[SDLK_w] == SDL_PRESSED;
-  new_press_key[1][PRESS_KEY_DOWN] = keys[SDLK_z] == SDL_PRESSED;
-  new_press_key[1][PRESS_KEY_LEFT] = keys[SDLK_a] == SDL_PRESSED;
-  new_press_key[1][PRESS_KEY_RIGHT] = keys[SDLK_s] == SDL_PRESSED;
+  new_press_key[1][input_device::up] = keys[SDLK_w] == SDL_PRESSED;
+  new_press_key[1][input_device::down] = keys[SDLK_z] == SDL_PRESSED;
+  new_press_key[1][input_device::left] = keys[SDLK_a] == SDL_PRESSED;
+  new_press_key[1][input_device::right] = keys[SDLK_s] == SDL_PRESSED;
 
-  new_press_key[0][PRESS_KEY_SPACE] = keys[SDLK_SPACE] == SDL_PRESSED;
-  new_press_key[1][PRESS_KEY_SPACE] = keys[SDLK_SPACE] == SDL_PRESSED;
+  new_press_key[0][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
+  new_press_key[1][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
 #ifdef DEBUG
-  new_press_key[0][PRESS_KEY_B] = keys[SDLK_b] == SDL_PRESSED;
-  new_press_key[1][PRESS_KEY_B] = keys[SDLK_b] == SDL_PRESSED;
+  new_press_key[0][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
+  new_press_key[1][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
 #endif
   for (int i = 0; i < NUM_DEVICES; ++i) {
-    for (int j = 0; j < NUM_PRESS_KEY; ++j) {
+    for (int j = 0; j < input_device::count; ++j) {
       Edge_key[i][j] = !Press_key[i][j] && new_press_key[i][j];
       Press_key[i][j] = new_press_key[i][j];
     }

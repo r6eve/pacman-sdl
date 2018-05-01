@@ -5,11 +5,11 @@
 #include "main_chara.hpp"
 #include "map.hpp"
 
-static Enemy_data Enemy[NUM_ENEMY];
+static Enemy_data Enemy[enemy_character::count];
 
 void init_enemy() {
-  int start_block[NUM_ENEMY][2] = {{11, 12}, {12, 12}, {11, 11}, {12, 11}};
-  for (int i = 0; i < NUM_ENEMY; ++i) {
+  int start_block[enemy_character::count][2] = {{11, 12}, {12, 12}, {11, 11}, {12, 11}};
+  for (int i = 0; i < enemy_character::count; ++i) {
     Enemy[i].pos_x = BLOCK_SIZE * start_block[i][0];
     Enemy[i].pos_y = BLOCK_SIZE * start_block[i][1];
     Enemy[i].block_x = Enemy[i].nextblock_x = start_block[i][0];
@@ -21,7 +21,7 @@ void init_enemy() {
 }
 
 void update_enemy() {
-  for (int i = 0; i < NUM_ENEMY; ++i) {
+  for (int i = 0; i < enemy_character::count; ++i) {
     ++Enemy[i].anime_weight;
     if (Enemy[i].anime_weight >= 8) {
       Enemy[i].anime_weight = 0;
@@ -39,9 +39,9 @@ void draw_enemy() {
   p_surface[2] = get_img("aosuke");
   p_surface[3] = get_img("guzuta");
   p_surface[4] = get_img("mon_run");
-  for (int i = 0; i < NUM_ENEMY; ++i) {
+  for (int i = 0; i < enemy_character::count; ++i) {
     switch (Enemy_state[i]) {
-      case ENEMY_STATE_NORMAL:
+      case enemy_state::normal:
         src.x = BLOCK_SIZE * Enemy[i].dir;
         src.y = BLOCK_SIZE * Enemy[i].anime_count;
         src.w = BLOCK_SIZE;
@@ -50,7 +50,7 @@ void draw_enemy() {
         dst.y = Enemy[i].pos_y;
         SDL_BlitSurface(p_surface[i], &src, Screen, &dst);
         break;
-      case ENEMY_STATE_LOSE:
+      case enemy_state::lose:
         src.x = 0;
         src.y = BLOCK_SIZE * Enemy[i].anime_count;
         src.w = BLOCK_SIZE;
@@ -70,10 +70,10 @@ void mv_normal_enemy(int index) {
   int is_mving, dst_pos_x, dst_pos_y;
 
   switch (index) {
-    case ENEMY_AKABEI:  // TODO: change moving algorithm for each enemies.
-    case ENEMY_PINKY:
-    case ENEMY_AOSUKE:
-    case ENEMY_GUZUTA:
+    case enemy_character::akabei:  // TODO: change moving algorithm for each enemies.
+    case enemy_character::pinky:
+    case enemy_character::aosuke:
+    case enemy_character::guzuta:
       dst_pos_x = Enemy[index].nextblock_x * BLOCK_SIZE;
       dst_pos_y = Enemy[index].nextblock_y * BLOCK_SIZE;
 
@@ -249,7 +249,7 @@ void mv_normal_enemy(int index) {
 
 void mv_lose_enemy(int index) {
   if (!(Power_chara_mode[0] || Power_chara_mode[1])) {
-    Enemy_state[index] = ENEMY_STATE_NORMAL;
+    Enemy_state[index] = enemy_state::normal;
   }
   int is_mving;
   int dst_pos_x = Enemy[index].nextblock_x * BLOCK_SIZE;
@@ -298,36 +298,36 @@ void mv_lose_enemy(int index) {
 void check_hit_enemy() {
   int main_chara_pos_x = get_main_chara_pos_x();
   int main_chara_pos_y = get_main_chara_pos_y();
-  for (int i = 0; i < NUM_ENEMY; ++i) {
+  for (int i = 0; i < enemy_character::count; ++i) {
     int d = get_distance(main_chara_pos_x, main_chara_pos_y, Enemy[i].pos_x,
                          Enemy[i].pos_y);
     if (d < HIT_DISTANCE) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
-        Game_state = GAME_STATE_MISS;
+        Game_state = game_state::miss;
       } else {
-        if (Enemy_state[i] != ENEMY_STATE_LOSE) {
+        if (Enemy_state[i] != enemy_state::lose) {
           Now_score[0] += 100;
         }
-        Enemy_state[i] = ENEMY_STATE_LOSE;
+        Enemy_state[i] = enemy_state::lose;
       }
     }
   }
-  if (Game_mode == GAME_MODE_BATTLE) {
+  if (Game_mode == game_mode::battle) {
     int rival_chara_pos_x = get_rival_chara_pos_x();
     int rival_chara_pos_y = get_rival_chara_pos_y();
-    for (int i = 0; i < NUM_ENEMY; ++i) {
+    for (int i = 0; i < enemy_character::count; ++i) {
       int d = get_distance(rival_chara_pos_x, rival_chara_pos_y, Enemy[i].pos_x,
                            Enemy[i].pos_y);
       if (d < HIT_DISTANCE) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;
-          Game_state = GAME_STATE_MISS;
+          Game_state = game_state::miss;
         } else {
-          if (Enemy_state[i] != ENEMY_STATE_LOSE) {
+          if (Enemy_state[i] != enemy_state::lose) {
             Now_score[1] += 100;
           }
-          Enemy_state[i] = ENEMY_STATE_LOSE;
+          Enemy_state[i] = enemy_state::lose;
         }
       }
     }

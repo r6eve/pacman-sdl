@@ -60,8 +60,8 @@ bool init() {
   Blink_count = 0;
   Enemy_run_debug = false;
   Game_count = 0;
-  Game_mode = GAME_MODE_1P;
-  Game_state = GAME_STATE_TITLE;
+  Game_mode = game_mode::single;
+  Game_state = game_state::title;
   Num_player = 1;
   Rival_chara_life = 2;
 
@@ -140,25 +140,25 @@ void main_loop() {
   for (;;) {
     update_input();
     switch (Game_state) {
-      case GAME_STATE_TITLE:
+      case game_state::title:
         title();
         break;
-      case GAME_STATE_START:
+      case game_state::start:
         game_start();
         break;
-      case GAME_STATE_GAME:
+      case game_state::playing:
         play_game();
         break;
-      case GAME_STATE_CLEAR:
+      case game_state::clear:
         game_clear();
         break;
-      case GAME_STATE_MISS:
+      case game_state::miss:
         game_miss();
         break;
-      case GAME_STATE_OVER:
+      case game_state::gameover:
         game_over();
         break;
-      case GAME_STATE_PAUSE:
+      case game_state::pause:
         game_pause();
         break;
       default:
@@ -214,8 +214,8 @@ void title() {
         Blink_count = 0;
       }
 
-      if (Edge_key[0][PRESS_KEY_X] || Edge_key[1][PRESS_KEY_X] ||
-          Edge_key[0][PRESS_KEY_SPACE]) {
+      if (Edge_key[0][input_device::x] || Edge_key[1][input_device::x] ||
+          Edge_key[0][input_device::space]) {
         ++Game_count;
         Blink_count = 0;
       }
@@ -223,8 +223,8 @@ void title() {
     case 3:
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
-      if (!Press_key[0][PRESS_KEY_X] && !Press_key[1][PRESS_KEY_X] &&
-          !Press_key[0][PRESS_KEY_SPACE]) {
+      if (!Press_key[0][input_device::x] && !Press_key[1][input_device::x] &&
+          !Press_key[0][input_device::space]) {
         ++Game_count;
       }
       break;
@@ -233,7 +233,7 @@ void title() {
                     "P a c - M a n");
 
       switch (Game_mode) {
-        case GAME_MODE_1P:
+        case game_mode::single:
           dst_select.x = 250;
           dst_select.y = 300;
           dst_select.w = 96;
@@ -242,7 +242,7 @@ void title() {
           Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
           break;
-        case GAME_MODE_BATTLE:
+        case game_mode::battle:
           dst_select.x = 250;
           dst_select.y = 350;
           dst_select.w = 96;
@@ -256,28 +256,28 @@ void title() {
           break;
       }
 
-      if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
-          Press_key[0][PRESS_KEY_SPACE]) {
+      if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
+          Press_key[0][input_device::space]) {
         set_wipe_out();
         draw_wipe(SCREEN_WIDTH);
         ++Game_count;
       }
 
-      if (Press_key[0][PRESS_KEY_BUTTON_2] ||
-          Press_key[1][PRESS_KEY_BUTTON_2]) {
+      if (Press_key[0][input_device::bUTTON_2] ||
+          Press_key[1][input_device::bUTTON_2]) {
         Game_count -= 2;
-        Game_mode = GAME_MODE_1P;
+        Game_mode = game_mode::single;
       }
 
-      if (Press_key[0][PRESS_KEY_DOWN] || Press_key[1][PRESS_KEY_DOWN]) {
-        Game_mode = GAME_MODE_BATTLE;
-      } else if (Press_key[0][PRESS_KEY_UP] || Press_key[1][PRESS_KEY_UP]) {
-        Game_mode = GAME_MODE_1P;
+      if (Press_key[0][input_device::down] || Press_key[1][input_device::down]) {
+        Game_mode = game_mode::battle;
+      } else if (Press_key[0][input_device::up] || Press_key[1][input_device::up]) {
+        Game_mode = game_mode::single;
       }
       break;
     case 5:
       switch (Game_mode) {
-        case GAME_MODE_1P:
+        case game_mode::single:
           dst_select.x = 250;
           dst_select.y = 300;
           dst_select.w = 96;
@@ -286,7 +286,7 @@ void title() {
           Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
           break;
-        case GAME_MODE_BATTLE:
+        case game_mode::battle:
           dst_select.x = 250;
           dst_select.y = 350;
           dst_select.w = 96;
@@ -310,11 +310,11 @@ void title() {
         init_enemy();
 
         Game_count = 0;
-        Game_state = GAME_STATE_START;
+        Game_state = game_state::start;
         Game_level = 1;
         Main_chara_life = 2;
 
-        if (Game_mode == GAME_MODE_BATTLE) {
+        if (Game_mode == game_mode::battle) {
           Num_player = 2;
         }
 
@@ -365,12 +365,12 @@ void game_start() {
 
   if (Game_count > 220) {
     Game_count = 0;
-    Game_state = GAME_STATE_GAME;
+    Game_state = game_state::playing;
     for (int i = 0; i < Num_player; ++i) {
       Power_chara_mode[i] = 0;
     }
-    for (int i = 0; i < NUM_ENEMY; ++i) {
-      Enemy_state[i] = ENEMY_STATE_NORMAL;
+    for (int i = 0; i < enemy_character::count; ++i) {
+      Enemy_state[i] = enemy_state::normal;
     }
   }
 }
@@ -383,8 +383,8 @@ void play_game() {
   draw_main_chara();
   draw_score();
   mv_main_chara();
-  for (int i = 0; i < NUM_ENEMY; ++i) {
-    if (Enemy_run_debug || (Enemy_state[i] == ENEMY_STATE_LOSE)) {
+  for (int i = 0; i < enemy_character::count; ++i) {
+    if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
       mv_lose_enemy(i);
     } else {
       mv_normal_enemy(i);
@@ -393,11 +393,11 @@ void play_game() {
   check_food_state();
   check_hit_enemy();
 
-  if (Edge_key[0][PRESS_KEY_SPACE]) {
-    Game_state = GAME_STATE_PAUSE;
+  if (Edge_key[0][input_device::space]) {
+    Game_state = game_state::pause;
   }
 
-  if (Edge_key[0][PRESS_KEY_B]) {
+  if (Edge_key[0][input_device::b]) {
     Enemy_run_debug = !Enemy_run_debug;
   }
 }
@@ -418,10 +418,10 @@ void game_clear() {
     if (update_wipe()) {
       if (Game_level >= 256) {
         Game_count = 0;
-        Game_state = GAME_STATE_OVER;
+        Game_state = game_state::gameover;
       } else {
         Game_count = 0;
-        Game_state = GAME_STATE_START;
+        Game_state = game_state::start;
         ++Game_level;
         init_food();
         init_enemy();
@@ -460,13 +460,13 @@ void game_miss() {
         --Main_chara_life;
         if (Main_chara_life >= 0) {
           Game_count = 0;
-          Game_state = GAME_STATE_START;
+          Game_state = game_state::start;
           init_enemy();
           init_main_chara();
         } else {
           Game_count = 0;
           Blink_count = 0;
-          Game_state = GAME_STATE_OVER;
+          Game_state = game_state::gameover;
         }
       }
     } else {
@@ -475,13 +475,13 @@ void game_miss() {
         --Rival_chara_life;
         if (Rival_chara_life >= 0) {
           Game_count = 0;
-          Game_state = GAME_STATE_START;
+          Game_state = game_state::start;
           init_enemy();
           init_main_chara();
         } else {
           Game_count = 0;
           Blink_count = 0;
-          Game_state = GAME_STATE_OVER;
+          Game_state = game_state::gameover;
         }
       }
     }
@@ -494,7 +494,7 @@ void game_over() {
   SDL_FillRect(Screen, &dst_back, white);
 
   switch (Game_mode) {
-    case GAME_MODE_1P:
+    case game_mode::single:
       switch (Game_count) {
         case 0:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
@@ -527,8 +527,8 @@ void game_over() {
             Blink_count = 0;
           }
 
-          if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
-              Press_key[0][PRESS_KEY_SPACE]) {
+          if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
+              Press_key[0][input_device::space]) {
             ++Game_count;
             set_wipe_out();
             draw_wipe(SCREEN_WIDTH);
@@ -539,7 +539,7 @@ void game_over() {
           if (update_wipe()) {
             Blink_count = 0;
             Game_count = 0;
-            Game_state = GAME_STATE_TITLE;
+            Game_state = game_state::title;
           }
           break;
         default:
@@ -547,7 +547,7 @@ void game_over() {
           break;
       }
       break;
-    case GAME_MODE_BATTLE:
+    case game_mode::battle:
       switch (Game_count) {
         case 0:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
@@ -588,8 +588,8 @@ void game_over() {
             Blink_count = 0;
           }
 
-          if (Press_key[0][PRESS_KEY_X] || Press_key[1][PRESS_KEY_X] ||
-              Press_key[0][PRESS_KEY_SPACE]) {
+          if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
+              Press_key[0][input_device::space]) {
             ++Game_count;
             set_wipe_out();
             draw_wipe(SCREEN_WIDTH);
@@ -601,7 +601,7 @@ void game_over() {
             Blink_count = 0;
             Game_count = 0;
             Rival_chara_life = 2;
-            Game_state = GAME_STATE_TITLE;
+            Game_state = game_state::title;
           }
           break;
         default:
@@ -624,8 +624,8 @@ void game_pause() {
   draw_main_chara();
   draw_score();
   draw_translucence();
-  if (Edge_key[0][PRESS_KEY_SPACE]) {
-    Game_state = GAME_STATE_GAME;
+  if (Edge_key[0][input_device::space]) {
+    Game_state = game_state::playing;
   }
 }
 
@@ -653,7 +653,7 @@ void draw_score() {
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 32,
                   Font[FONT_SIZE_16], WHITE, " x %d", Main_chara_life);
-    if (Game_mode == GAME_MODE_BATTLE) {
+    if (Game_mode == game_mode::battle) {
       Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
                     Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
       SDL_Surface *p_surface = get_img("rival");

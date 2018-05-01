@@ -46,7 +46,7 @@ void init_map() {
     }
   }
 
-  if (Game_mode == GAME_MODE_BATTLE) {
+  if (Game_mode == game_mode::battle) {
     Block[18][14] = 8;
   }
 

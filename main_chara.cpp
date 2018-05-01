@@ -15,7 +15,7 @@ void init_main_chara() {
   Main_chara.dir = 1;
   Main_chara.anime_count = 0;
   Main_chara.anime_weight = 0;
-  if (Game_mode == GAME_MODE_BATTLE) {
+  if (Game_mode == game_mode::battle) {
     Rival_chara.pos_x = BLOCK_SIZE * 14;
     Rival_chara.pos_y = BLOCK_SIZE * 18;
     Rival_chara.nextblock_x = Main_chara.block_x = 14;
@@ -53,7 +53,7 @@ void draw_main_chara() {
   dst.x = Main_chara.pos_x;
   dst.y = Main_chara.pos_y;
   SDL_BlitSurface(p_surface, &src, Screen, &dst);
-  if (Game_mode == GAME_MODE_BATTLE) {
+  if (Game_mode == game_mode::battle) {
     SDL_Surface *p_rival = get_img("rival");
     SDL_Rect src_rival;
     src_rival.x = BLOCK_SIZE * Rival_chara.dir;
@@ -98,16 +98,16 @@ void mv_main_chara() {
     Main_chara.block_x = dst_block_x;
     Main_chara.block_y = dst_block_y;
 
-    if (Press_key[0][PRESS_KEY_DOWN]) {
+    if (Press_key[0][input_device::down]) {
       Main_chara.dir = 0;
       ++dst_block_y;
-    } else if (Press_key[0][PRESS_KEY_LEFT]) {
+    } else if (Press_key[0][input_device::left]) {
       Main_chara.dir = 1;
       --dst_block_x;
-    } else if (Press_key[0][PRESS_KEY_UP]) {
+    } else if (Press_key[0][input_device::up]) {
       Main_chara.dir = 2;
       --dst_block_y;
-    } else if (Press_key[0][PRESS_KEY_RIGHT]) {
+    } else if (Press_key[0][input_device::right]) {
       Main_chara.dir = 3;
       ++dst_block_x;
     }
@@ -136,7 +136,7 @@ void mv_main_chara() {
     }
   }
 
-  if (Game_mode == GAME_MODE_BATTLE) {
+  if (Game_mode == game_mode::battle) {
     int is_mving;
     int dst_pos_x = Rival_chara.nextblock_x * BLOCK_SIZE;
     int dst_pos_y = Rival_chara.nextblock_y * BLOCK_SIZE;
@@ -167,16 +167,16 @@ void mv_main_chara() {
       Rival_chara.block_x = dst_block_x;
       Rival_chara.block_y = dst_block_y;
 
-      if (Press_key[1][PRESS_KEY_DOWN]) {
+      if (Press_key[1][input_device::down]) {
         Rival_chara.dir = 0;
         ++dst_block_y;
-      } else if (Press_key[1][PRESS_KEY_LEFT]) {
+      } else if (Press_key[1][input_device::left]) {
         Rival_chara.dir = 1;
         --dst_block_x;
-      } else if (Press_key[1][PRESS_KEY_UP]) {
+      } else if (Press_key[1][input_device::up]) {
         Rival_chara.dir = 2;
         --dst_block_y;
-      } else if (Press_key[1][PRESS_KEY_RIGHT]) {
+      } else if (Press_key[1][input_device::right]) {
         Rival_chara.dir = 3;
         ++dst_block_x;
       }

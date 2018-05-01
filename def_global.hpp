@@ -19,62 +19,62 @@
 #define NUM_DEVICES 2
 
 // Keyboard and Joystick
+namespace input_device {
 enum {
-  PRESS_KEY_UP = 0,
-  PRESS_KEY_DOWN,
-  PRESS_KEY_LEFT,
-  PRESS_KEY_RIGHT,
-  PRESS_KEY_X,
-  PRESS_KEY_C,
-  PRESS_KEY_B,  // Debug key: Enemys back home.
-  PRESS_KEY_SPACE,
+  up = 0,
+  down,
+  left,
+  right,
+  x,
+  c,
+  b,  // Debug key: Enemys back home.
+  space,
+
   // used by only Joystick
-  PRESS_KEY_BUTTON_2,
-  PRESS_KEY_BUTTON_3,
-  PRESS_KEY_BUTTON_4,
-  PRESS_KEY_BUTTON_5,
-  PRESS_KEY_BUTTON_6,
-  PRESS_KEY_BUTTON_7,
-  PRESS_KEY_BUTTON_8,
-  PRESS_KEY_BUTTON_9,
-  PRESS_KEY_START,
-  PRESS_KEY_SELECT,
-  NUM_PRESS_KEY,
+  bUTTON_2,
+  bUTTON_3,
+  bUTTON_4,
+  bUTTON_5,
+  bUTTON_6,
+  bUTTON_7,
+  bUTTON_8,
+  bUTTON_9,
+
+  start,
+  select,
+  count,
+};
+}  // namespace input_device
+
+enum class game_state {
+  title,
+  start,
+  clear,
+  miss,
+  playing,
+  gameover,
+  pause,
 };
 
-// game state
+namespace enemy_character {
 enum {
-  GAME_STATE_TITLE = 0,
-  GAME_STATE_START,
-  GAME_STATE_CLEAR,
-  GAME_STATE_MISS,
-  GAME_STATE_GAME,
-  GAME_STATE_OVER,
-  GAME_STATE_PAUSE,
-  NUM_GAME_STATE,
+  akabei = 0,
+  pinky,
+  aosuke,
+  guzuta,
+  count,
 };
+}  // namespace enemy_character
 
-// enemys
-enum {
-  ENEMY_AKABEI = 0,
-  ENEMY_PINKY,
-  ENEMY_AOSUKE,
-  ENEMY_GUZUTA,
-  NUM_ENEMY,
-};
-
-// enemy state
-enum {
-  ENEMY_STATE_NORMAL = 0,
-  ENEMY_STATE_LOSE,
-  NUM_ENEMY_STATE,
+enum class enemy_state {
+  normal,
+  lose,
 };
 
 // game mode
-enum {
-  GAME_MODE_1P = 0,
-  GAME_MODE_BATTLE,
-  NUM_GAME_MODE,
+enum class game_mode {
+  single,
+  battle,
 };
 
 #ifdef MAIN
@@ -89,16 +89,16 @@ GLOBAL int Main_chara_life;
 GLOBAL int Rival_chara_life;
 GLOBAL int Game_count;
 GLOBAL int Game_level;
-GLOBAL int Game_state;
-GLOBAL int Game_mode;
-GLOBAL int Enemy_state[NUM_ENEMY];
+GLOBAL game_state Game_state;
+GLOBAL game_mode Game_mode;
+GLOBAL enemy_state Enemy_state[enemy_character::count];
 GLOBAL int Power_chara_mode[2];
-GLOBAL bool Press_key[2][NUM_PRESS_KEY];
-GLOBAL bool Edge_key[2][NUM_PRESS_KEY];
+GLOBAL bool Press_key[2][input_device::count];
+GLOBAL bool Edge_key[2][input_device::count];
 GLOBAL int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
 GLOBAL bool Enemy_run_debug;
-GLOBAL Mix_Music *Music[5]; // TODO: enum class
-GLOBAL Mix_Chunk *Se[4]; // TODO: enum class
+GLOBAL Mix_Music *Music[5];  // TODO: enum class
+GLOBAL Mix_Chunk *Se[4];     // TODO: enum class
 GLOBAL int Num_player;
 GLOBAL bool Choice_hit;  // true: 1P, false: 2P
 

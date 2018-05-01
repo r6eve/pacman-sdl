@@ -68,7 +68,7 @@ void check_food_state() {
       ;
     }
   }
-  if (Game_mode == GAME_MODE_BATTLE) {
+  if (Game_mode == game_mode::battle) {
     int x = get_rival_chara_block_x();
     int y = get_rival_chara_block_y();
     if (food[y][x] == 1) {
@@ -96,6 +96,6 @@ void check_food_state() {
     }
   }
   if (rest_food == 0) {
-    Game_state = GAME_STATE_CLEAR;
+    Game_state = game_state::clear;
   }
 }
