@@ -14,7 +14,6 @@ void load_image(const char *path, const char *name) {
   }
 
   Img_list *list = new Img_list;
-  ;
   if (!list) {
     SDL_FreeSurface(img);
     throw "out of memory";
