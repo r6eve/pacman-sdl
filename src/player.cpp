@@ -9,7 +9,7 @@ namespace player {
 static Chara Player_1;
 static Chara Player_2;
 
-void init_player() {
+void init() {
   Player_1.pos_x = BLOCK_SIZE * 9;
   Player_1.pos_y = BLOCK_SIZE * 18;
   Player_1.nextblock_x = Player_1.block_x = 9;
@@ -28,7 +28,7 @@ void init_player() {
   }
 }
 
-void draw_player() {
+void draw() {
   SDL_Surface *p_surface = image_manager::get_image("player1");
   SDL_Rect src;
   src.x = BLOCK_SIZE * Player_1.dir;
@@ -54,7 +54,7 @@ void draw_player() {
 }
 
 // TODO: reduce magic numbers
-void move_player() {
+void move() {
   int is_mving;
   int dst_pos_x = Player_1.nextblock_x * BLOCK_SIZE;
   int dst_pos_y = Player_1.nextblock_y * BLOCK_SIZE;

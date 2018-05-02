@@ -17,9 +17,9 @@ typedef struct {
   int anime_weight;
 } Chara;
 
-void init_player();
-void draw_player();
-void move_player();
+void init();
+void draw();
+void move();
 void add_player_1_pos(int x, int y);
 void add_player_2_pos(int x, int y);
 

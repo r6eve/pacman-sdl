@@ -308,7 +308,7 @@ void title() {
       if (wipe::update_wipe()) {
         map::init();
         food::init();
-        player::init_player();
+        player::init();
         enemy::init();
 
         Game_count = 0;
@@ -337,7 +337,7 @@ void game_start() {
   map::draw();
   food::draw();
   enemy::draw();
-  player::draw_player();
+  player::draw();
   draw_score();
   switch (Game_count) {
     case 0:
@@ -381,9 +381,9 @@ void play_game() {
   map::draw();
   food::draw();
   enemy::draw();
-  player::draw_player();
+  player::draw();
   draw_score();
-  player::move_player();
+  player::move();
   for (int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
       enemy::move_lose_enemy(i);
@@ -414,7 +414,7 @@ void game_clear() {
   map::draw();
   food::draw();
   enemy::draw();
-  player::draw_player();
+  player::draw();
   draw_score();
 
   if (Game_count == 0) {
@@ -435,7 +435,7 @@ void game_clear() {
       ++Game_level;
       food::init();
       enemy::init();
-      player::init_player();
+      player::init();
     }
   }
 }
@@ -444,7 +444,7 @@ void game_miss() {
   map::draw();
   food::draw();
   enemy::draw();
-  player::draw_player();
+  player::draw();
   draw_score();
 
   if (Game_count == 0) {
@@ -474,7 +474,7 @@ void game_miss() {
         Game_count = 0;
         Game_state = game_state::start;
         enemy::init();
-        player::init_player();
+        player::init();
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -489,7 +489,7 @@ void game_miss() {
         Game_count = 0;
         Game_state = game_state::start;
         enemy::init();
-        player::init_player();
+        player::init();
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -632,7 +632,7 @@ void game_pause() {
   map::draw();
   food::draw();
   enemy::draw();
-  player::draw_player();
+  player::draw();
   draw_score();
   draw_translucence();
   if (Edge_key[0][input_device::space]) {
