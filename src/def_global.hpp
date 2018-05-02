@@ -89,7 +89,6 @@ GLOBAL int Player_1_life;
 GLOBAL int Player_2_life;
 GLOBAL int Game_count;
 GLOBAL int Game_level;
-GLOBAL game_state Game_state;
 GLOBAL game_mode Game_mode;
 GLOBAL enemy_state Enemy_state[enemy_character::count];
 GLOBAL int Power_chara_mode[2];

@@ -16,10 +16,18 @@ typedef struct {
 } Enemy_data;
 
 void init_enemy();
+
 void draw_enemy();
+
 void move_normal_enemy(int enemy_type);
+
 void move_lose_enemy(int enemy_type);
-void check_hit_enemy();
+
+/**
+ * Return true if the player whose state is normal hits enemy, and false
+ * otherwise.
+ */
+bool check_hit_enemy();
 
 }  // namespace enemy
 

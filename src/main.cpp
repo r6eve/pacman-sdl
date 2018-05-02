@@ -17,6 +17,7 @@
 
 using namespace std;
 
+static game_state Game_state;
 static Kanji_Font *Font[2];
 
 // TODO: enum class
@@ -389,8 +390,15 @@ void play_game() {
       enemy::move_normal_enemy(i);
     }
   }
-  food::check_food_state();
-  enemy::check_hit_enemy();
+
+  // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
+  bool food_state = food::check_food_state();
+  bool hit_enemy = enemy::check_hit_enemy();
+  if (food_state) {
+    Game_state = game_state::clear;
+  } else if (hit_enemy) {
+    Game_state = game_state::miss;
+  }
 
   if (Edge_key[0][input_device::space]) {
     Game_state = game_state::pause;

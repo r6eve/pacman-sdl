@@ -43,19 +43,18 @@ void draw_food() {
       SDL_Rect dst;
       dst.x = BLOCK_SIZE * x;
       dst.y = BLOCK_SIZE * y;
-      if (food[y][x] == 1) {
+      if (food[y][x] == 1) { // food
         SDL_Surface *p_surface = image_manager::get_img("food");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      } else if (food[y][x] == 0) {
+      } else if (food[y][x] == 0) { // counter food
         SDL_Surface *p_surface = image_manager::get_img("food_counter");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      }  // TODO: else
+      }
     }
   }
 }
 
-// TODO: return game_state
-void check_food_state() {
+bool check_food_state() {
   int x = player::get_player_1_block_x();
   int y = player::get_player_1_block_y();
   if (food[y][x] == 1) {
@@ -100,9 +99,8 @@ void check_food_state() {
       }
     }
   }
-  if (rest_food == 0) {
-    Game_state = game_state::clear;
-  }
+
+  return (rest_food == 0);
 }
 
 }  // namespace food

@@ -300,24 +300,24 @@ void move_lose_enemy(int index) {
   }
 }
 
-void check_hit_enemy() {
-  int player_pos_x = player::get_player_1_pos_x();
-  int player_pos_y = player::get_player_1_pos_y();
+bool check_hit_enemy() {
+  int player_1_pos_x = player::get_player_1_pos_x();
+  int player_1_pos_y = player::get_player_1_pos_y();
   for (int i = 0; i < enemy_character::count; ++i) {
-    int d = get_distance(player_pos_x, player_pos_y, Enemy[i].pos_x,
+    int d = get_distance(player_1_pos_x, player_1_pos_y, Enemy[i].pos_x,
                          Enemy[i].pos_y);
     if (d < HIT_DISTANCE) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
-        Game_state = game_state::miss;
-      } else {
-        if (Enemy_state[i] != enemy_state::lose) {
-          Now_score[0] += 100;
-        }
-        Enemy_state[i] = enemy_state::lose;
+        return true;
       }
+      if (Enemy_state[i] != enemy_state::lose) {
+        Now_score[0] += 100;
+      }
+      Enemy_state[i] = enemy_state::lose;
     }
   }
+
   if (Game_mode == game_mode::battle) {
     int player_2_pos_x = player::get_player_2_pos_x();
     int player_2_pos_y = player::get_player_2_pos_y();
@@ -327,16 +327,17 @@ void check_hit_enemy() {
       if (d < HIT_DISTANCE) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;
-          Game_state = game_state::miss;
-        } else {
-          if (Enemy_state[i] != enemy_state::lose) {
-            Now_score[1] += 100;
-          }
-          Enemy_state[i] = enemy_state::lose;
+          return true;
         }
+        if (Enemy_state[i] != enemy_state::lose) {
+          Now_score[1] += 100;
+        }
+        Enemy_state[i] = enemy_state::lose;
       }
     }
   }
+
+  return false;
 }
 
 }  // namespace enemy
