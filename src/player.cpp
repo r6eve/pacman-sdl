@@ -201,7 +201,7 @@ void move_player() {
   }
 }
 
-void add_player_pos(int x, int y) {
+void add_player_1_pos(int x, int y) {
   Player_1.pos_x += x;
   Player_1.pos_y += y;
 }

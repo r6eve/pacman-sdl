@@ -467,7 +467,7 @@ void game_miss() {
 
   // TODO: use pointer to delete if-clauses
   if (Choice_hit) {
-    player::add_player_pos(0, -1);
+    player::add_player_1_pos(0, -1);
     if (wipe::update_wipe()) {
       --Player_1_life;
       if (Player_1_life >= 0) {
