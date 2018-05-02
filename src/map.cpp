@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "main.hpp"

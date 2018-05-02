@@ -1,18 +1,19 @@
 #define MAIN
 
-#include "main.hpp"
 #include <SDL/SDL_image.h>
 #include <math.h>
 #include <time.h>
 #include <iostream>
+
 #include "SDL_kanji.hpp"
 #include "def_global.hpp"
 #include "enemy.hpp"
 #include "food.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
-#include "player.hpp"
+#include "main.hpp"
 #include "map.hpp"
+#include "player.hpp"
 #include "wipe.hpp"
 
 using namespace std;
@@ -420,22 +421,23 @@ void game_clear() {
     wipe::set_wipe_out();
     wipe::draw_wipe(OFFSET_X);
     ++Game_count;
-  } else if (Game_count == 1) {
-    wipe::draw_wipe(OFFSET_X);
-    if (wipe::update_wipe()) {
-      if (Game_level >= 256) {
-        Game_count = 0;
-        Game_state = game_state::gameover;
-      } else {
-        Game_count = 0;
-        Game_state = game_state::start;
-        ++Game_level;
-        food::init_food();
-        enemy::init_enemy();
-        player::init_player();
-      }
+    return;
+  }
+
+  wipe::draw_wipe(OFFSET_X);
+  if (wipe::update_wipe()) {
+    if (Game_level >= 256) {
+      Game_count = 0;
+      Game_state = game_state::gameover;
+    } else {
+      Game_count = 0;
+      Game_state = game_state::start;
+      ++Game_level;
+      food::init_food();
+      enemy::init_enemy();
+      player::init_player();
     }
-  } // TODO: else
+  }
 }
 
 void game_miss() {
@@ -454,45 +456,47 @@ void game_miss() {
       wipe::draw_wipe(OFFSET_X);
     }
     ++Game_count;
-  } else if (Game_count == 1) {
-    if ((Player_1_life == 0) || (Player_2_life == 0)) {
-      wipe::draw_wipe(SCREEN_WIDTH);
-    } else {
-      wipe::draw_wipe(OFFSET_X);
-    }
+    return;
+  }
 
-    if (Choice_hit) {
-      player::add_player_pos(0, -1);
-      if (wipe::update_wipe()) {
-        --Player_1_life;
-        if (Player_1_life >= 0) {
-          Game_count = 0;
-          Game_state = game_state::start;
-          enemy::init_enemy();
-          player::init_player();
-        } else {
-          Game_count = 0;
-          Blink_count = 0;
-          Game_state = game_state::gameover;
-        }
-      }
-    } else {
-      player::add_player_2_pos(0, -1);
-      if (wipe::update_wipe()) {
-        --Player_2_life;
-        if (Player_2_life >= 0) {
-          Game_count = 0;
-          Game_state = game_state::start;
-          enemy::init_enemy();
-          player::init_player();
-        } else {
-          Game_count = 0;
-          Blink_count = 0;
-          Game_state = game_state::gameover;
-        }
+  if ((Player_1_life == 0) || (Player_2_life == 0)) {
+    wipe::draw_wipe(SCREEN_WIDTH);
+  } else {
+    wipe::draw_wipe(OFFSET_X);
+  }
+
+  // TODO: use pointer to delete if-clauses
+  if (Choice_hit) {
+    player::add_player_pos(0, -1);
+    if (wipe::update_wipe()) {
+      --Player_1_life;
+      if (Player_1_life >= 0) {
+        Game_count = 0;
+        Game_state = game_state::start;
+        enemy::init_enemy();
+        player::init_player();
+      } else {
+        Game_count = 0;
+        Blink_count = 0;
+        Game_state = game_state::gameover;
       }
     }
-  } // TODO: else
+  } else {
+    player::add_player_2_pos(0, -1);
+    if (wipe::update_wipe()) {
+      --Player_2_life;
+      if (Player_2_life >= 0) {
+        Game_count = 0;
+        Game_state = game_state::start;
+        enemy::init_enemy();
+        player::init_player();
+      } else {
+        Game_count = 0;
+        Blink_count = 0;
+        Game_state = game_state::gameover;
+      }
+    }
+  }
 }
 
 void game_over() {

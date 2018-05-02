@@ -1,6 +1,7 @@
-#include "input.hpp"
 #include <SDL/SDL_image.h>
+
 #include "def_global.hpp"
+#include "input.hpp"
 
 namespace input {
 

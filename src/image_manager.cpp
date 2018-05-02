@@ -1,6 +1,7 @@
-#include "image_manager.hpp"
 #include <stdio.h>
 #include <string.h>
+
+#include "image_manager.hpp"
 
 namespace image_manager {
 

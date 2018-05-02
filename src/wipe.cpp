@@ -1,5 +1,5 @@
-#include "wipe.hpp"
 #include "def_global.hpp"
+#include "wipe.hpp"
 
 namespace wipe {
 
@@ -19,12 +19,12 @@ void set_wipe_out() {
   Wipe_count_reach = SCREEN_HEIGHT / 10;
 }
 
-int update_wipe() {
+bool update_wipe() {
   if (Wipe_count != Wipe_count_reach) {
     Wipe_count += Wipe_variation;
-    return 0;
+    return false;
   } else {
-    return 1;
+    return true;
   }
 }
 

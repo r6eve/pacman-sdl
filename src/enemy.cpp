@@ -1,9 +1,9 @@
-#include "enemy.hpp"
 #include "def_global.hpp"
+#include "enemy.hpp"
 #include "image_manager.hpp"
 #include "main.hpp"
-#include "player.hpp"
 #include "map.hpp"
+#include "player.hpp"
 
 namespace enemy {
 

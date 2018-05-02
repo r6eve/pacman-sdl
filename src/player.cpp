@@ -1,30 +1,13 @@
-#include "player.hpp"
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
 #include "map.hpp"
+#include "player.hpp"
 
 namespace player {
 
 static Chara Player_1;
 static Chara Player_2;
-
-// private function
-void update_player(int index) {
-  if (index == 0) {
-    ++Player_1.anime_weight;
-    if (Player_1.anime_weight > 4) {
-      Player_1.anime_count = 1 - Player_1.anime_count;
-      Player_1.anime_weight = 0;
-    }
-  } else if (index == 1) {
-    ++Player_2.anime_weight;
-    if (Player_2.anime_weight > 4) {
-      Player_2.anime_count = 1 - Player_2.anime_count;
-      Player_2.anime_weight = 0;
-    }
-  } // TODO: else
-}
 
 void init_player() {
   Player_1.pos_x = BLOCK_SIZE * 9;
@@ -83,7 +66,11 @@ void move_player() {
   }
 
   if (is_mving) {
-    update_player(0);
+    ++Player_1.anime_weight;
+    if (Player_1.anime_weight > 4) {
+      Player_1.anime_count = 1 - Player_1.anime_count;
+      Player_1.anime_weight = 0;
+    }
     int mv_value = 2;
     if (dst_pos_x > Player_1.pos_x) {
       Player_1.pos_x += mv_value;
@@ -151,7 +138,11 @@ void move_player() {
     }
 
     if (is_mving) {
-      update_player(1);
+      ++Player_2.anime_weight;
+      if (Player_2.anime_weight > 4) {
+        Player_2.anime_count = 1 - Player_2.anime_count;
+        Player_2.anime_weight = 0;
+      }
       int mv_value = 2;
       if (dst_pos_x > Player_2.pos_x) {
         Player_2.pos_x += mv_value;

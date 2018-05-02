@@ -1,9 +1,9 @@
-#include "food.hpp"
 #include "def_global.hpp"
 #include "enemy.hpp"
+#include "food.hpp"
 #include "image_manager.hpp"
-#include "player.hpp"
 #include "map.hpp"
+#include "player.hpp"
 
 namespace food {
 
@@ -26,11 +26,11 @@ void init_food() {
   for (int y = 0; y < NUM_BLOCK_Y; ++y) {
     for (int x = 0; x < NUM_BLOCK_X; ++x) {
       food[y][x] = -1;
-      if (map::check_map_state(x, y) == 0) {
+      if (map::check_map_state(x, y) == 0) {  // field where player can move
         food[y][x] = 1;
-      } else if (map::check_map_state(x, y) == 4) {  // TODO: What's 4?
+      } else if (map::check_map_state(x, y) == 4) {  // counter food
         food[y][x] = 0;
-      }  // TODO: else
+      }
     }
   }
 }
