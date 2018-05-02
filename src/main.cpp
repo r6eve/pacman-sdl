@@ -393,7 +393,7 @@ void play_game() {
   }
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
-  bool food_state = food::check_food_state();
+  bool food_state = food::check_state();
   bool hit_enemy = enemy::check_hit_enemy();
   if (food_state) {
     Game_state = game_state::clear;

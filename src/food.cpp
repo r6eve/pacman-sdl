@@ -50,7 +50,7 @@ void draw() {
   }
 }
 
-bool check_food_state() {
+bool check_state() {
   int x = player::get_player_1_block_x();
   int y = player::get_player_1_block_y();
   if (food[y][x] == 1) {

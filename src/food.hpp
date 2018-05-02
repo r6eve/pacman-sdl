@@ -10,7 +10,7 @@ void draw();
 /**
  * Return true if all of the food are eaten, and false otherwise.
  */
-bool check_food_state();
+bool check_state();
 
 }  // namespace food
 
