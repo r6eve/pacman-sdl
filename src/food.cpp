@@ -11,18 +11,7 @@ namespace food {
 // -1: no food, 0: counter food, 1: food, 2: get food
 static int food[NUM_BLOCK_Y][NUM_BLOCK_X];
 
-// private function
-void update_food() {
-  for (int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (int x = 0; x < NUM_BLOCK_X; ++x) {
-      if (food[y][x] == 2) {
-        food[y][x] = -1;
-      }
-    }
-  }
-}
-
-void init_food() {
+void init() {
   for (int y = 0; y < NUM_BLOCK_Y; ++y) {
     for (int x = 0; x < NUM_BLOCK_X; ++x) {
       food[y][x] = -1;
@@ -35,8 +24,15 @@ void init_food() {
   }
 }
 
-void draw_food() {
-  update_food();
+void draw() {
+  for (int y = 0; y < NUM_BLOCK_Y; ++y) {
+    for (int x = 0; x < NUM_BLOCK_X; ++x) {
+      if (food[y][x] == 2) {
+        food[y][x] = -1;
+      }
+    }
+  }
+
   SDL_Rect src = {0, 0, BLOCK_SIZE, BLOCK_SIZE};
   for (int y = 0; y < NUM_BLOCK_Y; ++y) {
     for (int x = 0; x < NUM_BLOCK_X; ++x) {

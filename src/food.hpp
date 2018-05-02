@@ -3,9 +3,9 @@
 
 namespace food {
 
-void init_food();
+void init();
 
-void draw_food();
+void draw();
 
 /**
  * Return true if all of the food are eaten, and false otherwise.
