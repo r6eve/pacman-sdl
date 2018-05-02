@@ -54,7 +54,7 @@ bool init() {
   }
 
   init_color();
-  init_joystick();
+  input::init_joystick();
 
   // initialize global variables
   Blink_count = 0;
@@ -106,20 +106,20 @@ void init_font() {
 
 void init_img() {
   try {
-    load_img("./data/pacman.png", "pacman");
-    load_img("./data/rival.png", "rival");
-    load_img("./data/bg.png", "bg");
-    load_img("./data/bg_red.png", "bg_red");
-    load_img("./data/bg_green.png", "bg_green");
-    load_img("./data/bg_blue.png", "bg_blue");
-    load_img("./data/food.png", "food");
-    load_img("./data/food_counter.png", "food_counter");
-    load_img("./data/akabei.png", "akabei");
-    load_img("./data/pinky.png", "pinky");
-    load_img("./data/aosuke.png", "aosuke");
-    load_img("./data/guzuta.png", "guzuta");
-    load_img("./data/mon_run.png", "mon_run");
-    load_img("./data/plate.png", "plate");
+    image_manager::load_img("./data/pacman.png", "pacman");
+    image_manager::load_img("./data/rival.png", "rival");
+    image_manager::load_img("./data/bg.png", "bg");
+    image_manager::load_img("./data/bg_red.png", "bg_red");
+    image_manager::load_img("./data/bg_green.png", "bg_green");
+    image_manager::load_img("./data/bg_blue.png", "bg_blue");
+    image_manager::load_img("./data/food.png", "food");
+    image_manager::load_img("./data/food_counter.png", "food_counter");
+    image_manager::load_img("./data/akabei.png", "akabei");
+    image_manager::load_img("./data/pinky.png", "pinky");
+    image_manager::load_img("./data/aosuke.png", "aosuke");
+    image_manager::load_img("./data/guzuta.png", "guzuta");
+    image_manager::load_img("./data/mon_run.png", "mon_run");
+    image_manager::load_img("./data/plate.png", "plate");
   } catch (char *e) {
     throw e;
   }
@@ -138,7 +138,7 @@ void init_music() {
 
 void main_loop() {
   for (;;) {
-    update_input();
+    input::update_input();
     switch (Game_state) {
       case game_state::title:
         title();
@@ -189,15 +189,15 @@ void title() {
 
   switch (Game_count) {
     case 0:
-      set_wipe_in();
-      draw_wipe(SCREEN_WIDTH);
+      wipe::set_wipe_in();
+      wipe::draw_wipe(SCREEN_WIDTH);
       ++Game_count;
       break;
     case 1:
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
-      draw_wipe(SCREEN_WIDTH);
-      if (update_wipe()) {
+      wipe::draw_wipe(SCREEN_WIDTH);
+      if (wipe::update_wipe()) {
         ++Game_count;
       }
       break;
@@ -258,8 +258,8 @@ void title() {
 
       if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
           Press_key[0][input_device::space]) {
-        set_wipe_out();
-        draw_wipe(SCREEN_WIDTH);
+        wipe::set_wipe_out();
+        wipe::draw_wipe(SCREEN_WIDTH);
         ++Game_count;
       }
 
@@ -300,14 +300,14 @@ void title() {
           break;
       }
 
-      draw_wipe(SCREEN_WIDTH);
+      wipe::draw_wipe(SCREEN_WIDTH);
 
       // initialize globals
-      if (update_wipe()) {
-        init_map();
-        init_food();
-        init_main_chara();
-        init_enemy();
+      if (wipe::update_wipe()) {
+        map::init_map();
+        food::init_food();
+        main_chara::init_main_chara();
+        enemy::init_enemy();
 
         Game_count = 0;
         Game_state = game_state::start;
@@ -332,23 +332,23 @@ void title() {
 }
 
 void game_start() {
-  draw_map();
-  draw_food();
-  draw_enemy();
-  draw_main_chara();
+  map::draw_map();
+  food::draw_food();
+  enemy::draw_enemy();
+  main_chara::draw_main_chara();
   draw_score();
   switch (Game_count) {
     case 0:
       if ((Main_chara_life == 2) && (Rival_chara_life == 2)) {
         Mix_PlayMusic(Music[2], 0);
       }
-      set_wipe_in();
-      draw_wipe(OFFSET_X);
+      wipe::set_wipe_in();
+      wipe::draw_wipe(OFFSET_X);
       ++Game_count;
       break;
     case 1:
-      draw_wipe(OFFSET_X);
-      if (update_wipe()) {
+      wipe::draw_wipe(OFFSET_X);
+      if (wipe::update_wipe()) {
         ++Game_count;
       }
       break;
@@ -376,22 +376,21 @@ void game_start() {
 }
 
 void play_game() {
-  update_food();
-  draw_map();
-  draw_food();
-  draw_enemy();
-  draw_main_chara();
+  map::draw_map();
+  food::draw_food();
+  enemy::draw_enemy();
+  main_chara::draw_main_chara();
   draw_score();
-  mv_main_chara();
+  main_chara::move_main_chara();
   for (int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
-      mv_lose_enemy(i);
+      enemy::move_lose_enemy(i);
     } else {
-      mv_normal_enemy(i);
+      enemy::move_normal_enemy(i);
     }
   }
-  check_food_state();
-  check_hit_enemy();
+  food::check_food_state();
+  enemy::check_hit_enemy();
 
   if (Edge_key[0][input_device::space]) {
     Game_state = game_state::pause;
@@ -403,19 +402,19 @@ void play_game() {
 }
 
 void game_clear() {
-  draw_map();
-  draw_food();
-  draw_enemy();
-  draw_main_chara();
+  map::draw_map();
+  food::draw_food();
+  enemy::draw_enemy();
+  main_chara::draw_main_chara();
   draw_score();
 
   if (Game_count == 0) {
-    set_wipe_out();
-    draw_wipe(OFFSET_X);
+    wipe::set_wipe_out();
+    wipe::draw_wipe(OFFSET_X);
     ++Game_count;
   } else if (Game_count == 1) {
-    draw_wipe(OFFSET_X);
-    if (update_wipe()) {
+    wipe::draw_wipe(OFFSET_X);
+    if (wipe::update_wipe()) {
       if (Game_level >= 256) {
         Game_count = 0;
         Game_state = game_state::gameover;
@@ -423,46 +422,46 @@ void game_clear() {
         Game_count = 0;
         Game_state = game_state::start;
         ++Game_level;
-        init_food();
-        init_enemy();
-        init_main_chara();
+        food::init_food();
+        enemy::init_enemy();
+        main_chara::init_main_chara();
       }
     }
   } // TODO: else
 }
 
 void game_miss() {
-  draw_map();
-  draw_food();
-  draw_enemy();
-  draw_main_chara();
+  map::draw_map();
+  food::draw_food();
+  enemy::draw_enemy();
+  main_chara::draw_main_chara();
   draw_score();
 
   if (Game_count == 0) {
     Mix_PlayMusic(Music[3], 0);
-    set_wipe_out();
+    wipe::set_wipe_out();
     if ((Main_chara_life == 0) || (Rival_chara_life == 0)) {
-      draw_wipe(SCREEN_WIDTH);
+      wipe::draw_wipe(SCREEN_WIDTH);
     } else {
-      draw_wipe(OFFSET_X);
+      wipe::draw_wipe(OFFSET_X);
     }
     ++Game_count;
   } else if (Game_count == 1) {
     if ((Main_chara_life == 0) || (Rival_chara_life == 0)) {
-      draw_wipe(SCREEN_WIDTH);
+      wipe::draw_wipe(SCREEN_WIDTH);
     } else {
-      draw_wipe(OFFSET_X);
+      wipe::draw_wipe(OFFSET_X);
     }
 
     if (Choice_hit) {
-      add_main_chara_pos(0, -1);
-      if (update_wipe()) {
+      main_chara::add_main_chara_pos(0, -1);
+      if (wipe::update_wipe()) {
         --Main_chara_life;
         if (Main_chara_life >= 0) {
           Game_count = 0;
           Game_state = game_state::start;
-          init_enemy();
-          init_main_chara();
+          enemy::init_enemy();
+          main_chara::init_main_chara();
         } else {
           Game_count = 0;
           Blink_count = 0;
@@ -470,14 +469,14 @@ void game_miss() {
         }
       }
     } else {
-      add_rival_chara_pos(0, -1);
-      if (update_wipe()) {
+      main_chara::add_rival_chara_pos(0, -1);
+      if (wipe::update_wipe()) {
         --Rival_chara_life;
         if (Rival_chara_life >= 0) {
           Game_count = 0;
           Game_state = game_state::start;
-          init_enemy();
-          init_main_chara();
+          enemy::init_enemy();
+          main_chara::init_main_chara();
         } else {
           Game_count = 0;
           Blink_count = 0;
@@ -499,15 +498,15 @@ void game_over() {
         case 0:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
-          set_wipe_in();
-          draw_wipe(SCREEN_WIDTH);
+          wipe::set_wipe_in();
+          wipe::draw_wipe(SCREEN_WIDTH);
           ++Game_count;
           break;
         case 1:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
-          draw_wipe(SCREEN_WIDTH);
-          if (update_wipe()) {
+          wipe::draw_wipe(SCREEN_WIDTH);
+          if (wipe::update_wipe()) {
             ++Game_count;
           }
           break;
@@ -530,13 +529,13 @@ void game_over() {
           if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
               Press_key[0][input_device::space]) {
             ++Game_count;
-            set_wipe_out();
-            draw_wipe(SCREEN_WIDTH);
+            wipe::set_wipe_out();
+            wipe::draw_wipe(SCREEN_WIDTH);
           }
           break;
         case 3:
-          draw_wipe(SCREEN_WIDTH);
-          if (update_wipe()) {
+          wipe::draw_wipe(SCREEN_WIDTH);
+          if (wipe::update_wipe()) {
             Blink_count = 0;
             Game_count = 0;
             Game_state = game_state::title;
@@ -552,15 +551,15 @@ void game_over() {
         case 0:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
-          set_wipe_in();
-          draw_wipe(SCREEN_WIDTH);
+          wipe::set_wipe_in();
+          wipe::draw_wipe(SCREEN_WIDTH);
           ++Game_count;
           break;
         case 1:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
-          draw_wipe(SCREEN_WIDTH);
-          if (update_wipe()) {
+          wipe::draw_wipe(SCREEN_WIDTH);
+          if (wipe::update_wipe()) {
             ++Game_count;
           }
           break;
@@ -591,13 +590,13 @@ void game_over() {
           if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
               Press_key[0][input_device::space]) {
             ++Game_count;
-            set_wipe_out();
-            draw_wipe(SCREEN_WIDTH);
+            wipe::set_wipe_out();
+            wipe::draw_wipe(SCREEN_WIDTH);
           }
           break;
         case 3:
-          draw_wipe(SCREEN_WIDTH);
-          if (update_wipe()) {
+          wipe::draw_wipe(SCREEN_WIDTH);
+          if (wipe::update_wipe()) {
             Blink_count = 0;
             Game_count = 0;
             Rival_chara_life = 2;
@@ -618,10 +617,10 @@ void game_over() {
 }
 
 void game_pause() {
-  draw_map();
-  draw_food();
-  draw_enemy();
-  draw_main_chara();
+  map::draw_map();
+  food::draw_food();
+  enemy::draw_enemy();
+  main_chara::draw_main_chara();
   draw_score();
   draw_translucence();
   if (Edge_key[0][input_device::space]) {
@@ -633,7 +632,7 @@ void game_pause() {
 // TODO: delete meanigneless block scopes
 void draw_score() {
   {
-    SDL_Surface *p_surface = get_img("plate");
+    SDL_Surface *p_surface = image_manager::get_img("plate");
     SDL_Rect dst;
     dst.x = OFFSET_X;
     dst.y = 0;
@@ -642,7 +641,7 @@ void draw_score() {
   {
     Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
                   WHITE, "Score: %6d", Now_score[0]);
-    SDL_Surface *p_surface = get_img("pacman");
+    SDL_Surface *p_surface = image_manager::get_img("pacman");
     SDL_Rect src, dst;
     src.x = BLOCK_SIZE;
     src.y = 0;
@@ -656,7 +655,7 @@ void draw_score() {
     if (Game_mode == game_mode::battle) {
       Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
                     Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
-      SDL_Surface *p_surface = get_img("rival");
+      SDL_Surface *p_surface = image_manager::get_img("rival");
       SDL_Rect src, dst;
       src.x = BLOCK_SIZE;
       src.y = 0;
@@ -750,11 +749,11 @@ void draw_fps() {
 }
 
 void end() {
-  del_all_img();
+  image_manager::del_all_img();
   for (int i = 0; i < NUM_FONT; ++i) {
     Kanji_CloseFont(Font[i]);
   }
-  end_joystick();
+  input::end_joystick();
   end_music();
   atexit(SDL_Quit);
 }

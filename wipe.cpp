@@ -1,6 +1,8 @@
 #include "wipe.hpp"
 #include "def_global.hpp"
 
+namespace wipe {
+
 static int Wipe_variation;
 static int Wipe_count;
 static int Wipe_count_reach;
@@ -37,3 +39,5 @@ void draw_wipe(int end_x) {
     SDL_FillRect(Screen, &dst, black);
   }
 }
+
+}  // namespace wipe

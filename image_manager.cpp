@@ -2,7 +2,30 @@
 #include <stdio.h>
 #include <string.h>
 
+namespace image_manager {
+
 static Img_list *Img_list_top = nullptr;
+
+// private function
+void del_img(const char *name) {
+  Img_list *p = Img_list_top;
+  while (p) {
+    if (!strcmp(p->name, name)) {
+      if (p->next) {
+        p->next->prev = p->prev;
+      }
+      if (p->prev) {
+        p->prev->next = p->next;
+      } else {
+        Img_list_top = p->next;
+      }
+      SDL_FreeSurface(p->img);
+      delete p;
+      break;
+    }
+    p = p->next;
+  }
+}
 
 void load_img(const char *path, const char *name) {
   SDL_Surface *img = IMG_Load(path);
@@ -10,7 +33,8 @@ void load_img(const char *path, const char *name) {
     throw IMG_GetError();
   }
 
-  Img_list *list = new Img_list;;
+  Img_list *list = new Img_list;
+  ;
   if (!list) {
     SDL_FreeSurface(img);
     throw "out of memory";
@@ -37,26 +61,6 @@ SDL_Surface *get_img(const char *name) {
   return nullptr;
 }
 
-void del_img(const char *name) {
-  Img_list *p = Img_list_top;
-  while (p) {
-    if (!strcmp(p->name, name)) {
-      if (p->next) {
-        p->next->prev = p->prev;
-      }
-      if (p->prev) {
-        p->prev->next = p->next;
-      } else {
-        Img_list_top = p->next;
-      }
-      SDL_FreeSurface(p->img);
-      delete p;
-      break;
-    }
-    p = p->next;
-  }
-}
-
 void del_all_img() {
   while (Img_list_top) {
     Img_list *p = Img_list_top->next;
@@ -68,3 +72,5 @@ void del_all_img() {
     }
   }
 }
+
+}  // namespace image_manager

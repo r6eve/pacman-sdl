@@ -1,11 +1,31 @@
+// TODO: main_chara->player_chara
 #include "main_chara.hpp"
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
 #include "map.hpp"
 
+namespace main_chara {
+
 static Chara Main_chara;
 static Chara Rival_chara;
+
+// private function
+void update_main_chara(int index) {
+  if (index == 0) {
+    ++Main_chara.anime_weight;
+    if (Main_chara.anime_weight > 4) {
+      Main_chara.anime_count = 1 - Main_chara.anime_count;
+      Main_chara.anime_weight = 0;
+    }
+  } else if (index == 1) {
+    ++Rival_chara.anime_weight;
+    if (Rival_chara.anime_weight > 4) {
+      Rival_chara.anime_count = 1 - Rival_chara.anime_count;
+      Rival_chara.anime_weight = 0;
+    }
+  } // TODO: else
+}
 
 void init_main_chara() {
   Main_chara.pos_x = BLOCK_SIZE * 9;
@@ -26,24 +46,8 @@ void init_main_chara() {
   }
 }
 
-void update_main_chara(int index) {
-  if (index == 0) {
-    ++Main_chara.anime_weight;
-    if (Main_chara.anime_weight > 4) {
-      Main_chara.anime_count = 1 - Main_chara.anime_count;
-      Main_chara.anime_weight = 0;
-    }
-  } else if (index == 1) {
-    ++Rival_chara.anime_weight;
-    if (Rival_chara.anime_weight > 4) {
-      Rival_chara.anime_count = 1 - Rival_chara.anime_count;
-      Rival_chara.anime_weight = 0;
-    }
-  } // TODO: else
-}
-
 void draw_main_chara() {
-  SDL_Surface *p_surface = get_img("pacman");
+  SDL_Surface *p_surface = image_manager::get_img("pacman");
   SDL_Rect src;
   src.x = BLOCK_SIZE * Main_chara.dir;
   src.y = BLOCK_SIZE * Main_chara.anime_count;
@@ -54,7 +58,7 @@ void draw_main_chara() {
   dst.y = Main_chara.pos_y;
   SDL_BlitSurface(p_surface, &src, Screen, &dst);
   if (Game_mode == game_mode::battle) {
-    SDL_Surface *p_rival = get_img("rival");
+    SDL_Surface *p_rival = image_manager::get_img("rival");
     SDL_Rect src_rival;
     src_rival.x = BLOCK_SIZE * Rival_chara.dir;
     src_rival.y = BLOCK_SIZE * Rival_chara.anime_count;
@@ -68,7 +72,7 @@ void draw_main_chara() {
 }
 
 // TODO: reduce magic numbers
-void mv_main_chara() {
+void move_main_chara() {
   int is_mving;
   int dst_pos_x = Main_chara.nextblock_x * BLOCK_SIZE;
   int dst_pos_y = Main_chara.nextblock_y * BLOCK_SIZE;
@@ -112,25 +116,25 @@ void mv_main_chara() {
       ++dst_block_x;
     }
 
-    if ((check_map_state(dst_block_x, dst_block_y) == 0) ||
-        (check_map_state(dst_block_x, dst_block_y) == 3) ||
-        (check_map_state(dst_block_x, dst_block_y) == 4) ||
-        (check_map_state(dst_block_x, dst_block_y) == 5) ||
-        (check_map_state(dst_block_x, dst_block_y) == 6) ||
-        (check_map_state(dst_block_x + 1, dst_block_y) == 6) ||
-        (check_map_state(dst_block_x, dst_block_y) == 7) ||
-        (check_map_state(dst_block_x - 1, dst_block_y) == 7) ||
-        (check_map_state(dst_block_x, dst_block_y) == 8)) {
+    if ((map::check_map_state(dst_block_x, dst_block_y) == 0) ||
+        (map::check_map_state(dst_block_x, dst_block_y) == 3) ||
+        (map::check_map_state(dst_block_x, dst_block_y) == 4) ||
+        (map::check_map_state(dst_block_x, dst_block_y) == 5) ||
+        (map::check_map_state(dst_block_x, dst_block_y) == 6) ||
+        (map::check_map_state(dst_block_x + 1, dst_block_y) == 6) ||
+        (map::check_map_state(dst_block_x, dst_block_y) == 7) ||
+        (map::check_map_state(dst_block_x - 1, dst_block_y) == 7) ||
+        (map::check_map_state(dst_block_x, dst_block_y) == 8)) {
       Main_chara.nextblock_x = dst_block_x;
       Main_chara.nextblock_y = dst_block_y;
     }
 
-    if (check_map_state(dst_block_x + 2, dst_block_y) == 6) {
+    if (map::check_map_state(dst_block_x + 2, dst_block_y) == 6) {
       Main_chara.nextblock_x = NUM_BLOCK_X;
       Main_chara.pos_x = BLOCK_SIZE * Main_chara.nextblock_x;
     }
 
-    if (check_map_state(dst_block_x - 2, dst_block_y) == 7) {
+    if (map::check_map_state(dst_block_x - 2, dst_block_y) == 7) {
       Main_chara.nextblock_x = -1;
       Main_chara.pos_x = BLOCK_SIZE * Main_chara.nextblock_x;
     }
@@ -181,25 +185,25 @@ void mv_main_chara() {
         ++dst_block_x;
       }
 
-      if ((check_map_state(dst_block_x, dst_block_y) == 0) ||
-          (check_map_state(dst_block_x, dst_block_y) == 3) ||
-          (check_map_state(dst_block_x, dst_block_y) == 4) ||
-          (check_map_state(dst_block_x, dst_block_y) == 5) ||
-          (check_map_state(dst_block_x, dst_block_y) == 6) ||
-          (check_map_state(dst_block_x + 1, dst_block_y) == 6) ||
-          (check_map_state(dst_block_x, dst_block_y) == 7) ||
-          (check_map_state(dst_block_x - 1, dst_block_y) == 7) ||
-          (check_map_state(dst_block_x, dst_block_y) == 8)) {
+      if ((map::check_map_state(dst_block_x, dst_block_y) == 0) ||
+          (map::check_map_state(dst_block_x, dst_block_y) == 3) ||
+          (map::check_map_state(dst_block_x, dst_block_y) == 4) ||
+          (map::check_map_state(dst_block_x, dst_block_y) == 5) ||
+          (map::check_map_state(dst_block_x, dst_block_y) == 6) ||
+          (map::check_map_state(dst_block_x + 1, dst_block_y) == 6) ||
+          (map::check_map_state(dst_block_x, dst_block_y) == 7) ||
+          (map::check_map_state(dst_block_x - 1, dst_block_y) == 7) ||
+          (map::check_map_state(dst_block_x, dst_block_y) == 8)) {
         Rival_chara.nextblock_x = dst_block_x;
         Rival_chara.nextblock_y = dst_block_y;
       }
 
-      if (check_map_state(dst_block_x + 2, dst_block_y) == 6) {
+      if (map::check_map_state(dst_block_x + 2, dst_block_y) == 6) {
         Rival_chara.nextblock_x = NUM_BLOCK_X;
         Rival_chara.pos_x = BLOCK_SIZE * Rival_chara.nextblock_x;
       }
 
-      if (check_map_state(dst_block_x - 2, dst_block_y) == 7) {
+      if (map::check_map_state(dst_block_x - 2, dst_block_y) == 7) {
         Rival_chara.nextblock_x = -1;
         Rival_chara.pos_x = BLOCK_SIZE * Rival_chara.nextblock_x;
       }
@@ -232,3 +236,5 @@ int get_rival_chara_block_x() { return Rival_chara.block_x; }
 int get_main_chara_block_y() { return Main_chara.block_y; }
 
 int get_rival_chara_block_y() { return Rival_chara.block_y; }
+
+}  // namespace main_chara

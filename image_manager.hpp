@@ -3,6 +3,9 @@
 
 #include <SDL/SDL_image.h>
 
+namespace image_manager {
+
+// TODO: priavate struct/class
 typedef struct Img_list_rec {
   char name[64];
   SDL_Surface *img;
@@ -12,7 +15,8 @@ typedef struct Img_list_rec {
 
 void load_img(const char *path, const char *name);
 SDL_Surface *get_img(const char *name);
-void del_img(const char *name);
 void del_all_img();
+
+}  // namespace image_manager
 
 #endif

@@ -5,21 +5,11 @@
 #include "main_chara.hpp"
 #include "map.hpp"
 
+namespace enemy {
+
 static Enemy_data Enemy[enemy_character::count];
 
-void init_enemy() {
-  int start_block[enemy_character::count][2] = {{11, 12}, {12, 12}, {11, 11}, {12, 11}};
-  for (int i = 0; i < enemy_character::count; ++i) {
-    Enemy[i].pos_x = BLOCK_SIZE * start_block[i][0];
-    Enemy[i].pos_y = BLOCK_SIZE * start_block[i][1];
-    Enemy[i].block_x = Enemy[i].nextblock_x = start_block[i][0];
-    Enemy[i].block_y = Enemy[i].nextblock_y = start_block[i][1];
-    Enemy[i].dir = 2;
-    Enemy[i].anime_count = 0;
-    Enemy[i].anime_weight = 0;
-  }
-}
-
+// private function
 void update_enemy() {
   for (int i = 0; i < enemy_character::count; ++i) {
     ++Enemy[i].anime_weight;
@@ -31,14 +21,28 @@ void update_enemy() {
   }
 }
 
+void init_enemy() {
+  int start_block[enemy_character::count][2] = {
+      {11, 12}, {12, 12}, {11, 11}, {12, 11}};
+  for (int i = 0; i < enemy_character::count; ++i) {
+    Enemy[i].pos_x = BLOCK_SIZE * start_block[i][0];
+    Enemy[i].pos_y = BLOCK_SIZE * start_block[i][1];
+    Enemy[i].block_x = Enemy[i].nextblock_x = start_block[i][0];
+    Enemy[i].block_y = Enemy[i].nextblock_y = start_block[i][1];
+    Enemy[i].dir = 2;
+    Enemy[i].anime_count = 0;
+    Enemy[i].anime_weight = 0;
+  }
+}
+
 void draw_enemy() {
   SDL_Rect src, dst;
-  SDL_Surface *p_surface[5]; // TODO: 5
-  p_surface[0] = get_img("akabei");
-  p_surface[1] = get_img("pinky");
-  p_surface[2] = get_img("aosuke");
-  p_surface[3] = get_img("guzuta");
-  p_surface[4] = get_img("mon_run");
+  SDL_Surface *p_surface[5];  // TODO: 5
+  p_surface[0] = image_manager::get_img("akabei");
+  p_surface[1] = image_manager::get_img("pinky");
+  p_surface[2] = image_manager::get_img("aosuke");
+  p_surface[3] = image_manager::get_img("guzuta");
+  p_surface[4] = image_manager::get_img("mon_run");
   for (int i = 0; i < enemy_character::count; ++i) {
     switch (Enemy_state[i]) {
       case enemy_state::normal:
@@ -66,11 +70,12 @@ void draw_enemy() {
   }
 }
 
-void mv_normal_enemy(int index) {
+void move_normal_enemy(int index) {
   int is_mving, dst_pos_x, dst_pos_y;
 
   switch (index) {
-    case enemy_character::akabei:  // TODO: change moving algorithm for each enemies.
+    case enemy_character::akabei:  // TODO: change moving algorithm for each
+                                   // enemies.
     case enemy_character::pinky:
     case enemy_character::aosuke:
     case enemy_character::guzuta:
@@ -102,7 +107,7 @@ void mv_normal_enemy(int index) {
       } else {
         Enemy[index].block_x = Enemy[index].nextblock_x;
         Enemy[index].block_y = Enemy[index].nextblock_y;
-        if (check_map_state(Enemy[index].block_x, Enemy[index].block_y) == 2) {
+        if (map::check_map_state(Enemy[index].block_x, Enemy[index].block_y) == 2) {
           Enemy[index].dir = 2;
           --Enemy[index].nextblock_y;
         } else {
@@ -120,7 +125,7 @@ void mv_normal_enemy(int index) {
               Enemy[index].block_x + front_pos[Enemy[index].dir][0];
           int front_block_y =
               Enemy[index].block_y + front_pos[Enemy[index].dir][1];
-          int front_block = check_map_state(front_block_x, front_block_y);
+          int front_block = map::check_map_state(front_block_x, front_block_y);
           if ((front_block == 3) || (front_block == 4) || (front_block == 5) ||
               (front_block == 6) || (front_block == 7) || (front_block == 8)) {
             front_block = 0;  // can move it
@@ -130,7 +135,7 @@ void mv_normal_enemy(int index) {
               Enemy[index].block_x + left_pos[Enemy[index].dir][0];
           int left_block_y =
               Enemy[index].block_y + left_pos[Enemy[index].dir][1];
-          int left_block = check_map_state(left_block_x, left_block_y);
+          int left_block = map::check_map_state(left_block_x, left_block_y);
           if ((left_block == 3) || (left_block == 4) || (left_block == 5) ||
               (front_block == 8)) {
             left_block = 0;
@@ -140,7 +145,7 @@ void mv_normal_enemy(int index) {
               Enemy[index].block_x + right_pos[Enemy[index].dir][0];
           int right_block_y =
               Enemy[index].block_y + right_pos[Enemy[index].dir][1];
-          int right_block = check_map_state(right_block_x, right_block_y);
+          int right_block = map::check_map_state(right_block_x, right_block_y);
           if ((right_block == 3) || (right_block == 4) || (right_block == 5) ||
               (front_block == 8)) {
             right_block = 0;
@@ -149,7 +154,7 @@ void mv_normal_enemy(int index) {
           if (((rand() % 100) == 0) ||
               ((390 <= Power_chara_mode[0]) && (Power_chara_mode[0] <= 400)) ||
               ((390 <= Power_chara_mode[1]) && (Power_chara_mode[1] <= 400))) {
-            if (check_map_state(
+            if (map::check_map_state(
                     Enemy[index].block_x + back_pos[Enemy[index].dir][0],
                     Enemy[index].block_y + back_pos[Enemy[index].dir][1]) ==
                 2) {
@@ -247,7 +252,7 @@ void mv_normal_enemy(int index) {
   }
 }
 
-void mv_lose_enemy(int index) {
+void move_lose_enemy(int index) {
   if (!(Power_chara_mode[0] || Power_chara_mode[1])) {
     Enemy_state[index] = enemy_state::normal;
   }
@@ -296,8 +301,8 @@ void mv_lose_enemy(int index) {
 }
 
 void check_hit_enemy() {
-  int main_chara_pos_x = get_main_chara_pos_x();
-  int main_chara_pos_y = get_main_chara_pos_y();
+  int main_chara_pos_x = main_chara::get_main_chara_pos_x();
+  int main_chara_pos_y = main_chara::get_main_chara_pos_y();
   for (int i = 0; i < enemy_character::count; ++i) {
     int d = get_distance(main_chara_pos_x, main_chara_pos_y, Enemy[i].pos_x,
                          Enemy[i].pos_y);
@@ -314,8 +319,8 @@ void check_hit_enemy() {
     }
   }
   if (Game_mode == game_mode::battle) {
-    int rival_chara_pos_x = get_rival_chara_pos_x();
-    int rival_chara_pos_y = get_rival_chara_pos_y();
+    int rival_chara_pos_x = main_chara::get_rival_chara_pos_x();
+    int rival_chara_pos_y = main_chara::get_rival_chara_pos_y();
     for (int i = 0; i < enemy_character::count; ++i) {
       int d = get_distance(rival_chara_pos_x, rival_chara_pos_y, Enemy[i].pos_x,
                            Enemy[i].pos_y);
@@ -333,3 +338,5 @@ void check_hit_enemy() {
     }
   }
 }
+
+}  // namespace enemy

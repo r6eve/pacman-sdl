@@ -2,7 +2,9 @@
 #include <SDL/SDL_image.h>
 #include "def_global.hpp"
 
-static SDL_Joystick *Joystick[2]; // TODO: 2
+namespace input {
+
+static SDL_Joystick *Joystick[2];  // TODO: 2
 static int Num_joysticks;
 
 void init_joystick() {
@@ -92,3 +94,5 @@ void end_joystick() {
     SDL_JoystickClose(Joystick[i]);
   }
 }
+
+}  // namespace input
