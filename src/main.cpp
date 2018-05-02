@@ -140,7 +140,7 @@ void init_music() {
 
 void main_loop() {
   for (;;) {
-    input::update_input();
+    input::update();
     switch (Game_state) {
       case game_state::title:
         title();

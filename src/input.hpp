@@ -4,7 +4,7 @@
 namespace input {
 
 void init_joystick();
-void update_input();
+void update();
 void end_joystick();
 
 }  // namespace input

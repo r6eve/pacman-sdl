@@ -15,7 +15,7 @@ void init_joystick() {
   }
 }
 
-void update_input() {
+void update() {
   bool new_press_key[NUM_DEVICES][input_device::count];
   for (int i = 0; i < NUM_DEVICES; ++i) {
     for (int j = 0; j < input_device::count; ++j) {
