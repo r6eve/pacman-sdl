@@ -29,7 +29,7 @@ void init_player() {
 }
 
 void draw_player() {
-  SDL_Surface *p_surface = image_manager::get_img("player1");
+  SDL_Surface *p_surface = image_manager::get_image("player1");
   SDL_Rect src;
   src.x = BLOCK_SIZE * Player_1.dir;
   src.y = BLOCK_SIZE * Player_1.anime_count;
@@ -40,7 +40,7 @@ void draw_player() {
   dst.y = Player_1.pos_y;
   SDL_BlitSurface(p_surface, &src, Screen, &dst);
   if (Game_mode == game_mode::battle) {
-    SDL_Surface *p_player_2 = image_manager::get_img("player2");
+    SDL_Surface *p_player_2 = image_manager::get_image("player2");
     SDL_Rect src_player_2;
     src_player_2.x = BLOCK_SIZE * Player_2.dir;
     src_player_2.y = BLOCK_SIZE * Player_2.anime_count;

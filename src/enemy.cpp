@@ -38,11 +38,11 @@ void init_enemy() {
 void draw_enemy() {
   SDL_Rect src, dst;
   SDL_Surface *p_surface[5];  // TODO: 5
-  p_surface[0] = image_manager::get_img("akabei");
-  p_surface[1] = image_manager::get_img("pinky");
-  p_surface[2] = image_manager::get_img("aosuke");
-  p_surface[3] = image_manager::get_img("guzuta");
-  p_surface[4] = image_manager::get_img("mon_run");
+  p_surface[0] = image_manager::get_image("akabei");
+  p_surface[1] = image_manager::get_image("pinky");
+  p_surface[2] = image_manager::get_image("aosuke");
+  p_surface[3] = image_manager::get_image("guzuta");
+  p_surface[4] = image_manager::get_image("mon_run");
   for (int i = 0; i < enemy_character::count; ++i) {
     switch (Enemy_state[i]) {
       case enemy_state::normal:

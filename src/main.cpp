@@ -108,20 +108,20 @@ void init_font() {
 
 void init_img() {
   try {
-    image_manager::load_img("./data/player1.png", "player1");
-    image_manager::load_img("./data/player2.png", "player2");
-    image_manager::load_img("./data/bg.png", "bg");
-    image_manager::load_img("./data/bg_red.png", "bg_red");
-    image_manager::load_img("./data/bg_green.png", "bg_green");
-    image_manager::load_img("./data/bg_blue.png", "bg_blue");
-    image_manager::load_img("./data/food.png", "food");
-    image_manager::load_img("./data/food_counter.png", "food_counter");
-    image_manager::load_img("./data/akabei.png", "akabei");
-    image_manager::load_img("./data/pinky.png", "pinky");
-    image_manager::load_img("./data/aosuke.png", "aosuke");
-    image_manager::load_img("./data/guzuta.png", "guzuta");
-    image_manager::load_img("./data/mon_run.png", "mon_run");
-    image_manager::load_img("./data/plate.png", "plate");
+    image_manager::load_image("./data/player1.png", "player1");
+    image_manager::load_image("./data/player2.png", "player2");
+    image_manager::load_image("./data/bg.png", "bg");
+    image_manager::load_image("./data/bg_red.png", "bg_red");
+    image_manager::load_image("./data/bg_green.png", "bg_green");
+    image_manager::load_image("./data/bg_blue.png", "bg_blue");
+    image_manager::load_image("./data/food.png", "food");
+    image_manager::load_image("./data/food_counter.png", "food_counter");
+    image_manager::load_image("./data/akabei.png", "akabei");
+    image_manager::load_image("./data/pinky.png", "pinky");
+    image_manager::load_image("./data/aosuke.png", "aosuke");
+    image_manager::load_image("./data/guzuta.png", "guzuta");
+    image_manager::load_image("./data/mon_run.png", "mon_run");
+    image_manager::load_image("./data/plate.png", "plate");
   } catch (char *e) {
     throw e;
   }
@@ -644,7 +644,7 @@ void game_pause() {
 // TODO: delete meanigneless block scopes
 void draw_score() {
   {
-    SDL_Surface *p_surface = image_manager::get_img("plate");
+    SDL_Surface *p_surface = image_manager::get_image("plate");
     SDL_Rect dst;
     dst.x = OFFSET_X;
     dst.y = 0;
@@ -653,7 +653,7 @@ void draw_score() {
   {
     Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
                   WHITE, "Score: %6d", Now_score[0]);
-    SDL_Surface *p_surface = image_manager::get_img("player1");
+    SDL_Surface *p_surface = image_manager::get_image("player1");
     SDL_Rect src, dst;
     src.x = BLOCK_SIZE;
     src.y = 0;
@@ -667,7 +667,7 @@ void draw_score() {
     if (Game_mode == game_mode::battle) {
       Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
                     Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
-      SDL_Surface *p_surface = image_manager::get_img("player2");
+      SDL_Surface *p_surface = image_manager::get_image("player2");
       SDL_Rect src, dst;
       src.x = BLOCK_SIZE;
       src.y = 0;
@@ -761,7 +761,7 @@ void draw_fps() {
 }
 
 void end() {
-  image_manager::del_all_img();
+  image_manager::delete_all_image();
   for (int i = 0; i < NUM_FONT; ++i) {
     Kanji_CloseFont(Font[i]);
   }

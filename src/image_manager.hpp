@@ -13,9 +13,9 @@ typedef struct Img_list_rec {
   struct Img_list_rec *next;
 } Img_list;
 
-void load_img(const char *path, const char *name);
-SDL_Surface *get_img(const char *name);
-void del_all_img();
+void load_image(const char *path, const char *name);
+SDL_Surface *get_image(const char *name);
+void delete_all_image();
 
 }  // namespace image_manager
 

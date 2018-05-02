@@ -44,10 +44,10 @@ void draw_food() {
       dst.x = BLOCK_SIZE * x;
       dst.y = BLOCK_SIZE * y;
       if (food[y][x] == 1) { // food
-        SDL_Surface *p_surface = image_manager::get_img("food");
+        SDL_Surface *p_surface = image_manager::get_image("food");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
       } else if (food[y][x] == 0) { // counter food
-        SDL_Surface *p_surface = image_manager::get_img("food_counter");
+        SDL_Surface *p_surface = image_manager::get_image("food_counter");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
       }
     }

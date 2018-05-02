@@ -100,13 +100,13 @@ void draw_map() {
   SDL_Surface *p_surface = nullptr;
   const unsigned int mod = Game_level % 4;
   if (mod == 1) {
-    p_surface = image_manager::get_img("bg");
+    p_surface = image_manager::get_image("bg");
   } else if (mod == 2) {
-    p_surface = image_manager::get_img("bg_red");
+    p_surface = image_manager::get_image("bg_red");
   } else if (mod == 3) {
-    p_surface = image_manager::get_img("bg_green");
+    p_surface = image_manager::get_image("bg_green");
   } else {
-    p_surface = image_manager::get_img("bg_blue");
+    p_surface = image_manager::get_image("bg_blue");
   }
 
   {
