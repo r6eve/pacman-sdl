@@ -1,4 +1,5 @@
 pacman-sdl
+build
 *.o
 GPATH
 GRTAGS

@@ -1,6 +1,8 @@
 TARGET  = pacman-sdl
-SRCS    = $(wildcard *.cpp)
-OBJS    = $(SRCS:%.cpp=%.o)
+SRCS    = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS    = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+SRC_DIR = src
+OBJ_DIR = build
 CC      = g++
 CFLAGS  = -std=c++11 -O2 -Wall -Wextra -pedantic -Wformat=2 -Wstrict-aliasing=2
 LDFLAGS = `sdl-config --cflags --libs` -lSDL_image -lSDL_mixer -lm
@@ -12,8 +14,9 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
 
-.cpp.o:
-	$(CC) $(CFLAGS) -c $< $(LDFLAGS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< $(LDFLAGS) -o $@
 
 clean:
 	-rm -f $(OBJS) $(TARGET)
