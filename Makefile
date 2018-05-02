@@ -20,6 +20,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CXXFLAGS) -c $< $(LDFLAGS) -o $@
 
 clean:
-	-rm -f $(OBJS) $(TARGET)
+	-rm -rf $(OBJ_DIR) $(TARGET)
 
 -include $(DEPENDS)
