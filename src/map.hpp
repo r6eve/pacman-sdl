@@ -3,9 +3,9 @@
 
 namespace map {
 
-void init_map();
-int check_map_state(int x, int y);
-void draw_map();
+void init();
+void draw();
+int check_state(int x, int y);
 
 }  // namespace map
 

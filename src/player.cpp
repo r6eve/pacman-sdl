@@ -102,25 +102,25 @@ void move_player() {
       ++dst_block_x;
     }
 
-    if ((map::check_map_state(dst_block_x, dst_block_y) == 0) ||
-        (map::check_map_state(dst_block_x, dst_block_y) == 3) ||
-        (map::check_map_state(dst_block_x, dst_block_y) == 4) ||
-        (map::check_map_state(dst_block_x, dst_block_y) == 5) ||
-        (map::check_map_state(dst_block_x, dst_block_y) == 6) ||
-        (map::check_map_state(dst_block_x + 1, dst_block_y) == 6) ||
-        (map::check_map_state(dst_block_x, dst_block_y) == 7) ||
-        (map::check_map_state(dst_block_x - 1, dst_block_y) == 7) ||
-        (map::check_map_state(dst_block_x, dst_block_y) == 8)) {
+    if ((map::check_state(dst_block_x, dst_block_y) == 0) ||
+        (map::check_state(dst_block_x, dst_block_y) == 3) ||
+        (map::check_state(dst_block_x, dst_block_y) == 4) ||
+        (map::check_state(dst_block_x, dst_block_y) == 5) ||
+        (map::check_state(dst_block_x, dst_block_y) == 6) ||
+        (map::check_state(dst_block_x + 1, dst_block_y) == 6) ||
+        (map::check_state(dst_block_x, dst_block_y) == 7) ||
+        (map::check_state(dst_block_x - 1, dst_block_y) == 7) ||
+        (map::check_state(dst_block_x, dst_block_y) == 8)) {
       Player_1.nextblock_x = dst_block_x;
       Player_1.nextblock_y = dst_block_y;
     }
 
-    if (map::check_map_state(dst_block_x + 2, dst_block_y) == 6) {
+    if (map::check_state(dst_block_x + 2, dst_block_y) == 6) {
       Player_1.nextblock_x = NUM_BLOCK_X;
       Player_1.pos_x = BLOCK_SIZE * Player_1.nextblock_x;
     }
 
-    if (map::check_map_state(dst_block_x - 2, dst_block_y) == 7) {
+    if (map::check_state(dst_block_x - 2, dst_block_y) == 7) {
       Player_1.nextblock_x = -1;
       Player_1.pos_x = BLOCK_SIZE * Player_1.nextblock_x;
     }
@@ -175,25 +175,25 @@ void move_player() {
         ++dst_block_x;
       }
 
-      if ((map::check_map_state(dst_block_x, dst_block_y) == 0) ||
-          (map::check_map_state(dst_block_x, dst_block_y) == 3) ||
-          (map::check_map_state(dst_block_x, dst_block_y) == 4) ||
-          (map::check_map_state(dst_block_x, dst_block_y) == 5) ||
-          (map::check_map_state(dst_block_x, dst_block_y) == 6) ||
-          (map::check_map_state(dst_block_x + 1, dst_block_y) == 6) ||
-          (map::check_map_state(dst_block_x, dst_block_y) == 7) ||
-          (map::check_map_state(dst_block_x - 1, dst_block_y) == 7) ||
-          (map::check_map_state(dst_block_x, dst_block_y) == 8)) {
+      if ((map::check_state(dst_block_x, dst_block_y) == 0) ||
+          (map::check_state(dst_block_x, dst_block_y) == 3) ||
+          (map::check_state(dst_block_x, dst_block_y) == 4) ||
+          (map::check_state(dst_block_x, dst_block_y) == 5) ||
+          (map::check_state(dst_block_x, dst_block_y) == 6) ||
+          (map::check_state(dst_block_x + 1, dst_block_y) == 6) ||
+          (map::check_state(dst_block_x, dst_block_y) == 7) ||
+          (map::check_state(dst_block_x - 1, dst_block_y) == 7) ||
+          (map::check_state(dst_block_x, dst_block_y) == 8)) {
         Player_2.nextblock_x = dst_block_x;
         Player_2.nextblock_y = dst_block_y;
       }
 
-      if (map::check_map_state(dst_block_x + 2, dst_block_y) == 6) {
+      if (map::check_state(dst_block_x + 2, dst_block_y) == 6) {
         Player_2.nextblock_x = NUM_BLOCK_X;
         Player_2.pos_x = BLOCK_SIZE * Player_2.nextblock_x;
       }
 
-      if (map::check_map_state(dst_block_x - 2, dst_block_y) == 7) {
+      if (map::check_state(dst_block_x - 2, dst_block_y) == 7) {
         Player_2.nextblock_x = -1;
         Player_2.pos_x = BLOCK_SIZE * Player_2.nextblock_x;
       }

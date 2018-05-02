@@ -15,9 +15,9 @@ void init() {
   for (int y = 0; y < NUM_BLOCK_Y; ++y) {
     for (int x = 0; x < NUM_BLOCK_X; ++x) {
       food[y][x] = -1;
-      if (map::check_map_state(x, y) == 0) {  // field where player can move
+      if (map::check_state(x, y) == 0) {  // field where player can move
         food[y][x] = 1;
-      } else if (map::check_map_state(x, y) == 4) {  // counter food
+      } else if (map::check_state(x, y) == 4) {  // counter food
         food[y][x] = 0;
       }
     }

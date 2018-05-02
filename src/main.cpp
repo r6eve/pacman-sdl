@@ -306,7 +306,7 @@ void title() {
 
       // initialize globals
       if (wipe::update_wipe()) {
-        map::init_map();
+        map::init();
         food::init();
         player::init_player();
         enemy::init();
@@ -334,7 +334,7 @@ void title() {
 }
 
 void game_start() {
-  map::draw_map();
+  map::draw();
   food::draw();
   enemy::draw();
   player::draw_player();
@@ -378,7 +378,7 @@ void game_start() {
 }
 
 void play_game() {
-  map::draw_map();
+  map::draw();
   food::draw();
   enemy::draw();
   player::draw_player();
@@ -411,7 +411,7 @@ void play_game() {
 }
 
 void game_clear() {
-  map::draw_map();
+  map::draw();
   food::draw();
   enemy::draw();
   player::draw_player();
@@ -441,7 +441,7 @@ void game_clear() {
 }
 
 void game_miss() {
-  map::draw_map();
+  map::draw();
   food::draw();
   enemy::draw();
   player::draw_player();
@@ -629,7 +629,7 @@ void game_over() {
 }
 
 void game_pause() {
-  map::draw_map();
+  map::draw();
   food::draw();
   enemy::draw();
   player::draw_player();

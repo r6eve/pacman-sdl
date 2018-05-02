@@ -107,7 +107,7 @@ void move_normal_enemy(int index) {
       } else {
         Enemy[index].block_x = Enemy[index].nextblock_x;
         Enemy[index].block_y = Enemy[index].nextblock_y;
-        if (map::check_map_state(Enemy[index].block_x, Enemy[index].block_y) == 2) {
+        if (map::check_state(Enemy[index].block_x, Enemy[index].block_y) == 2) {
           Enemy[index].dir = 2;
           --Enemy[index].nextblock_y;
         } else {
@@ -125,7 +125,7 @@ void move_normal_enemy(int index) {
               Enemy[index].block_x + front_pos[Enemy[index].dir][0];
           int front_block_y =
               Enemy[index].block_y + front_pos[Enemy[index].dir][1];
-          int front_block = map::check_map_state(front_block_x, front_block_y);
+          int front_block = map::check_state(front_block_x, front_block_y);
           if ((front_block == 3) || (front_block == 4) || (front_block == 5) ||
               (front_block == 6) || (front_block == 7) || (front_block == 8)) {
             front_block = 0;  // can move it
@@ -135,7 +135,7 @@ void move_normal_enemy(int index) {
               Enemy[index].block_x + left_pos[Enemy[index].dir][0];
           int left_block_y =
               Enemy[index].block_y + left_pos[Enemy[index].dir][1];
-          int left_block = map::check_map_state(left_block_x, left_block_y);
+          int left_block = map::check_state(left_block_x, left_block_y);
           if ((left_block == 3) || (left_block == 4) || (left_block == 5) ||
               (front_block == 8)) {
             left_block = 0;
@@ -145,7 +145,7 @@ void move_normal_enemy(int index) {
               Enemy[index].block_x + right_pos[Enemy[index].dir][0];
           int right_block_y =
               Enemy[index].block_y + right_pos[Enemy[index].dir][1];
-          int right_block = map::check_map_state(right_block_x, right_block_y);
+          int right_block = map::check_state(right_block_x, right_block_y);
           if ((right_block == 3) || (right_block == 4) || (right_block == 5) ||
               (front_block == 8)) {
             right_block = 0;
@@ -154,7 +154,7 @@ void move_normal_enemy(int index) {
           if (((rand() % 100) == 0) ||
               ((390 <= Power_chara_mode[0]) && (Power_chara_mode[0] <= 400)) ||
               ((390 <= Power_chara_mode[1]) && (Power_chara_mode[1] <= 400))) {
-            if (map::check_map_state(
+            if (map::check_state(
                     Enemy[index].block_x + back_pos[Enemy[index].dir][0],
                     Enemy[index].block_y + back_pos[Enemy[index].dir][1]) ==
                 2) {
