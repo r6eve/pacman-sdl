@@ -1,5 +1,5 @@
 TARGET  = pacman-sdl
-SRCS    = SDL_kanji.cpp enemy.cpp food.cpp image_manager.cpp input.cpp main.cpp main_chara.cpp map.cpp wipe.cpp
+SRCS    = $(wildcard *.cpp)
 OBJS    = $(SRCS:%.cpp=%.o)
 CC      = g++
 CFLAGS  = -std=c++11 -O2 -Wall -Wextra -pedantic -Wformat=2 -Wstrict-aliasing=2
