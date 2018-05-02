@@ -2,7 +2,7 @@
 #include "def_global.hpp"
 #include "enemy.hpp"
 #include "image_manager.hpp"
-#include "main_chara.hpp"
+#include "player.hpp"
 #include "map.hpp"
 
 namespace food {
@@ -56,8 +56,8 @@ void draw_food() {
 
 // TODO: return game_state
 void check_food_state() {
-  int x = main_chara::get_main_chara_block_x();
-  int y = main_chara::get_main_chara_block_y();
+  int x = player::get_player_1_block_x();
+  int y = player::get_player_1_block_y();
   if (food[y][x] == 1) {
     Mix_PlayChannel(-1, Se[0], 0);
     ++food[y][x];
@@ -74,8 +74,8 @@ void check_food_state() {
     }
   }
   if (Game_mode == game_mode::battle) {
-    int x = main_chara::get_rival_chara_block_x();
-    int y = main_chara::get_rival_chara_block_y();
+    int x = player::get_player_2_block_x();
+    int y = player::get_player_2_block_y();
     if (food[y][x] == 1) {
       Mix_PlayChannel(-1, Se[0], 0);
       ++food[y][x];

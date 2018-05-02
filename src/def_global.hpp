@@ -85,8 +85,8 @@ enum class game_mode {
 
 GLOBAL SDL_Surface *Screen;
 GLOBAL int Now_score[2];  // 0: 1P, 1: 2P
-GLOBAL int Main_chara_life;
-GLOBAL int Rival_chara_life;
+GLOBAL int Player_1_life;
+GLOBAL int Player_2_life;
 GLOBAL int Game_count;
 GLOBAL int Game_level;
 GLOBAL game_state Game_state;

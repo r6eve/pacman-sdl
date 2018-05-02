@@ -2,7 +2,7 @@
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "main.hpp"
-#include "main_chara.hpp"
+#include "player.hpp"
 #include "map.hpp"
 
 namespace enemy {
@@ -301,10 +301,10 @@ void move_lose_enemy(int index) {
 }
 
 void check_hit_enemy() {
-  int main_chara_pos_x = main_chara::get_main_chara_pos_x();
-  int main_chara_pos_y = main_chara::get_main_chara_pos_y();
+  int player_pos_x = player::get_player_1_pos_x();
+  int player_pos_y = player::get_player_1_pos_y();
   for (int i = 0; i < enemy_character::count; ++i) {
-    int d = get_distance(main_chara_pos_x, main_chara_pos_y, Enemy[i].pos_x,
+    int d = get_distance(player_pos_x, player_pos_y, Enemy[i].pos_x,
                          Enemy[i].pos_y);
     if (d < HIT_DISTANCE) {
       if (!Power_chara_mode[0]) {
@@ -319,10 +319,10 @@ void check_hit_enemy() {
     }
   }
   if (Game_mode == game_mode::battle) {
-    int rival_chara_pos_x = main_chara::get_rival_chara_pos_x();
-    int rival_chara_pos_y = main_chara::get_rival_chara_pos_y();
+    int player_2_pos_x = player::get_player_2_pos_x();
+    int player_2_pos_y = player::get_player_2_pos_y();
     for (int i = 0; i < enemy_character::count; ++i) {
-      int d = get_distance(rival_chara_pos_x, rival_chara_pos_y, Enemy[i].pos_x,
+      int d = get_distance(player_2_pos_x, player_2_pos_y, Enemy[i].pos_x,
                            Enemy[i].pos_y);
       if (d < HIT_DISTANCE) {
         if (!Power_chara_mode[1]) {

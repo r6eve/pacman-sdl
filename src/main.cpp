@@ -11,7 +11,7 @@
 #include "food.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
-#include "main_chara.hpp"
+#include "player.hpp"
 #include "map.hpp"
 #include "wipe.hpp"
 
@@ -63,7 +63,7 @@ bool init() {
   Game_mode = game_mode::single;
   Game_state = game_state::title;
   Num_player = 1;
-  Rival_chara_life = 2;
+  Player_2_life = 2;
 
   return true;
 }
@@ -106,8 +106,8 @@ void init_font() {
 
 void init_img() {
   try {
-    image_manager::load_img("./data/pacman.png", "pacman");
-    image_manager::load_img("./data/rival.png", "rival");
+    image_manager::load_img("./data/player1.png", "player1");
+    image_manager::load_img("./data/player2.png", "player2");
     image_manager::load_img("./data/bg.png", "bg");
     image_manager::load_img("./data/bg_red.png", "bg_red");
     image_manager::load_img("./data/bg_green.png", "bg_green");
@@ -306,13 +306,13 @@ void title() {
       if (wipe::update_wipe()) {
         map::init_map();
         food::init_food();
-        main_chara::init_main_chara();
+        player::init_player();
         enemy::init_enemy();
 
         Game_count = 0;
         Game_state = game_state::start;
         Game_level = 1;
-        Main_chara_life = 2;
+        Player_1_life = 2;
 
         if (Game_mode == game_mode::battle) {
           Num_player = 2;
@@ -335,11 +335,11 @@ void game_start() {
   map::draw_map();
   food::draw_food();
   enemy::draw_enemy();
-  main_chara::draw_main_chara();
+  player::draw_player();
   draw_score();
   switch (Game_count) {
     case 0:
-      if ((Main_chara_life == 2) && (Rival_chara_life == 2)) {
+      if ((Player_1_life == 2) && (Player_2_life == 2)) {
         Mix_PlayMusic(Music[2], 0);
       }
       wipe::set_wipe_in();
@@ -379,9 +379,9 @@ void play_game() {
   map::draw_map();
   food::draw_food();
   enemy::draw_enemy();
-  main_chara::draw_main_chara();
+  player::draw_player();
   draw_score();
-  main_chara::move_main_chara();
+  player::move_player();
   for (int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
       enemy::move_lose_enemy(i);
@@ -405,7 +405,7 @@ void game_clear() {
   map::draw_map();
   food::draw_food();
   enemy::draw_enemy();
-  main_chara::draw_main_chara();
+  player::draw_player();
   draw_score();
 
   if (Game_count == 0) {
@@ -424,7 +424,7 @@ void game_clear() {
         ++Game_level;
         food::init_food();
         enemy::init_enemy();
-        main_chara::init_main_chara();
+        player::init_player();
       }
     }
   } // TODO: else
@@ -434,34 +434,34 @@ void game_miss() {
   map::draw_map();
   food::draw_food();
   enemy::draw_enemy();
-  main_chara::draw_main_chara();
+  player::draw_player();
   draw_score();
 
   if (Game_count == 0) {
     Mix_PlayMusic(Music[3], 0);
     wipe::set_wipe_out();
-    if ((Main_chara_life == 0) || (Rival_chara_life == 0)) {
+    if ((Player_1_life == 0) || (Player_2_life == 0)) {
       wipe::draw_wipe(SCREEN_WIDTH);
     } else {
       wipe::draw_wipe(OFFSET_X);
     }
     ++Game_count;
   } else if (Game_count == 1) {
-    if ((Main_chara_life == 0) || (Rival_chara_life == 0)) {
+    if ((Player_1_life == 0) || (Player_2_life == 0)) {
       wipe::draw_wipe(SCREEN_WIDTH);
     } else {
       wipe::draw_wipe(OFFSET_X);
     }
 
     if (Choice_hit) {
-      main_chara::add_main_chara_pos(0, -1);
+      player::add_player_pos(0, -1);
       if (wipe::update_wipe()) {
-        --Main_chara_life;
-        if (Main_chara_life >= 0) {
+        --Player_1_life;
+        if (Player_1_life >= 0) {
           Game_count = 0;
           Game_state = game_state::start;
           enemy::init_enemy();
-          main_chara::init_main_chara();
+          player::init_player();
         } else {
           Game_count = 0;
           Blink_count = 0;
@@ -469,14 +469,14 @@ void game_miss() {
         }
       }
     } else {
-      main_chara::add_rival_chara_pos(0, -1);
+      player::add_player_2_pos(0, -1);
       if (wipe::update_wipe()) {
-        --Rival_chara_life;
-        if (Rival_chara_life >= 0) {
+        --Player_2_life;
+        if (Player_2_life >= 0) {
           Game_count = 0;
           Game_state = game_state::start;
           enemy::init_enemy();
-          main_chara::init_main_chara();
+          player::init_player();
         } else {
           Game_count = 0;
           Blink_count = 0;
@@ -599,7 +599,7 @@ void game_over() {
           if (wipe::update_wipe()) {
             Blink_count = 0;
             Game_count = 0;
-            Rival_chara_life = 2;
+            Player_2_life = 2;
             Game_state = game_state::title;
           }
           break;
@@ -620,7 +620,7 @@ void game_pause() {
   map::draw_map();
   food::draw_food();
   enemy::draw_enemy();
-  main_chara::draw_main_chara();
+  player::draw_player();
   draw_score();
   draw_translucence();
   if (Edge_key[0][input_device::space]) {
@@ -641,7 +641,7 @@ void draw_score() {
   {
     Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
                   WHITE, "Score: %6d", Now_score[0]);
-    SDL_Surface *p_surface = image_manager::get_img("pacman");
+    SDL_Surface *p_surface = image_manager::get_img("player1");
     SDL_Rect src, dst;
     src.x = BLOCK_SIZE;
     src.y = 0;
@@ -651,11 +651,11 @@ void draw_score() {
     dst.y = (SCREEN_HEIGHT / 6 + 32) - 5;
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 32,
-                  Font[FONT_SIZE_16], WHITE, " x %d", Main_chara_life);
+                  Font[FONT_SIZE_16], WHITE, " x %d", Player_1_life);
     if (Game_mode == game_mode::battle) {
       Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
                     Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
-      SDL_Surface *p_surface = image_manager::get_img("rival");
+      SDL_Surface *p_surface = image_manager::get_img("player2");
       SDL_Rect src, dst;
       src.x = BLOCK_SIZE;
       src.y = 0;
@@ -665,7 +665,7 @@ void draw_score() {
       dst.y = (SCREEN_HEIGHT / 6 + 112) - 5;
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 112,
-                    Font[FONT_SIZE_16], WHITE, " x %d", Rival_chara_life);
+                    Font[FONT_SIZE_16], WHITE, " x %d", Player_2_life);
     }
   }
   {
