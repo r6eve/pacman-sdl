@@ -19,7 +19,7 @@ void set_wipe_out() {
   Wipe_count_reach = SCREEN_HEIGHT / 10;
 }
 
-bool update_wipe() {
+bool update() {
   if (Wipe_count != Wipe_count_reach) {
     Wipe_count += Wipe_variation;
     return false;
@@ -28,7 +28,7 @@ bool update_wipe() {
   }
 }
 
-void draw_wipe(int end_x) {
+void draw(int end_x) {
   Uint32 black = 0x00000000;
   SDL_Rect dst;
   dst.x = 0;

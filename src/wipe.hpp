@@ -10,9 +10,9 @@ void set_wipe_out();
 /**
  * Return true if wipe finishes.
  */
-bool update_wipe();
+bool update();
 
-void draw_wipe(int end_x);
+void draw(int end_x);
 
 }  // namespace wipe
 

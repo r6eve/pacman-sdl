@@ -192,14 +192,14 @@ void title() {
   switch (Game_count) {
     case 0:
       wipe::set_wipe_in();
-      wipe::draw_wipe(SCREEN_WIDTH);
+      wipe::draw(SCREEN_WIDTH);
       ++Game_count;
       break;
     case 1:
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
-      wipe::draw_wipe(SCREEN_WIDTH);
-      if (wipe::update_wipe()) {
+      wipe::draw(SCREEN_WIDTH);
+      if (wipe::update()) {
         ++Game_count;
       }
       break;
@@ -261,7 +261,7 @@ void title() {
       if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
           Press_key[0][input_device::space]) {
         wipe::set_wipe_out();
-        wipe::draw_wipe(SCREEN_WIDTH);
+        wipe::draw(SCREEN_WIDTH);
         ++Game_count;
       }
 
@@ -302,10 +302,10 @@ void title() {
           break;
       }
 
-      wipe::draw_wipe(SCREEN_WIDTH);
+      wipe::draw(SCREEN_WIDTH);
 
       // initialize globals
-      if (wipe::update_wipe()) {
+      if (wipe::update()) {
         map::init();
         food::init();
         player::init();
@@ -345,12 +345,12 @@ void game_start() {
         Mix_PlayMusic(Music[2], 0);
       }
       wipe::set_wipe_in();
-      wipe::draw_wipe(OFFSET_X);
+      wipe::draw(OFFSET_X);
       ++Game_count;
       break;
     case 1:
-      wipe::draw_wipe(OFFSET_X);
-      if (wipe::update_wipe()) {
+      wipe::draw(OFFSET_X);
+      if (wipe::update()) {
         ++Game_count;
       }
       break;
@@ -419,13 +419,13 @@ void game_clear() {
 
   if (Game_count == 0) {
     wipe::set_wipe_out();
-    wipe::draw_wipe(OFFSET_X);
+    wipe::draw(OFFSET_X);
     ++Game_count;
     return;
   }
 
-  wipe::draw_wipe(OFFSET_X);
-  if (wipe::update_wipe()) {
+  wipe::draw(OFFSET_X);
+  if (wipe::update()) {
     if (Game_level >= 256) {
       Game_count = 0;
       Game_state = game_state::gameover;
@@ -451,24 +451,24 @@ void game_miss() {
     Mix_PlayMusic(Music[3], 0);
     wipe::set_wipe_out();
     if ((Player_1_life == 0) || (Player_2_life == 0)) {
-      wipe::draw_wipe(SCREEN_WIDTH);
+      wipe::draw(SCREEN_WIDTH);
     } else {
-      wipe::draw_wipe(OFFSET_X);
+      wipe::draw(OFFSET_X);
     }
     ++Game_count;
     return;
   }
 
   if ((Player_1_life == 0) || (Player_2_life == 0)) {
-    wipe::draw_wipe(SCREEN_WIDTH);
+    wipe::draw(SCREEN_WIDTH);
   } else {
-    wipe::draw_wipe(OFFSET_X);
+    wipe::draw(OFFSET_X);
   }
 
   // TODO: use pointer to delete if-clauses
   if (Choice_hit) {
     player::add_player_1_pos(0, -1);
-    if (wipe::update_wipe()) {
+    if (wipe::update()) {
       --Player_1_life;
       if (Player_1_life >= 0) {
         Game_count = 0;
@@ -483,7 +483,7 @@ void game_miss() {
     }
   } else {
     player::add_player_2_pos(0, -1);
-    if (wipe::update_wipe()) {
+    if (wipe::update()) {
       --Player_2_life;
       if (Player_2_life >= 0) {
         Game_count = 0;
@@ -511,14 +511,14 @@ void game_over() {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           wipe::set_wipe_in();
-          wipe::draw_wipe(SCREEN_WIDTH);
+          wipe::draw(SCREEN_WIDTH);
           ++Game_count;
           break;
         case 1:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
-          wipe::draw_wipe(SCREEN_WIDTH);
-          if (wipe::update_wipe()) {
+          wipe::draw(SCREEN_WIDTH);
+          if (wipe::update()) {
             ++Game_count;
           }
           break;
@@ -542,12 +542,12 @@ void game_over() {
               Press_key[0][input_device::space]) {
             ++Game_count;
             wipe::set_wipe_out();
-            wipe::draw_wipe(SCREEN_WIDTH);
+            wipe::draw(SCREEN_WIDTH);
           }
           break;
         case 3:
-          wipe::draw_wipe(SCREEN_WIDTH);
-          if (wipe::update_wipe()) {
+          wipe::draw(SCREEN_WIDTH);
+          if (wipe::update()) {
             Blink_count = 0;
             Game_count = 0;
             Game_state = game_state::title;
@@ -564,14 +564,14 @@ void game_over() {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           wipe::set_wipe_in();
-          wipe::draw_wipe(SCREEN_WIDTH);
+          wipe::draw(SCREEN_WIDTH);
           ++Game_count;
           break;
         case 1:
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
-          wipe::draw_wipe(SCREEN_WIDTH);
-          if (wipe::update_wipe()) {
+          wipe::draw(SCREEN_WIDTH);
+          if (wipe::update()) {
             ++Game_count;
           }
           break;
@@ -603,12 +603,12 @@ void game_over() {
               Press_key[0][input_device::space]) {
             ++Game_count;
             wipe::set_wipe_out();
-            wipe::draw_wipe(SCREEN_WIDTH);
+            wipe::draw(SCREEN_WIDTH);
           }
           break;
         case 3:
-          wipe::draw_wipe(SCREEN_WIDTH);
-          if (wipe::update_wipe()) {
+          wipe::draw(SCREEN_WIDTH);
+          if (wipe::update()) {
             Blink_count = 0;
             Game_count = 0;
             Player_2_life = 2;
