@@ -15,9 +15,9 @@ typedef struct {
   int anime_weight;
 } Enemy_data;
 
-void init_enemy();
+void init();
 
-void draw_enemy();
+void draw();
 
 void move_normal_enemy(int enemy_type);
 

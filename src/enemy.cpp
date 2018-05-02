@@ -10,7 +10,7 @@ namespace enemy {
 static Enemy_data Enemy[enemy_character::count];
 
 // private function
-void update_enemy() {
+void update() {
   for (int i = 0; i < enemy_character::count; ++i) {
     ++Enemy[i].anime_weight;
     if (Enemy[i].anime_weight >= 8) {
@@ -21,7 +21,7 @@ void update_enemy() {
   }
 }
 
-void init_enemy() {
+void init() {
   int start_block[enemy_character::count][2] = {
       {11, 12}, {12, 12}, {11, 11}, {12, 11}};
   for (int i = 0; i < enemy_character::count; ++i) {
@@ -35,7 +35,7 @@ void init_enemy() {
   }
 }
 
-void draw_enemy() {
+void draw() {
   SDL_Rect src, dst;
   SDL_Surface *p_surface[5];  // TODO: 5
   p_surface[0] = image_manager::get_image("akabei");
@@ -90,7 +90,7 @@ void move_normal_enemy(int index) {
       }
 
       if (is_mving) {
-        update_enemy();
+        update();
         int mv_value = 2;
         if (dst_pos_x > Enemy[index].pos_x) {
           Enemy[index].pos_x += mv_value;
@@ -267,7 +267,7 @@ void move_lose_enemy(int index) {
   }
 
   if (is_mving) {
-    update_enemy();
+    update();
     int mv_value = 2;
     if (dst_pos_x > Enemy[index].pos_x) {
       Enemy[index].pos_x += mv_value;

@@ -309,7 +309,7 @@ void title() {
         map::init_map();
         food::init_food();
         player::init_player();
-        enemy::init_enemy();
+        enemy::init();
 
         Game_count = 0;
         Game_state = game_state::start;
@@ -336,7 +336,7 @@ void title() {
 void game_start() {
   map::draw_map();
   food::draw_food();
-  enemy::draw_enemy();
+  enemy::draw();
   player::draw_player();
   draw_score();
   switch (Game_count) {
@@ -380,7 +380,7 @@ void game_start() {
 void play_game() {
   map::draw_map();
   food::draw_food();
-  enemy::draw_enemy();
+  enemy::draw();
   player::draw_player();
   draw_score();
   player::move_player();
@@ -413,7 +413,7 @@ void play_game() {
 void game_clear() {
   map::draw_map();
   food::draw_food();
-  enemy::draw_enemy();
+  enemy::draw();
   player::draw_player();
   draw_score();
 
@@ -434,7 +434,7 @@ void game_clear() {
       Game_state = game_state::start;
       ++Game_level;
       food::init_food();
-      enemy::init_enemy();
+      enemy::init();
       player::init_player();
     }
   }
@@ -443,7 +443,7 @@ void game_clear() {
 void game_miss() {
   map::draw_map();
   food::draw_food();
-  enemy::draw_enemy();
+  enemy::draw();
   player::draw_player();
   draw_score();
 
@@ -473,7 +473,7 @@ void game_miss() {
       if (Player_1_life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
-        enemy::init_enemy();
+        enemy::init();
         player::init_player();
       } else {
         Game_count = 0;
@@ -488,7 +488,7 @@ void game_miss() {
       if (Player_2_life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
-        enemy::init_enemy();
+        enemy::init();
         player::init_player();
       } else {
         Game_count = 0;
@@ -631,7 +631,7 @@ void game_over() {
 void game_pause() {
   map::draw_map();
   food::draw_food();
-  enemy::draw_enemy();
+  enemy::draw();
   player::draw_player();
   draw_score();
   draw_translucence();
