@@ -126,21 +126,23 @@ void move_normal_enemy(unsigned int enemy_type) {
           Enemy[enemy_type].block_x + front_pos[Enemy[enemy_type].dir][0];
       const int front_block_y =
           Enemy[enemy_type].block_y + front_pos[Enemy[enemy_type].dir][1];
-      unsigned int front_block = map::check_state(front_block_x, front_block_y);
-      if ((front_block == 3) || (front_block == 4) || (front_block == 5) ||
-          (front_block == 6) || (front_block == 7) || (front_block == 8)) {
-        front_block = 0;  // can move it
+      unsigned int mut_front_block = map::check_state(front_block_x, front_block_y);
+      if ((mut_front_block == 3) || (mut_front_block == 4) || (mut_front_block == 5) ||
+          (mut_front_block == 6) || (mut_front_block == 7) || (mut_front_block == 8)) {
+        mut_front_block = 0;  // can move it
       }
+      const unsigned int front_block = mut_front_block;
 
       const int left_block_x =
           Enemy[enemy_type].block_x + left_pos[Enemy[enemy_type].dir][0];
       const int left_block_y =
           Enemy[enemy_type].block_y + left_pos[Enemy[enemy_type].dir][1];
-      unsigned int left_block = map::check_state(left_block_x, left_block_y);
-      if ((left_block == 3) || (left_block == 4) || (left_block == 5) ||
+      unsigned int mut_left_block = map::check_state(left_block_x, left_block_y);
+      if ((mut_left_block == 3) || (mut_left_block == 4) || (mut_left_block == 5) ||
           (front_block == 8)) {
-        left_block = 0;
+        mut_left_block = 0;
       }
+      const unsigned int left_block = mut_left_block;
 
       const int right_block_x =
           Enemy[enemy_type].block_x + right_pos[Enemy[enemy_type].dir][0];
@@ -175,7 +177,7 @@ void move_normal_enemy(unsigned int enemy_type) {
 
       // move front/left/right at random
       if ((front_block == 0) && (left_block == 0) && (right_block == 0)) {
-        int next = rand() % 3;
+        const unsigned int next = rand() % 3;
         if (next == 0) {
           Enemy[enemy_type].next_block_x = front_block_x;
           Enemy[enemy_type].next_block_y = front_block_y;
@@ -195,7 +197,7 @@ void move_normal_enemy(unsigned int enemy_type) {
 
       // move front/left at random
       if ((front_block == 0) && (left_block == 0) && (right_block != 0)) {
-        int next = rand() % 2;
+        const unsigned int next = rand() % 2;
         if (next == 0) {
           Enemy[enemy_type].next_block_x = front_block_x;
           Enemy[enemy_type].next_block_y = front_block_y;
@@ -210,7 +212,7 @@ void move_normal_enemy(unsigned int enemy_type) {
 
       // move front/right at random
       if ((front_block == 0) && (left_block != 0) && (right_block == 0)) {
-        int next = rand() % 2;
+        const unsigned int next = rand() % 2;
         if (next == 0) {
           Enemy[enemy_type].next_block_x = front_block_x;
           Enemy[enemy_type].next_block_y = front_block_y;
@@ -232,7 +234,7 @@ void move_normal_enemy(unsigned int enemy_type) {
 
       // move left/right at random
       if ((front_block != 0) && (left_block == 0) && (right_block == 0)) {
-        int next = rand() % 2;
+        const unsigned int next = rand() % 2;
         if (next == 0) {
           Enemy[enemy_type].next_block_x = left_block_x;
           Enemy[enemy_type].next_block_y = left_block_y;

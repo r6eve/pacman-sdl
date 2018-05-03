@@ -7,8 +7,10 @@ void init();
 
 void draw();
 
+// TODO: take parameter as enemy_charater
 void move_normal_enemy(unsigned int enemy_type);
 
+// TODO: take parameter as enemy_charater
 void move_lose_enemy(unsigned int enemy_type);
 
 /**
