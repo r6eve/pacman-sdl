@@ -8,26 +8,28 @@ namespace input {
 namespace {
 
 static SDL_Joystick *Joystick[2];  // TODO: 2
-static int Num_joysticks;
+static unsigned int Num_joysticks;
 
 }  // namespace
 
 void init_joystick() {
-  Num_joysticks = SDL_NumJoysticks();
-  for (int i = 0; i < Num_joysticks; ++i) {
+  // SDL_NumJoysticks() definitely returns int type. However, as far as I read
+  // source code, it always returns unsigned int type.
+  Num_joysticks = static_cast<unsigned int>(SDL_NumJoysticks());
+  for (unsigned int i = 0; i < Num_joysticks; ++i) {
     Joystick[i] = SDL_JoystickOpen(i);
   }
 }
 
 void update() {
   bool new_press_key[NUM_DEVICES][input_device::count];
-  for (int i = 0; i < NUM_DEVICES; ++i) {
-    for (int j = 0; j < input_device::count; ++j) {
+  for (unsigned int i = 0; i < NUM_DEVICES; ++i) {
+    for (unsigned int j = 0; j < input_device::count; ++j) {
       new_press_key[i][j] = false;
     }
   }
 
-  for (int i = 0; i < Num_joysticks; ++i) {
+  for (unsigned int i = 0; i < Num_joysticks; ++i) {
     if (Joystick[i]) {
       SDL_JoystickUpdate();
       new_press_key[i][input_device::x] =
@@ -86,8 +88,8 @@ void update() {
   new_press_key[0][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
   new_press_key[1][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
 #endif
-  for (int i = 0; i < NUM_DEVICES; ++i) {
-    for (int j = 0; j < input_device::count; ++j) {
+  for (unsigned int i = 0; i < NUM_DEVICES; ++i) {
+    for (unsigned int j = 0; j < input_device::count; ++j) {
       Edge_key[i][j] = !Press_key[i][j] && new_press_key[i][j];
       Press_key[i][j] = new_press_key[i][j];
     }
@@ -95,7 +97,7 @@ void update() {
 }
 
 void end_joystick() {
-  for (int i = 0; i < Num_joysticks; ++i) {
+  for (unsigned int i = 0; i < Num_joysticks; ++i) {
     SDL_JoystickClose(Joystick[i]);
   }
 }

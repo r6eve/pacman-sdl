@@ -17,9 +17,9 @@ typedef struct {
   int block_y;
   int next_block_x;
   int next_block_y;
-  int dir;          // TODO: enum class 0:down, 1:left, 2:up, 3:right
-  int anime_count;  // 0 or 1
-  int anime_weight;
+  unsigned char dir; // max value is 4
+  unsigned char anime_count;  // 0 or 1
+  unsigned char anime_weight; // max value is 8
 } Enemy_data;
 
 Enemy_data Enemy[enemy_character::count];

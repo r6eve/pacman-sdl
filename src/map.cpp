@@ -91,7 +91,6 @@ void init() {
     }
   }
 }
-
 // Don't modify parameter type as unsigned int
 // TODO:
 // Why is the parameter of x=-1 and y=12 OK?
@@ -100,9 +99,8 @@ unsigned int check_state(int x, int y) { return Block[y][x]; }
 
 // TODO: reduce magic numbers
 void draw() {
-  Uint32 black = 0x00000000;
   SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-  SDL_FillRect(Screen, &dst, black);
+  SDL_FillRect(Screen, &dst, 0x00000000);
 
   SDL_Surface *p_surface = nullptr;
   const unsigned int mod = Game_level % 4;
@@ -117,43 +115,41 @@ void draw() {
   }
 
   {
-    SDL_Rect src[2];
-
-    src[0].x = 0;
-    src[1].x = BLOCK_SIZE;
-    src[0].y = src[1].y = 0;
-    src[0].w = src[1].w = BLOCK_SIZE;
-    src[0].h = src[1].h = BLOCK_SIZE;
-    for (int y = 0; y < NUM_BLOCK_Y; ++y) {
-      for (int x = 0; x < NUM_BLOCK_X; ++x) {
-        SDL_Rect dst;
-        dst.x = BLOCK_SIZE * x;
-        dst.y = BLOCK_SIZE * y;
-        int block = Block[y][x];
-        if ((block == 2) || (block == 3) || (block == 4) || (block == 5) ||
-            (block == 6) || (block == 7) || (block == 8)) {
-          block = 0;
+    SDL_Rect src[2] = {{0, 0, BLOCK_SIZE, BLOCK_SIZE},
+                       {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE}};
+    for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
+      for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+        SDL_Rect dst = {static_cast<Sint16>(BLOCK_SIZE * x),
+                        static_cast<Sint16>(BLOCK_SIZE * y), 0, 0};
+        int mut_block = Block[y][x];
+        if ((mut_block == 2) || (mut_block == 3) || (mut_block == 4) ||
+            (mut_block == 5) || (mut_block == 6) || (mut_block == 7) ||
+            (mut_block == 8)) {
+          mut_block = 0;
         }
+        const int block = mut_block;
         SDL_BlitSurface(p_surface, &src[block], Screen, &dst);
       }
     }
   }
   {
     SDL_Rect src = {BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2};
-    for (int y = 0; y < NUM_BLOCK_Y - 1; ++y) {
-      for (int x = 0; x < NUM_BLOCK_X; ++x) {
-        int block = Block[y][x];
-        int under_block = Block[y + 1][x];
-        if ((under_block == 2) || (under_block == 3) || (under_block == 4) ||
-            (under_block == 5) || (under_block == 6) || (under_block == 7) ||
-            (under_block == 8)) {
-          under_block = 0;
+    for (unsigned int y = 0; y < NUM_BLOCK_Y - 1; ++y) {
+      for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+        const int block = Block[y][x];
+        int mut_under_block = Block[y + 1][x];
+        if ((mut_under_block == 2) || (mut_under_block == 3) ||
+            (mut_under_block == 4) || (mut_under_block == 5) ||
+            (mut_under_block == 6) || (mut_under_block == 7) ||
+            (mut_under_block == 8)) {
+          mut_under_block = 0;
         }
+        const int under_block = mut_under_block;
 
         if ((block == 1) && (under_block == 0)) {
-          SDL_Rect dst;
-          dst.x = BLOCK_SIZE * x;
-          dst.y = BLOCK_SIZE * y + BLOCK_SIZE / 2;
+          SDL_Rect dst = {static_cast<Sint16>(BLOCK_SIZE * x),
+                          static_cast<Sint16>(BLOCK_SIZE * y + BLOCK_SIZE / 2),
+                          0, 0};
           SDL_BlitSurface(p_surface, &src, Screen, &dst);
         }
       }

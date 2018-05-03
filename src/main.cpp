@@ -66,7 +66,7 @@ bool init() {
   // TODO: exit() here
   try {
     init_sdl();
-  } catch (char *e) {
+  } catch (const char *e) {
     cerr << "error: " << e << '\n';
     atexit(SDL_Quit);
     return false;
@@ -76,7 +76,7 @@ bool init() {
     init_font();
     init_img();
     init_music();
-  } catch (char *e) {
+  } catch (const char *e) {
     cerr << "error: " << e << '\n';
     end();
     return false;
@@ -125,7 +125,7 @@ void init_font() {
   Kanji_AddFont(Font[FONT_SIZE_16], "./data/8x16.bdf");
   Font[FONT_SIZE_24] = Kanji_OpenFont("./data/jiskan24.bdf", 24);
   Kanji_AddFont(Font[FONT_SIZE_24], "./data/12x24.bdf");
-  for (int i = 0; i < NUM_FONT; ++i) {
+  for (unsigned int i = 0; i < NUM_FONT; ++i) {
     if (!Font[i]) {
       throw SDL_GetError();
     }
@@ -149,7 +149,7 @@ void init_img() {
     image_manager::load_image("./data/guzuta.png", "guzuta");
     image_manager::load_image("./data/mon_run.png", "mon_run");
     image_manager::load_image("./data/plate.png", "plate");
-  } catch (char *e) {
+  } catch (const char *e) {
     throw e;
   }
 }
@@ -206,23 +206,17 @@ void main_loop() {
 }
 
 void title() {
-  // TODO: narrow scope
-  SDL_Rect dst_back, dst_select;
-  Uint32 white = 0xffffffff;
-  Uint32 black = 0x00000000;
-  dst_back.x = 0;
-  dst_back.y = 0;
-  dst_back.w = SCREEN_WIDTH;
-  dst_back.h = SCREEN_HEIGHT;
-  SDL_FillRect(Screen, &dst_back, white);
+  SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_FillRect(Screen, &dst, 0xffffffff);
 
   switch (Game_count) {
-    case 0:
+    case 0: {
       wipe::set_wipe_in();
       wipe::draw(SCREEN_WIDTH);
       ++Game_count;
       break;
-    case 1:
+    }
+    case 1: {
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
       wipe::draw(SCREEN_WIDTH);
@@ -230,7 +224,8 @@ void title() {
         ++Game_count;
       }
       break;
-    case 2:
+    }
+    case 2: {
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
       if (Blink_count < 30) {
@@ -249,7 +244,8 @@ void title() {
         Blink_count = 0;
       }
       break;
-    case 3:
+    }
+    case 3: {
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
       if (!Press_key[0][input_device::x] && !Press_key[1][input_device::x] &&
@@ -257,29 +253,26 @@ void title() {
         ++Game_count;
       }
       break;
-    case 4:
+    }
+    case 4: {
       Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
                     "P a c - M a n");
 
       switch (Game_mode) {
-        case game_mode::single:
-          dst_select.x = 250;
-          dst_select.y = 300;
-          dst_select.w = 96;
-          dst_select.h = 16;
-          SDL_FillRect(Screen, &dst_select, black);
+        case game_mode::single: {
+          SDL_Rect dst = {250, 300, 96, 16};
+          SDL_FillRect(Screen, &dst, 0x00000000);
           Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
           break;
-        case game_mode::battle:
-          dst_select.x = 250;
-          dst_select.y = 350;
-          dst_select.w = 96;
-          dst_select.h = 16;
-          SDL_FillRect(Screen, &dst_select, black);
+        }
+        case game_mode::battle: {
+          SDL_Rect dst = {250, 350, 96, 16};
+          SDL_FillRect(Screen, &dst, 0x00000000);
           Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
           break;
+        }
         default:
           cerr << "error: undefined game mode." << '\n';
           break;
@@ -306,26 +299,23 @@ void title() {
         Game_mode = game_mode::single;
       }
       break;
-    case 5:
+    }
+    case 5: {
       switch (Game_mode) {
-        case game_mode::single:
-          dst_select.x = 250;
-          dst_select.y = 300;
-          dst_select.w = 96;
-          dst_select.h = 16;
-          SDL_FillRect(Screen, &dst_select, black);
+        case game_mode::single: {
+          SDL_Rect dst = {250, 300, 96, 16};
+          SDL_FillRect(Screen, &dst, 0x00000000);
           Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
           break;
-        case game_mode::battle:
-          dst_select.x = 250;
-          dst_select.y = 350;
-          dst_select.w = 96;
-          dst_select.h = 16;
-          SDL_FillRect(Screen, &dst_select, black);
+        }
+        case game_mode::battle: {
+          SDL_Rect dst = {250, 350, 96, 16};
+          SDL_FillRect(Screen, &dst, 0x00000000);
           Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
           break;
+        }
         default:
           cerr << "error: undefined game mode."
                << "\n";
@@ -357,6 +347,7 @@ void title() {
         srand((unsigned int)time(nullptr));
       }
       break;
+    }
     default:
       cerr << "error: undefined game count." << '\n';
       break;
@@ -370,7 +361,7 @@ void game_start() {
   player::draw();
   draw_score();
   switch (Game_count) {
-    case 0:
+    case 0: {
       if ((Player_1_life == 2) && (Player_2_life == 2)) {
         Mix_PlayMusic(Music[2], 0);
       }
@@ -378,12 +369,14 @@ void game_start() {
       wipe::draw(OFFSET_X);
       ++Game_count;
       break;
-    case 1:
+    }
+    case 1: {
       wipe::draw(OFFSET_X);
       if (wipe::update()) {
         ++Game_count;
       }
       break;
+    }
     default:
       ++Game_count;
       break;
@@ -401,7 +394,7 @@ void game_start() {
     for (unsigned int i = 0; i < Num_player; ++i) {
       Power_chara_mode[i] = 0;
     }
-    for (int i = 0; i < enemy_character::count; ++i) {
+    for (unsigned int i = 0; i < enemy_character::count; ++i) {
       Enemy_state[i] = enemy_state::normal;
     }
   }
@@ -414,7 +407,7 @@ void play_game() {
   player::draw();
   draw_score();
   player::move();
-  for (int i = 0; i < enemy_character::count; ++i) {
+  for (unsigned int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
       enemy::move_lose_enemy(i);
     } else {
@@ -423,8 +416,8 @@ void play_game() {
   }
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
-  bool food_state = food::check_state();
-  bool hit_enemy = enemy::check_hit_enemy();
+  const bool food_state = food::check_state();
+  const bool hit_enemy = enemy::check_hit_enemy();
   if (food_state) {
     Game_state = game_state::clear;
   } else if (hit_enemy) {
@@ -530,21 +523,21 @@ void game_miss() {
 }
 
 void game_over() {
-  SDL_Rect dst_back = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-  Uint32 white = 0xffffffff;
-  SDL_FillRect(Screen, &dst_back, white);
+  SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_FillRect(Screen, &dst, 0xffffffff);
 
   switch (Game_mode) {
-    case game_mode::single:
+    case game_mode::single: {
       switch (Game_count) {
-        case 0:
+        case 0: {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           wipe::set_wipe_in();
           wipe::draw(SCREEN_WIDTH);
           ++Game_count;
           break;
-        case 1:
+        }
+        case 1: {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           wipe::draw(SCREEN_WIDTH);
@@ -552,7 +545,8 @@ void game_over() {
             ++Game_count;
           }
           break;
-        case 2:
+        }
+        case 2: {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           Kanji_PutText(Screen, 150, 225, Font[FONT_SIZE_24], BLACK,
@@ -575,7 +569,8 @@ void game_over() {
             wipe::draw(SCREEN_WIDTH);
           }
           break;
-        case 3:
+        }
+        case 3: {
           wipe::draw(SCREEN_WIDTH);
           if (wipe::update()) {
             Blink_count = 0;
@@ -583,21 +578,24 @@ void game_over() {
             Game_state = game_state::title;
           }
           break;
+        }
         default:
           cerr << "error: undefined game count." << '\n';
           break;
       }
       break;
-    case game_mode::battle:
+    }
+    case game_mode::battle: {
       switch (Game_count) {
-        case 0:
+        case 0: {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           wipe::set_wipe_in();
           wipe::draw(SCREEN_WIDTH);
           ++Game_count;
           break;
-        case 1:
+        }
+        case 1: {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           wipe::draw(SCREEN_WIDTH);
@@ -605,7 +603,8 @@ void game_over() {
             ++Game_count;
           }
           break;
-        case 2:
+        }
+        case 2: {
           Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
                         "G a m e O v e r");
           if (Now_score[0] > Now_score[1]) {
@@ -636,7 +635,8 @@ void game_over() {
             wipe::draw(SCREEN_WIDTH);
           }
           break;
-        case 3:
+        }
+        case 3: {
           wipe::draw(SCREEN_WIDTH);
           if (wipe::update()) {
             Blink_count = 0;
@@ -645,12 +645,14 @@ void game_over() {
             Game_state = game_state::title;
           }
           break;
+        }
         default:
           // TODO: exit or throw exception
           cerr << "error: undefined game count." << '\n';
           break;
       }
       break;
+    }
     default:
       // TODO: exit or throw exception
       cerr << "error: undefined game state." << '\n';
@@ -671,26 +673,18 @@ void game_pause() {
 }
 
 // TODO: reduce magic numbers
-// TODO: delete meanigneless block scopes
 void draw_score() {
   {
     SDL_Surface *p_surface = image_manager::get_image("plate");
-    SDL_Rect dst;
-    dst.x = OFFSET_X;
-    dst.y = 0;
+    SDL_Rect dst = {OFFSET_X, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
   {
     Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
                   WHITE, "Score: %6d", Now_score[0]);
     SDL_Surface *p_surface = image_manager::get_image("player1");
-    SDL_Rect src, dst;
-    src.x = BLOCK_SIZE;
-    src.y = 0;
-    src.w = BLOCK_SIZE;
-    src.h = BLOCK_SIZE;
-    dst.x = OFFSET_X + 60;
-    dst.y = (SCREEN_HEIGHT / 6 + 32) - 5;
+    SDL_Rect src = {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE};
+    SDL_Rect dst = {OFFSET_X + 60, (SCREEN_HEIGHT / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 32,
                   Font[FONT_SIZE_16], WHITE, " x %d", Player_1_life);
@@ -698,13 +692,8 @@ void draw_score() {
       Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
                     Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
       SDL_Surface *p_surface = image_manager::get_image("player2");
-      SDL_Rect src, dst;
-      src.x = BLOCK_SIZE;
-      src.y = 0;
-      src.w = BLOCK_SIZE;
-      src.h = BLOCK_SIZE;
-      dst.x = OFFSET_X + 60;
-      dst.y = (SCREEN_HEIGHT / 6 + 112) - 5;
+      SDL_Rect src = {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE};
+      SDL_Rect dst = {OFFSET_X + 60, (SCREEN_HEIGHT / 6 + 112) - 5, 0, 0};
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 112,
                     Font[FONT_SIZE_16], WHITE, " x %d", Player_2_life);
@@ -712,25 +701,15 @@ void draw_score() {
   }
   {
     if (Power_chara_mode[0]) {
-      Uint32 yellow = 0xffff00;
-      SDL_Rect dst;
-
-      dst.x = OFFSET_X + 10;
-      dst.y = SCREEN_HEIGHT / 6 * 4;
-      dst.w = Power_chara_mode[0] / 4;
-      dst.h = BLOCK_SIZE;
-      SDL_FillRect(Screen, &dst, yellow);
+      SDL_Rect dst = {OFFSET_X + 10, SCREEN_HEIGHT / 6 * 4,
+                      static_cast<Uint16>(Power_chara_mode[0] / 4), BLOCK_SIZE};
+      SDL_FillRect(Screen, &dst, 0xffff00);
       --Power_chara_mode[0];
     }
     if (Power_chara_mode[1]) {
-      Uint32 gray = 0x808080;
-      SDL_Rect dst;
-
-      dst.x = OFFSET_X + 10;
-      dst.y = SCREEN_HEIGHT / 6 * 4 + 30;
-      dst.w = Power_chara_mode[1] / 4;
-      dst.h = BLOCK_SIZE;
-      SDL_FillRect(Screen, &dst, gray);
+      SDL_Rect dst = {OFFSET_X + 10, SCREEN_HEIGHT / 6 * 4 + 30,
+                      static_cast<Uint16>(Power_chara_mode[1] / 4), BLOCK_SIZE};
+      SDL_FillRect(Screen, &dst, 0x808080);
       --Power_chara_mode[1];
     }
   }
@@ -757,7 +736,7 @@ int poll_event() {
 
 void wait_game() {
   static Uint32 pre_count;
-  double wait_time = 1000.0 / FPS_MAX;
+  const double wait_time = 1000.0 / FPS_MAX;
   Uint32 wait_count = (wait_time + 0.5);
   if (pre_count) {
     Uint32 now_count = SDL_GetTicks();
@@ -792,7 +771,7 @@ void draw_fps() {
 
 void end() {
   image_manager::delete_all_image();
-  for (int i = 0; i < NUM_FONT; ++i) {
+  for (unsigned int i = 0; i < NUM_FONT; ++i) {
     Kanji_CloseFont(Font[i]);
   }
   input::end_joystick();
@@ -804,7 +783,7 @@ void end_music() {
   Mix_HaltMusic();
   Mix_HaltChannel(-1);
   // TODO: What's the number of 2?
-  for (int i = 0; i < 2; ++i) {
+  for (unsigned int i = 0; i < 2; ++i) {
     Mix_FreeMusic(Music[i]);
   }
   Mix_FreeChunk(Se[0]);
@@ -813,7 +792,7 @@ void end_music() {
 
 void draw_translucence() {
   Uint32 rmask, gmask, bmask, amask;
-  Uint8 alpha = 128;
+  const Uint8 alpha = 128;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   rmask = 0xff000000;
   gmask = 0x00ff0000;
@@ -825,10 +804,7 @@ void draw_translucence() {
   bmask = 0x00ff0000;
   amask = 0xff000000;
 #endif
-  SDL_Rect dst_back;
-  dst_back.x = 0;
-  dst_back.y = 0;
-
+  SDL_Rect dst = {0, 0, 0, 0};
   SDL_Surface *trans_surface =
       SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32,
                            rmask, gmask, bmask, amask);
@@ -837,7 +813,7 @@ void draw_translucence() {
     exit(EXIT_FAILURE);
   }
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
-  SDL_BlitSurface(trans_surface, nullptr, Screen, &dst_back);
+  SDL_BlitSurface(trans_surface, nullptr, Screen, &dst);
   if (Blink_count < 30) {
     Kanji_PutText(Screen, 240, 200, Font[FONT_SIZE_24], WHITE, "P a u s e");
     ++Blink_count;
