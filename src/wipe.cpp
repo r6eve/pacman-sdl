@@ -1,11 +1,15 @@
-#include "def_global.hpp"
 #include "wipe.hpp"
+#include "def_global.hpp"
 
 namespace wipe {
 
-static int Wipe_variation;
-static int Wipe_count;
-static int Wipe_count_reach;
+namespace {
+
+int Wipe_variation;
+int Wipe_count;
+int Wipe_count_reach;
+
+}  // namespace
 
 void set_wipe_in() {
   Wipe_variation = -1;

@@ -1,15 +1,19 @@
+#include "food.hpp"
 #include "def_global.hpp"
 #include "enemy.hpp"
-#include "food.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
 #include "player.hpp"
 
 namespace food {
 
+namespace {
+
 // TODO: enum class
 // -1: no food, 0: counter food, 1: food, 2: get food
-static int food[NUM_BLOCK_Y][NUM_BLOCK_X];
+int food[NUM_BLOCK_Y][NUM_BLOCK_X];
+
+}  // namespace
 
 void init() {
   for (int y = 0; y < NUM_BLOCK_Y; ++y) {
@@ -39,10 +43,10 @@ void draw() {
       SDL_Rect dst;
       dst.x = BLOCK_SIZE * x;
       dst.y = BLOCK_SIZE * y;
-      if (food[y][x] == 1) { // food
+      if (food[y][x] == 1) {  // food
         SDL_Surface *p_surface = image_manager::get_image("food");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      } else if (food[y][x] == 0) { // counter food
+      } else if (food[y][x] == 0) {  // counter food
         SDL_Surface *p_surface = image_manager::get_image("food_counter");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
       }

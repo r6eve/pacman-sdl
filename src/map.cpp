@@ -8,7 +8,11 @@
 
 namespace map {
 
-static unsigned int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
+namespace {
+
+unsigned int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
+
+}  // namespace
 
 void init() {
   // TODO: use enum class

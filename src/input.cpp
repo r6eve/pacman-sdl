@@ -5,8 +5,12 @@
 
 namespace input {
 
+namespace {
+
 static SDL_Joystick *Joystick[2];  // TODO: 2
 static int Num_joysticks;
+
+}  // namespace
 
 void init_joystick() {
   Num_joysticks = SDL_NumJoysticks();

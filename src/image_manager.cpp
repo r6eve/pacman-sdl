@@ -5,7 +5,8 @@
 
 namespace image_manager {
 
-// TODO: priavate struct/class
+namespace {
+
 typedef struct Img_list_rec {
   char name[64];
   SDL_Surface *img;
@@ -14,6 +15,8 @@ typedef struct Img_list_rec {
 } Img_list;
 
 static Img_list *Img_list_top = nullptr;
+
+}  // namespace
 
 void load_image(const char *path, const char *name) {
   SDL_Surface *img = IMG_Load(path);

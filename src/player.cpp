@@ -6,7 +6,9 @@
 
 namespace player {
 
-// TODO: private class
+namespace {
+
+// TODO: class
 // TODO: add a member of life descriving Player_1_life/Player_2_life
 typedef struct {
   int pos_x;
@@ -20,8 +22,10 @@ typedef struct {
   int anime_weight;
 } Chara;
 
-static Chara Player_1;
-static Chara Player_2;
+Chara Player_1;
+Chara Player_2;
+
+}
 
 void init() {
   Player_1.pos_x = BLOCK_SIZE * 9;

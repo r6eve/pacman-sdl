@@ -17,37 +17,41 @@
 
 using namespace std;
 
+namespace {
+
 // TODO: enum class
 enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
 
-static bool init();
-static void init_sdl();
-static void init_font();
-static void init_img();
-static void init_music();
-static void main_loop();
-static void title();
-static void game_start();
-static void play_game();
-static void game_clear();
-static void game_miss();
-static void game_over();
-static void game_pause();
-static void draw_score();
-static int poll_event();
-static void wait_game();
-static void draw_fps();
-static void end();
-static void end_music();
-static void draw_translucence();
+game_state Game_state;
+Kanji_Font *Font[2];
+int Player_1_life;
+int Player_2_life;
+unsigned int Blink_count;
+unsigned int Game_count;
+unsigned int Num_player;
 
-static game_state Game_state;
-static Kanji_Font *Font[2];
-static int Player_1_life;
-static int Player_2_life;
-static unsigned int Blink_count;
-static unsigned int Game_count;
-static unsigned int Num_player;
+}  // namespace
+
+bool init();
+void init_sdl();
+void init_font();
+void init_img();
+void init_music();
+void main_loop();
+void title();
+void game_start();
+void play_game();
+void game_clear();
+void game_miss();
+void game_over();
+void game_pause();
+void draw_score();
+int poll_event();
+void wait_game();
+void draw_fps();
+void end();
+void end_music();
+void draw_translucence();
 
 int main(int, char **) {
   if (!init()) {
@@ -294,9 +298,11 @@ void title() {
         Game_mode = game_mode::single;
       }
 
-      if (Press_key[0][input_device::down] || Press_key[1][input_device::down]) {
+      if (Press_key[0][input_device::down] ||
+          Press_key[1][input_device::down]) {
         Game_mode = game_mode::battle;
-      } else if (Press_key[0][input_device::up] || Press_key[1][input_device::up]) {
+      } else if (Press_key[0][input_device::up] ||
+                 Press_key[1][input_device::up]) {
         Game_mode = game_mode::single;
       }
       break;
@@ -321,7 +327,8 @@ void title() {
           Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
           break;
         default:
-          cerr << "error: undefined game mode." << "\n";
+          cerr << "error: undefined game mode."
+               << "\n";
           break;
       }
 
@@ -822,10 +829,11 @@ void draw_translucence() {
   dst_back.x = 0;
   dst_back.y = 0;
 
-  SDL_Surface *trans_surface = SDL_CreateRGBSurface(
-      SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, amask);
+  SDL_Surface *trans_surface =
+      SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32,
+                           rmask, gmask, bmask, amask);
   if (!trans_surface) {
-    cerr << "CreateRGBSurface failed: " <<  SDL_GetError() << '\n';
+    cerr << "CreateRGBSurface failed: " << SDL_GetError() << '\n';
     exit(EXIT_FAILURE);
   }
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);

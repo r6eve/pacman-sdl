@@ -7,7 +7,9 @@
 
 namespace enemy {
 
-// TODO: use private class
+namespace {
+
+// TODO: use class
 typedef struct {
   int pos_x;
   int pos_y;
@@ -20,9 +22,8 @@ typedef struct {
   int anime_weight;
 } Enemy_data;
 
-static Enemy_data Enemy[enemy_character::count];
+Enemy_data Enemy[enemy_character::count];
 
-// private function
 void update() {
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     ++Enemy[i].anime_weight;
@@ -33,6 +34,8 @@ void update() {
     }
   }
 }
+
+}  // namespace
 
 void init() {
   const unsigned int start_block[enemy_character::count][2] = {
