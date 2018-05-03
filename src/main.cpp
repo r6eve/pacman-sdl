@@ -18,13 +18,16 @@
 
 using namespace std;
 
-static game_state Game_state;
-static Kanji_Font *Font[2];
-
 // TODO: enum class
 enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
 
-static int Blink_count;
+static game_state Game_state;
+static Kanji_Font *Font[2];
+static int Player_1_life;
+static int Player_2_life;
+static unsigned int Blink_count;
+static unsigned int Game_count;
+static unsigned int Num_player;
 
 int main(int, char **) {
   if (!init()) {
@@ -320,7 +323,7 @@ void title() {
           Num_player = 2;
         }
 
-        for (int i = 0; i < Num_player; ++i) {
+        for (unsigned int i = 0; i < Num_player; ++i) {
           Now_score[i] = 0;
         }
 
@@ -368,7 +371,7 @@ void game_start() {
   if (Game_count > 220) {
     Game_count = 0;
     Game_state = game_state::playing;
-    for (int i = 0; i < Num_player; ++i) {
+    for (unsigned int i = 0; i < Num_player; ++i) {
       Power_chara_mode[i] = 0;
     }
     for (int i = 0; i < enemy_character::count; ++i) {

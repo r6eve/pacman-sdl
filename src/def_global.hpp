@@ -84,10 +84,7 @@ enum class game_mode {
 #endif
 
 GLOBAL SDL_Surface *Screen;
-GLOBAL int Now_score[2];  // 0: 1P, 1: 2P
-GLOBAL int Player_1_life;
-GLOBAL int Player_2_life;
-GLOBAL int Game_count;
+GLOBAL unsigned int Now_score[2];  // 0: 1P, 1: 2P
 GLOBAL int Game_level;
 GLOBAL game_mode Game_mode;
 GLOBAL enemy_state Enemy_state[enemy_character::count];
@@ -98,7 +95,6 @@ GLOBAL int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
 GLOBAL bool Enemy_run_debug;
 GLOBAL Mix_Music *Music[5];  // TODO: enum class
 GLOBAL Mix_Chunk *Se[4];     // TODO: enum class
-GLOBAL int Num_player;
-GLOBAL bool Choice_hit;  // true: 1P, false: 2P
+GLOBAL bool Choice_hit;  // true: player 1, false: player 2
 
 #endif
