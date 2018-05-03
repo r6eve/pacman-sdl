@@ -1,9 +1,9 @@
 #include "enemy.hpp"
 #include "def_global.hpp"
 #include "image_manager.hpp"
-#include "main.hpp"
 #include "map.hpp"
 #include "player.hpp"
+#include "util.hpp"
 
 namespace enemy {
 
@@ -92,7 +92,7 @@ void move_normal_enemy(unsigned int enemy_type) {
       if ((Enemy[enemy_type].pos_x != dst_pos_x) ||
           (Enemy[enemy_type].pos_y != dst_pos_y)) {
         update();
-        const int move_value = 2;
+        const unsigned int move_value = 2;
         if (dst_pos_x > Enemy[enemy_type].pos_x) {
           Enemy[enemy_type].pos_x += move_value;
         }
@@ -110,7 +110,8 @@ void move_normal_enemy(unsigned int enemy_type) {
 
       Enemy[enemy_type].block_x = Enemy[enemy_type].next_block_x;
       Enemy[enemy_type].block_y = Enemy[enemy_type].next_block_y;
-      if (map::check_state(Enemy[enemy_type].block_x, Enemy[enemy_type].block_y) == 2) {
+      if (map::check_state(Enemy[enemy_type].block_x,
+                           Enemy[enemy_type].block_y) == 2) {
         Enemy[enemy_type].dir = 2;
         --Enemy[enemy_type].next_block_y;
         return;
@@ -126,9 +127,11 @@ void move_normal_enemy(unsigned int enemy_type) {
           Enemy[enemy_type].block_x + front_pos[Enemy[enemy_type].dir][0];
       const int front_block_y =
           Enemy[enemy_type].block_y + front_pos[Enemy[enemy_type].dir][1];
-      unsigned int mut_front_block = map::check_state(front_block_x, front_block_y);
-      if ((mut_front_block == 3) || (mut_front_block == 4) || (mut_front_block == 5) ||
-          (mut_front_block == 6) || (mut_front_block == 7) || (mut_front_block == 8)) {
+      unsigned int mut_front_block =
+          map::check_state(front_block_x, front_block_y);
+      if ((mut_front_block == 3) || (mut_front_block == 4) ||
+          (mut_front_block == 5) || (mut_front_block == 6) ||
+          (mut_front_block == 7) || (mut_front_block == 8)) {
         mut_front_block = 0;  // can move it
       }
       const unsigned int front_block = mut_front_block;
@@ -137,9 +140,10 @@ void move_normal_enemy(unsigned int enemy_type) {
           Enemy[enemy_type].block_x + left_pos[Enemy[enemy_type].dir][0];
       const int left_block_y =
           Enemy[enemy_type].block_y + left_pos[Enemy[enemy_type].dir][1];
-      unsigned int mut_left_block = map::check_state(left_block_x, left_block_y);
-      if ((mut_left_block == 3) || (mut_left_block == 4) || (mut_left_block == 5) ||
-          (front_block == 8)) {
+      unsigned int mut_left_block =
+          map::check_state(left_block_x, left_block_y);
+      if ((mut_left_block == 3) || (mut_left_block == 4) ||
+          (mut_left_block == 5) || (front_block == 8)) {
         mut_left_block = 0;
       }
       const unsigned int left_block = mut_left_block;
@@ -148,9 +152,10 @@ void move_normal_enemy(unsigned int enemy_type) {
           Enemy[enemy_type].block_x + right_pos[Enemy[enemy_type].dir][0];
       const int right_block_y =
           Enemy[enemy_type].block_y + right_pos[Enemy[enemy_type].dir][1];
-      unsigned int mut_right_block = map::check_state(right_block_x, right_block_y);
-      if ((mut_right_block == 3) || (mut_right_block == 4) || (mut_right_block == 5) ||
-          (front_block == 8)) {
+      unsigned int mut_right_block =
+          map::check_state(right_block_x, right_block_y);
+      if ((mut_right_block == 3) || (mut_right_block == 4) ||
+          (mut_right_block == 5) || (front_block == 8)) {
         mut_right_block = 0;
       }
       const unsigned int right_block = mut_right_block;
@@ -161,7 +166,8 @@ void move_normal_enemy(unsigned int enemy_type) {
           ((390 <= Power_chara_mode[1]) && (Power_chara_mode[1] <= 400))) {
         if (map::check_state(
                 Enemy[enemy_type].block_x + back_pos[Enemy[enemy_type].dir][0],
-                Enemy[enemy_type].block_y + back_pos[Enemy[enemy_type].dir][1]) == 2) {
+                Enemy[enemy_type].block_y +
+                    back_pos[Enemy[enemy_type].dir][1]) == 2) {
           Enemy[enemy_type].next_block_x = left_block_x;
           Enemy[enemy_type].next_block_y = left_block_y;
           Enemy[enemy_type].dir += 3;
@@ -286,19 +292,13 @@ void move_lose_enemy(unsigned int enemy_type) {
   if (!(Power_chara_mode[0] || Power_chara_mode[1])) {
     Enemy_state[enemy_type] = enemy_state::normal;
   }
-  int is_moving;
-  int dst_pos_x = Enemy[enemy_type].next_block_x * BLOCK_SIZE;
-  int dst_pos_y = Enemy[enemy_type].next_block_y * BLOCK_SIZE;
 
-  if ((Enemy[enemy_type].pos_x == dst_pos_x) && (Enemy[enemy_type].pos_y == dst_pos_y)) {
-    is_moving = 0;
-  } else {
-    is_moving = 1;
-  }
-
-  if (is_moving) {
+  const int dst_pos_x = Enemy[enemy_type].next_block_x * BLOCK_SIZE;
+  const int dst_pos_y = Enemy[enemy_type].next_block_y * BLOCK_SIZE;
+  if ((Enemy[enemy_type].pos_x != dst_pos_x) ||
+      (Enemy[enemy_type].pos_y != dst_pos_y)) {
     update();
-    int move_value = 2;
+    const int move_value = 2;
     if (dst_pos_x > Enemy[enemy_type].pos_x) {
       Enemy[enemy_type].pos_x += move_value;
     }
@@ -311,31 +311,46 @@ void move_lose_enemy(unsigned int enemy_type) {
     if (dst_pos_y < Enemy[enemy_type].pos_y) {
       Enemy[enemy_type].pos_y -= move_value;
     }
-  } else {
-    Enemy[enemy_type].block_x = Enemy[enemy_type].next_block_x;
-    Enemy[enemy_type].block_y = Enemy[enemy_type].next_block_y;
-    int now_value = Home_way[Enemy[enemy_type].block_y][Enemy[enemy_type].block_x];
-    if (now_value > Home_way[Enemy[enemy_type].block_y - 1][Enemy[enemy_type].block_x]) {
-      --Enemy[enemy_type].next_block_y;
-    } else if (now_value >
-               Home_way[Enemy[enemy_type].block_y][Enemy[enemy_type].block_x - 1]) {
-      --Enemy[enemy_type].next_block_x;
-    } else if (now_value >
-               Home_way[Enemy[enemy_type].block_y][Enemy[enemy_type].block_x + 1]) {
-      ++Enemy[enemy_type].next_block_x;
-    } else if (now_value >
-               Home_way[Enemy[enemy_type].block_y + 1][Enemy[enemy_type].block_x]) {
-      ++Enemy[enemy_type].next_block_y;
-    }
+    return;
   }
+
+  Enemy[enemy_type].block_x = Enemy[enemy_type].next_block_x;
+  Enemy[enemy_type].block_y = Enemy[enemy_type].next_block_y;
+  const unsigned int now_value =
+      Home_way[Enemy[enemy_type].block_y][Enemy[enemy_type].block_x];
+  if (now_value >
+      Home_way[Enemy[enemy_type].block_y - 1][Enemy[enemy_type].block_x]) {
+    --Enemy[enemy_type].next_block_y;
+    return;
+  }
+
+  if (now_value >
+      Home_way[Enemy[enemy_type].block_y][Enemy[enemy_type].block_x - 1]) {
+    --Enemy[enemy_type].next_block_x;
+    return;
+  }
+
+  if (now_value >
+      Home_way[Enemy[enemy_type].block_y][Enemy[enemy_type].block_x + 1]) {
+    ++Enemy[enemy_type].next_block_x;
+    return;
+  }
+
+  if (now_value >
+      Home_way[Enemy[enemy_type].block_y + 1][Enemy[enemy_type].block_x]) {
+    ++Enemy[enemy_type].next_block_y;
+    return;
+  }
+
+  // enemy is in enemy's home
 }
 
 bool check_hit_enemy() {
-  int player_1_pos_x = player::get_player_1_pos_x();
-  int player_1_pos_y = player::get_player_1_pos_y();
+  const int player_1_pos_x = player::get_player_1_pos_x();
+  const int player_1_pos_y = player::get_player_1_pos_y();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
-    int d = get_distance(player_1_pos_x, player_1_pos_y, Enemy[i].pos_x,
-                         Enemy[i].pos_y);
+    const int d = util::get_distance(player_1_pos_x, player_1_pos_y,
+                                     Enemy[i].pos_x, Enemy[i].pos_y);
     if (d < HIT_DISTANCE) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
@@ -349,11 +364,11 @@ bool check_hit_enemy() {
   }
 
   if (Game_mode == game_mode::battle) {
-    int player_2_pos_x = player::get_player_2_pos_x();
-    int player_2_pos_y = player::get_player_2_pos_y();
+    const int player_2_pos_x = player::get_player_2_pos_x();
+    const int player_2_pos_y = player::get_player_2_pos_y();
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      int d = get_distance(player_2_pos_x, player_2_pos_y, Enemy[i].pos_x,
-                           Enemy[i].pos_y);
+      const int d = util::get_distance(player_2_pos_x, player_2_pos_y,
+                                       Enemy[i].pos_x, Enemy[i].pos_y);
       if (d < HIT_DISTANCE) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;

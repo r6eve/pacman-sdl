@@ -1,7 +1,6 @@
 #define MAIN
 
 #include <SDL/SDL_image.h>
-#include <math.h>
 #include <time.h>
 #include <iostream>
 
@@ -11,15 +10,36 @@
 #include "food.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
-#include "main.hpp"
 #include "map.hpp"
 #include "player.hpp"
+#include "util.hpp"
 #include "wipe.hpp"
 
 using namespace std;
 
 // TODO: enum class
 enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
+
+static bool init();
+static void init_sdl();
+static void init_font();
+static void init_img();
+static void init_music();
+static void main_loop();
+static void title();
+static void game_start();
+static void play_game();
+static void game_clear();
+static void game_miss();
+static void game_over();
+static void game_pause();
+static void draw_score();
+static int poll_event();
+static void wait_game();
+static void draw_fps();
+static void end();
+static void end_music();
+static void draw_translucence();
 
 static game_state Game_state;
 static Kanji_Font *Font[2];
@@ -782,11 +802,6 @@ void end_music() {
   }
   Mix_FreeChunk(Se[0]);
   Mix_CloseAudio();
-}
-
-// TODO: utils.cpp utils.hpp
-int get_distance(int x1, int y1, int x2, int y2) {
-  return (int)hypot((double)(x1 - x2), (double)(y1 - y2));
 }
 
 void draw_translucence() {

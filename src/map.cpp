@@ -4,7 +4,6 @@
 
 #include "def_global.hpp"
 #include "image_manager.hpp"
-#include "main.hpp"
 #include "map.hpp"
 
 namespace map {
@@ -89,7 +88,11 @@ void init() {
   }
 }
 
-unsigned int check_state(unsigned int x, unsigned int y) { return Block[y][x]; }
+// Don't modify parameter type as unsigned int
+// TODO:
+// Why is the parameter of x=-1 and y=12 OK?
+// Cf. https://ideone.com/u1QKTJ
+unsigned int check_state(int x, int y) { return Block[y][x]; }
 
 // TODO: reduce magic numbers
 void draw() {

@@ -91,7 +91,7 @@ GLOBAL enemy_state Enemy_state[enemy_character::count];
 GLOBAL int Power_chara_mode[2];
 GLOBAL bool Press_key[2][input_device::count];
 GLOBAL bool Edge_key[2][input_device::count];
-GLOBAL int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
+GLOBAL unsigned int Home_way[NUM_BLOCK_Y][NUM_BLOCK_X];
 GLOBAL bool Enemy_run_debug;
 GLOBAL Mix_Music *Music[5];  // TODO: enum class
 GLOBAL Mix_Chunk *Se[4];     // TODO: enum class

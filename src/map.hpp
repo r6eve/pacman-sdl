@@ -5,7 +5,7 @@ namespace map {
 
 void init();
 void draw();
-unsigned int check_state(unsigned int x, unsigned int y);
+unsigned int check_state(int x, int y);
 
 }  // namespace map
 
