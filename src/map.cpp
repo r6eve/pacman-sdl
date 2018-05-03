@@ -9,13 +9,13 @@
 
 namespace map {
 
-static int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
+static unsigned int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
 
 void init() {
   // TODO: use enum class
-  // 0: can move, 1: cannot move, 2: enemy house
+  // 0: can move, 1: cannot move, 2: enemy's house
   // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
-  int block_src[NUM_BLOCK_Y][NUM_BLOCK_X] = {
+  unsigned int block_src[NUM_BLOCK_Y][NUM_BLOCK_X] = {
   // 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 1
@@ -43,8 +43,8 @@ void init() {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 23
   };
 
-  for (int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
+    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
       Block[y][x] = block_src[y][x];
     }
   }
@@ -54,7 +54,7 @@ void init() {
   }
 
   // 1: enemy house, 0: cannot move
-  int way_to_home[NUM_BLOCK_Y][NUM_BLOCK_X] = {
+  const unsigned int way_to_home[NUM_BLOCK_Y][NUM_BLOCK_X] = {
    // 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, //99
     {99, 22, 21, 20, 19, 20, 21, 22, 21, 20, 19, 99, 99, 20, 21, 22, 23, 22, 21, 20, 21, 22, 23, 99}, // 1
@@ -82,14 +82,14 @@ void init() {
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, // 23
   };
 
-  for (int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
+    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
       Home_way[y][x] = way_to_home[y][x];
     }
   }
 }
 
-int check_state(int x, int y) { return Block[y][x]; }
+unsigned int check_state(unsigned int x, unsigned int y) { return Block[y][x]; }
 
 // TODO: reduce magic numbers
 void draw() {

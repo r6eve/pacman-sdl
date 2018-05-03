@@ -7,9 +7,9 @@ void init();
 
 void draw();
 
-void move_normal_enemy(int enemy_type);
+void move_normal_enemy(unsigned int enemy_type);
 
-void move_lose_enemy(int enemy_type);
+void move_lose_enemy(unsigned int enemy_type);
 
 /**
  * Return true if the player whose state is normal hits enemy, and false
