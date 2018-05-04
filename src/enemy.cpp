@@ -17,9 +17,9 @@ typedef struct {
   int block_y;
   int next_block_x;
   int next_block_y;
-  unsigned char dir; // max value is 4
-  unsigned char anime_count;  // 0 or 1
-  unsigned char anime_weight; // max value is 8
+  unsigned char dir;           // max value is 4
+  unsigned char anime_count;   // 0 or 1
+  unsigned char anime_weight;  // max value is 8
 } Enemy_data;
 
 Enemy_data Enemy[enemy_character::count];
@@ -352,8 +352,8 @@ bool check_hit_enemy() {
   const int player_1_pos_x = player::get_player_1_pos_x();
   const int player_1_pos_y = player::get_player_1_pos_y();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
-    const int d = util::get_distance(player_1_pos_x, player_1_pos_y,
-                                     Enemy[i].pos_x, Enemy[i].pos_y);
+    const unsigned int d = util::get_distance(player_1_pos_x, player_1_pos_y,
+                                              Enemy[i].pos_x, Enemy[i].pos_y);
     if (d < HIT_DISTANCE) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
@@ -370,8 +370,8 @@ bool check_hit_enemy() {
     const int player_2_pos_x = player::get_player_2_pos_x();
     const int player_2_pos_y = player::get_player_2_pos_y();
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      const int d = util::get_distance(player_2_pos_x, player_2_pos_y,
-                                       Enemy[i].pos_x, Enemy[i].pos_y);
+      const unsigned int d = util::get_distance(player_2_pos_x, player_2_pos_y,
+                                                Enemy[i].pos_x, Enemy[i].pos_y);
       if (d < HIT_DISTANCE) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;
