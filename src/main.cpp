@@ -1,10 +1,12 @@
 #define MAIN
 
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 #include <time.h>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
-#include "SDL_kanji.hpp"
 #include "def_global.hpp"
 #include "enemy.hpp"
 #include "food.hpp"
@@ -23,13 +25,12 @@ namespace {
 enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
 
 game_state Game_state;
-Kanji_Font *Font[2];
+TTF_Font *Ttf_fonts[2];
 int Player_1_life;
 int Player_2_life;
 unsigned int Blink_count;
 unsigned int Game_count;
 unsigned int Num_player;
-
 }  // namespace
 
 bool init();
@@ -45,12 +46,14 @@ void game_clear();
 void game_miss();
 void game_over();
 void game_pause();
+// TODO: make enum class `font_type` and `color`
+void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
+               const char *str);
 void draw_score();
 int poll_event();
 void wait_game();
 void draw_fps();
 void end();
-void end_music();
 void draw_translucence();
 
 int main(int, char **) {
@@ -82,7 +85,6 @@ bool init() {
     return false;
   }
 
-  init_color();
   input::init_joystick();
 
   // initialize global variables
@@ -117,19 +119,18 @@ void init_sdl() {
     throw Mix_GetError();
   }
 
+  if (TTF_Init() != 0) {
+    throw TTF_GetError();
+  }
+
   SDL_ShowCursor(SDL_DISABLE);
 }
 
 void init_font() {
-  Font[FONT_SIZE_16] = Kanji_OpenFont("./data/jiskan16.bdf", 16);
-  Kanji_AddFont(Font[FONT_SIZE_16], "./data/8x16.bdf");
-  Font[FONT_SIZE_24] = Kanji_OpenFont("./data/jiskan24.bdf", 24);
-  Kanji_AddFont(Font[FONT_SIZE_24], "./data/12x24.bdf");
-  for (unsigned int i = 0; i < NUM_FONT; ++i) {
-    if (!Font[i]) {
-      throw SDL_GetError();
-    }
-    Kanji_SetCodingSystem(Font[i], KANJI_EUC);
+  Ttf_fonts[0] = TTF_OpenFont("./data/GenEiGothicP-Heavy.otf", 36);
+  Ttf_fonts[1] = TTF_OpenFont("./data/GenEiGothicP-Regular.otf", 16);
+  if (!Ttf_fonts[0] || !Ttf_fonts[1]) {
+    throw TTF_GetError();
   }
 }
 
@@ -217,8 +218,7 @@ void title() {
       break;
     }
     case 1: {
-      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
-                    "P a c - M a n");
+      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
       wipe::draw(SCREEN_WIDTH);
       if (wipe::update()) {
         ++Game_count;
@@ -226,11 +226,10 @@ void title() {
       break;
     }
     case 2: {
-      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
-                    "P a c - M a n");
+      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
       if (Blink_count < 30) {
-        Kanji_PutText(Screen, 205, 300, Font[FONT_SIZE_16], BLACK,
-                      "P r e s s  S p a c e  K e y");
+        draw_text(1, 0x00, 0x00, 0x00, 205, 300,
+                  "P r e s s   S p a c e   K e y");
         ++Blink_count;
       } else if (Blink_count < 60) {
         ++Blink_count;
@@ -246,8 +245,7 @@ void title() {
       break;
     }
     case 3: {
-      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
-                    "P a c - M a n");
+      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
       if (!Press_key[0][input_device::x] && !Press_key[1][input_device::x] &&
           !Press_key[0][input_device::space]) {
         ++Game_count;
@@ -255,22 +253,21 @@ void title() {
       break;
     }
     case 4: {
-      Kanji_PutText(Screen, 230, 180, Font[FONT_SIZE_24], BLACK,
-                    "P a c - M a n");
+      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
 
       switch (Game_mode) {
         case game_mode::single: {
-          SDL_Rect dst = {250, 300, 96, 16};
+          SDL_Rect dst = {250, 298, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
-          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
+          draw_text(1, 0xff, 0xff, 0xff, 270, 300, "1P MODE");
+          draw_text(1, 0x00, 0x00, 0x00, 270, 350, "VS MODE");
           break;
         }
         case game_mode::battle: {
-          SDL_Rect dst = {250, 350, 96, 16};
+          SDL_Rect dst = {250, 348, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
-          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+          draw_text(1, 0x00, 0x00, 0x00, 270, 300, "1P MODE");
+          draw_text(1, 0xff, 0xff, 0xff, 270, 350, "VS MODE");
           break;
         }
         default:
@@ -303,17 +300,17 @@ void title() {
     case 5: {
       switch (Game_mode) {
         case game_mode::single: {
-          SDL_Rect dst = {250, 300, 96, 16};
+          SDL_Rect dst = {250, 298, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], WHITE, "1P MODE");
-          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], BLACK, "VS MODE");
+          draw_text(1, 0xff, 0xff, 0xff, 270, 300, "1P MODE");
+          draw_text(1, 0x00, 0x00, 0x00, 270, 350, "VS MODE");
           break;
         }
         case game_mode::battle: {
-          SDL_Rect dst = {250, 350, 96, 16};
+          SDL_Rect dst = {250, 348, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          Kanji_PutText(Screen, 270, 300, Font[FONT_SIZE_16], BLACK, "1P MODE");
-          Kanji_PutText(Screen, 270, 350, Font[FONT_SIZE_16], WHITE, "VS MODE");
+          draw_text(1, 0x00, 0x00, 0x00, 270, 300, "1P MODE");
+          draw_text(1, 0xff, 0xff, 0xff, 270, 350, "VS MODE");
           break;
         }
         default:
@@ -382,10 +379,11 @@ void game_start() {
       break;
   }
   if (Game_count < 130) {
-    Kanji_PutText(Screen, 220, 200, Font[FONT_SIZE_24], RED, "S t a g e %d",
-                  Game_level);
+    stringstream ss;
+    ss << "S t a g e " << Game_level;
+    draw_text(0, 0xff, 0x00, 0x00, 153, 170, ss.str().c_str());
   } else if (Game_count < 200) {
-    Kanji_PutText(Screen, 220, 200, Font[FONT_SIZE_24], RED, "S t a r t");
+    draw_text(0, 0xff, 0x00, 0x00, 165, 170, "S t a r t");
   }
 
   if (Game_count > 220) {
@@ -530,16 +528,14 @@ void game_over() {
     case game_mode::single: {
       switch (Game_count) {
         case 0: {
-          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                        "G a m e O v e r");
+          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe::set_wipe_in();
           wipe::draw(SCREEN_WIDTH);
           ++Game_count;
           break;
         }
         case 1: {
-          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                        "G a m e O v e r");
+          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe::draw(SCREEN_WIDTH);
           if (wipe::update()) {
             ++Game_count;
@@ -547,14 +543,14 @@ void game_over() {
           break;
         }
         case 2: {
-          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                        "G a m e O v e r");
-          Kanji_PutText(Screen, 150, 225, Font[FONT_SIZE_24], BLACK,
-                        "Y o u r  S c o r e :  %d", Now_score[0]);
+          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          stringstream ss;
+          ss << "Y o u r  S c o r e   " << Now_score[0];
+          draw_text(0, 0x00, 0x00, 0x00, 120, 220, ss.str().c_str());
 
           if (Blink_count < 30) {
-            Kanji_PutText(Screen, 205, 300, Font[FONT_SIZE_16], BLACK,
-                          "P r e s s  S p a c e  K e y");
+            draw_text(1, 0x00, 0x00, 0x00, 210, 350,
+                      "P r e s s  S p a c e  K e y");
             ++Blink_count;
           } else if (Blink_count < 60) {
             ++Blink_count;
@@ -588,16 +584,14 @@ void game_over() {
     case game_mode::battle: {
       switch (Game_count) {
         case 0: {
-          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                        "G a m e O v e r");
+          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe::set_wipe_in();
           wipe::draw(SCREEN_WIDTH);
           ++Game_count;
           break;
         }
         case 1: {
-          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                        "G a m e O v e r");
+          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe::draw(SCREEN_WIDTH);
           if (wipe::update()) {
             ++Game_count;
@@ -605,22 +599,22 @@ void game_over() {
           break;
         }
         case 2: {
-          Kanji_PutText(Screen, 210, 180, Font[FONT_SIZE_24], RED,
-                        "G a m e O v e r");
+          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          stringstream ss;
           if (Now_score[0] > Now_score[1]) {
-            Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
-                          "1 P  W I N :  %d", Now_score[0]);
+            ss << "1 P  W I N  " << Now_score[0];
+            draw_text(0, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           } else if (Now_score[1] > Now_score[0]) {
-            Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
-                          "2 P  W I N :  %d", Now_score[1]);
+            ss << "2 P  W I N  " << Now_score[1];
+            draw_text(0, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           } else {
-            Kanji_PutText(Screen, 210, 300, Font[FONT_SIZE_24], BLACK,
-                          "D R A W :  %d", Now_score[0]);
+            ss << "D R A W  " << Now_score[0];
+            draw_text(0, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           }
 
           if (Blink_count < 30) {
-            Kanji_PutText(Screen, 240, 400, Font[FONT_SIZE_16], BLACK,
-                          "P r e s s  K e y");
+            draw_text(1, 0x00, 0x00, 0x00, 210, 380,
+                      "P r e s s  S p a c e  K e y");
             ++Blink_count;
           } else if (Blink_count < 60) {
             ++Blink_count;
@@ -672,6 +666,17 @@ void game_pause() {
   }
 }
 
+void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
+               const char *str) {
+  SDL_Color black = {r, g, b, 0};
+  SDL_Surface *font_surface =
+      TTF_RenderUTF8_Blended(Ttf_fonts[font_type], str, black);
+  SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
+                  static_cast<Uint16>(font_surface->h)};
+  SDL_Rect dst = {static_cast<Sint16>(x), static_cast<Sint16>(y), 0, 0};
+  SDL_BlitSurface(font_surface, &src, Screen, &dst);
+}
+
 // TODO: reduce magic numbers
 void draw_score() {
   {
@@ -680,23 +685,31 @@ void draw_score() {
     SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
   {
-    Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6, Font[FONT_SIZE_16],
-                  WHITE, "Score: %6d", Now_score[0]);
+    stringstream score;
+    score << "S c o r e  " << setw(6) << Now_score[0];
+    draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 20, SCREEN_HEIGHT / 7,
+              score.str().c_str());
     SDL_Surface *p_surface = image_manager::get_image("player1");
     SDL_Rect src = {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE};
     SDL_Rect dst = {OFFSET_X + 60, (SCREEN_HEIGHT / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
-    Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 32,
-                  Font[FONT_SIZE_16], WHITE, " x %d", Player_1_life);
+    stringstream life;
+    life << "x " << Player_1_life;
+    draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 90, SCREEN_HEIGHT / 7 + 40,
+              life.str().c_str());
     if (Game_mode == game_mode::battle) {
-      Kanji_PutText(Screen, OFFSET_X + 10, SCREEN_HEIGHT / 6 + 80,
-                    Font[FONT_SIZE_16], WHITE, "Score: %6d", Now_score[1]);
+      stringstream score;
+      score << "S c o r e  " << setw(6) << Now_score[1];
+      draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 20, SCREEN_HEIGHT / 7 + 90,
+                score.str().c_str());
       SDL_Surface *p_surface = image_manager::get_image("player2");
       SDL_Rect src = {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE};
       SDL_Rect dst = {OFFSET_X + 60, (SCREEN_HEIGHT / 6 + 112) - 5, 0, 0};
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      Kanji_PutText(Screen, OFFSET_X + 80, SCREEN_HEIGHT / 6 + 112,
-                    Font[FONT_SIZE_16], WHITE, " x %d", Player_2_life);
+      stringstream life;
+      life << "x " << Player_2_life;
+      draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 90, SCREEN_HEIGHT / 7 + 122,
+                life.str().c_str());
     }
   }
   {
@@ -763,23 +776,19 @@ void draw_fps() {
       frame_rate = 1000.0 / interval;
     }
 
-    Kanji_PutText(Screen, OFFSET_X + 20, 16, Font[FONT_SIZE_16], WHITE,
-                  "FrameRate[%0.2f]", frame_rate);
+    stringstream ss;
+    ss << "FrameRate[" << setprecision(2) << setiosflags(ios::fixed)
+       << frame_rate << "]";
+    draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 15, 16, ss.str().c_str());
   }
   pre_count = now_count;
 }
 
 void end() {
   image_manager::delete_all_image();
-  for (unsigned int i = 0; i < NUM_FONT; ++i) {
-    Kanji_CloseFont(Font[i]);
-  }
-  input::end_joystick();
-  end_music();
-  atexit(SDL_Quit);
-}
 
-void end_music() {
+  input::end_joystick();
+
   Mix_HaltMusic();
   Mix_HaltChannel(-1);
   // TODO: What's the number of 2?
@@ -788,6 +797,9 @@ void end_music() {
   }
   Mix_FreeChunk(Se[0]);
   Mix_CloseAudio();
+
+  atexit(TTF_Quit);
+  atexit(SDL_Quit);
 }
 
 void draw_translucence() {
@@ -815,7 +827,7 @@ void draw_translucence() {
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
   SDL_BlitSurface(trans_surface, nullptr, Screen, &dst);
   if (Blink_count < 30) {
-    Kanji_PutText(Screen, 240, 200, Font[FONT_SIZE_24], WHITE, "P a u s e");
+    draw_text(0, 0xff, 0xff, 0xff, 165, 170, "P a u s e");
     ++Blink_count;
   } else if (Blink_count < 60) {
     ++Blink_count;

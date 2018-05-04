@@ -5,7 +5,7 @@ SRC_DIR = src
 OBJ_DIR = build
 CXX = g++
 CXXFLAGS = -std=c++17 -O2 -Wall -Wextra -pedantic -Wformat=2 -Wstrict-aliasing=2 -MMD
-LDFLAGS = `sdl-config --cflags --libs` -lSDL_image -lSDL_mixer -lm
+LDFLAGS = `sdl-config --cflags --libs` -lSDL_image -lSDL_mixer -lSDL_ttf -lm
 DEPENDS = $(OBJS:.o=.d)
 
 .SUFFIXES: .cpp .o
