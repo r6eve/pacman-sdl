@@ -12,7 +12,7 @@ void set_wipe_out();
  */
 bool update();
 
-void draw(int end_x);
+void draw(unsigned int end_x);
 
 }  // namespace wipe
 
