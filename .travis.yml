@@ -15,7 +15,7 @@ matrix:
             - libsdl1.2-dev
             - libsdl-image1.2-dev
             - libsdl-mixer1.2-dev
-            - libsdl-ttf1.2-dev
+            - libsdl-ttf2.0-dev
       compiler: g++-7
     - os: linux
       env:
@@ -30,7 +30,7 @@ matrix:
             - libsdl1.2-dev
             - libsdl-image1.2-dev
             - libsdl-mixer1.2-dev
-            - libsdl-ttf1.2-dev
+            - libsdl-ttf2.0-dev
       compiler: clang++-5.0
     - os: linux
       env:
@@ -45,7 +45,7 @@ matrix:
             - libsdl1.2-dev
             - libsdl-image1.2-dev
             - libsdl-mixer1.2-dev
-            - libsdl-ttf1.2-dev
+            - libsdl-ttf2.0-dev
       compiler: g++-7
     - os: linux
       env:
@@ -60,7 +60,7 @@ matrix:
             - libsdl1.2-dev
             - libsdl-image1.2-dev
             - libsdl-mixer1.2-dev
-            - libsdl-ttf1.2-dev
+            - libsdl-ttf2.0-dev
       compiler: clang++-5.0
     - os: osx
       osx_image: xcode9.3

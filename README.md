@@ -33,10 +33,7 @@ $ ./pacman-sdl
 ## Requirement
 
 * g++
-* [SDL(Ver. 1)][]
-
-Some libraries are downloaded from
-* [SDL_kanji][]
+* [SDL 1.2][]
 
 Sound are downloaded from
 * [Classic Gaming][]
@@ -50,7 +47,6 @@ Sound are downloaded from
 [Build Status on Travis CI]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
 [Travis CI Results]: https://travis-ci.org/r6eve/pacman-sdl
 [pacman-sdl-demo]: https://raw.githubusercontent.com/r6eve/screenshots/master/pacman-sdl/pacman-sdl.gif
-[SDL(Ver. 1)]: http://www.libsdl.org/
-[SDL_kanji]: http://shinh.skr.jp/sdlkanji/
+[SDL 1.2]: http://www.libsdl.org/
 [Classic Gaming]: http://www.classicgaming.cc/classics/pac-man/sounds.php
 [Sound FX Center]: http://soundfxcenter.com/download-sound/pacman-siren-sound-effect/
