@@ -1,8 +1,8 @@
+#include "player.hpp"
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
 #include "map.hpp"
-#include "player.hpp"
 
 namespace player {
 
@@ -15,31 +15,31 @@ typedef struct {
   int pos_y;
   int block_x;
   int block_y;
-  int nextblock_x;
-  int nextblock_y;
-  int dir;          // 0: down, 1: left, 2: up, 3: right
-  int anime_count;  // 0 or 1
-  int anime_weight;
-} Chara;
+  int next_block_x;
+  int next_block_y;
+  unsigned char dir; // 0: down, 1: left, 2: up, 3: right
+  unsigned char anime_count;  // 0 or 1
+  unsigned char anime_weight; // max value is 4
+} Player;
 
-Chara Player_1;
-Chara Player_2;
+Player Player_1;
+Player Player_2;
 
-}
+}  // namespace
 
 void init() {
   Player_1.pos_x = BLOCK_SIZE * 9;
   Player_1.pos_y = BLOCK_SIZE * 18;
-  Player_1.nextblock_x = Player_1.block_x = 9;
-  Player_1.nextblock_y = Player_1.block_y = 18;
+  Player_1.next_block_x = Player_1.block_x = 9;
+  Player_1.next_block_y = Player_1.block_y = 18;
   Player_1.dir = 1;
   Player_1.anime_count = 0;
   Player_1.anime_weight = 0;
   if (Game_mode == game_mode::battle) {
     Player_2.pos_x = BLOCK_SIZE * 14;
     Player_2.pos_y = BLOCK_SIZE * 18;
-    Player_2.nextblock_x = Player_1.block_x = 14;
-    Player_2.nextblock_y = Player_1.block_y = 18;
+    Player_2.next_block_x = Player_1.block_x = 14;
+    Player_2.next_block_y = Player_1.block_y = 18;
     Player_2.dir = 3;
     Player_2.anime_count = 0;
     Player_2.anime_weight = 0;
@@ -73,147 +73,148 @@ void draw() {
 
 // TODO: reduce magic numbers
 void move() {
-  int is_mving;
-  int dst_pos_x = Player_1.nextblock_x * BLOCK_SIZE;
-  int dst_pos_y = Player_1.nextblock_y * BLOCK_SIZE;
+  const int dst_pos_x = Player_1.next_block_x * BLOCK_SIZE;
+  const int dst_pos_y = Player_1.next_block_y * BLOCK_SIZE;
 
-  if ((Player_1.pos_x == dst_pos_x) && (Player_1.pos_y == dst_pos_y)) {
-    is_mving = 0;
-  } else {
-    is_mving = 1;
-  }
-
-  if (is_mving) {
+  if ((Player_1.pos_x != dst_pos_x) || (Player_1.pos_y != dst_pos_y)) {
     ++Player_1.anime_weight;
     if (Player_1.anime_weight > 4) {
       Player_1.anime_count = 1 - Player_1.anime_count;
       Player_1.anime_weight = 0;
     }
-    int mv_value = 2;
+    const unsigned int move_value = 2;
     if (dst_pos_x > Player_1.pos_x) {
-      Player_1.pos_x += mv_value;
-    } else if (dst_pos_x < Player_1.pos_x) {
-      Player_1.pos_x -= mv_value;
+      Player_1.pos_x += move_value;
     }
     if (dst_pos_y > Player_1.pos_y) {
-      Player_1.pos_y += mv_value;
-    } else if (dst_pos_y < Player_1.pos_y) {
-      Player_1.pos_y -= mv_value;
+      Player_1.pos_y += move_value;
+    }
+    if (dst_pos_x < Player_1.pos_x) {
+      Player_1.pos_x -= move_value;
+    }
+    if (dst_pos_y < Player_1.pos_y) {
+      Player_1.pos_y -= move_value;
     }
   } else {
-    int dst_block_x = Player_1.nextblock_x;
-    int dst_block_y = Player_1.nextblock_y;
-    Player_1.block_x = dst_block_x;
-    Player_1.block_y = dst_block_y;
+    Player_1.block_x = Player_1.next_block_x;
+    Player_1.block_y = Player_1.next_block_y;
 
+    // 同時押しの場合，優先順位は
+    // Down > Left > Up > Right
+    int mut_dst_block_x = Player_1.next_block_x;
+    int mut_dst_block_y = Player_1.next_block_y;
     if (Press_key[0][input_device::down]) {
       Player_1.dir = 0;
-      ++dst_block_y;
+      ++mut_dst_block_y;
     } else if (Press_key[0][input_device::left]) {
       Player_1.dir = 1;
-      --dst_block_x;
+      --mut_dst_block_x;
     } else if (Press_key[0][input_device::up]) {
       Player_1.dir = 2;
-      --dst_block_y;
+      --mut_dst_block_y;
     } else if (Press_key[0][input_device::right]) {
       Player_1.dir = 3;
-      ++dst_block_x;
+      ++mut_dst_block_x;
+    }
+    const int dst_block_x = mut_dst_block_x;
+    const int dst_block_y = mut_dst_block_y;
+
+    const unsigned int dst_block_state =
+        map::check_state(dst_block_x, dst_block_y);
+    const unsigned int dst_right_block_state =
+        map::check_state(dst_block_x + 1, dst_block_y);
+    const unsigned int dst_left_block_state =
+        map::check_state(dst_block_x - 1, dst_block_y);
+    if ((dst_block_state == 0) || (dst_block_state == 3) ||
+        (dst_block_state == 4) || (dst_block_state == 5) ||
+        (dst_block_state == 6) || (dst_right_block_state == 6) ||
+        (dst_block_state == 7) || (dst_left_block_state == 7) ||
+        (dst_block_state == 8)) {
+      Player_1.next_block_x = dst_block_x;
+      Player_1.next_block_y = dst_block_y;
     }
 
-    if ((map::check_state(dst_block_x, dst_block_y) == 0) ||
-        (map::check_state(dst_block_x, dst_block_y) == 3) ||
-        (map::check_state(dst_block_x, dst_block_y) == 4) ||
-        (map::check_state(dst_block_x, dst_block_y) == 5) ||
-        (map::check_state(dst_block_x, dst_block_y) == 6) ||
-        (map::check_state(dst_block_x + 1, dst_block_y) == 6) ||
-        (map::check_state(dst_block_x, dst_block_y) == 7) ||
-        (map::check_state(dst_block_x - 1, dst_block_y) == 7) ||
-        (map::check_state(dst_block_x, dst_block_y) == 8)) {
-      Player_1.nextblock_x = dst_block_x;
-      Player_1.nextblock_y = dst_block_y;
-    }
-
+    // Circle corner
     if (map::check_state(dst_block_x + 2, dst_block_y) == 6) {
-      Player_1.nextblock_x = NUM_BLOCK_X;
-      Player_1.pos_x = BLOCK_SIZE * Player_1.nextblock_x;
+      Player_1.next_block_x = NUM_BLOCK_X;
+      Player_1.pos_x = BLOCK_SIZE * Player_1.next_block_x;
     }
-
     if (map::check_state(dst_block_x - 2, dst_block_y) == 7) {
-      Player_1.nextblock_x = -1;
-      Player_1.pos_x = BLOCK_SIZE * Player_1.nextblock_x;
+      Player_1.next_block_x = -1;
+      Player_1.pos_x = BLOCK_SIZE * Player_1.next_block_x;
     }
   }
 
   if (Game_mode == game_mode::battle) {
-    int is_mving;
-    int dst_pos_x = Player_2.nextblock_x * BLOCK_SIZE;
-    int dst_pos_y = Player_2.nextblock_y * BLOCK_SIZE;
+    const int dst_pos_x = Player_2.next_block_x * BLOCK_SIZE;
+    const int dst_pos_y = Player_2.next_block_y * BLOCK_SIZE;
 
-    if ((Player_2.pos_x == dst_pos_x) && (Player_2.pos_y == dst_pos_y)) {
-      is_mving = 0;
-    } else {
-      is_mving = 1;
-    }
-
-    if (is_mving) {
+    if ((Player_2.pos_x != dst_pos_x) || (Player_2.pos_y != dst_pos_y)) {
       ++Player_2.anime_weight;
       if (Player_2.anime_weight > 4) {
         Player_2.anime_count = 1 - Player_2.anime_count;
         Player_2.anime_weight = 0;
       }
-      int mv_value = 2;
+      const unsigned int move_value = 2;
       if (dst_pos_x > Player_2.pos_x) {
-        Player_2.pos_x += mv_value;
-      } else if (dst_pos_x < Player_2.pos_x) {
-        Player_2.pos_x -= mv_value;
+        Player_2.pos_x += move_value;
       }
-
       if (dst_pos_y > Player_2.pos_y) {
-        Player_2.pos_y += mv_value;
-      } else if (dst_pos_y < Player_2.pos_y) {
-        Player_2.pos_y -= mv_value;
+        Player_2.pos_y += move_value;
+      }
+      if (dst_pos_x < Player_2.pos_x) {
+        Player_2.pos_x -= move_value;
+      }
+      if (dst_pos_y < Player_2.pos_y) {
+        Player_2.pos_y -= move_value;
       }
     } else {
-      int dst_block_x = Player_2.nextblock_x;
-      int dst_block_y = Player_2.nextblock_y;
-      Player_2.block_x = dst_block_x;
-      Player_2.block_y = dst_block_y;
+      Player_2.block_x = Player_2.next_block_x;
+      Player_2.block_y = Player_2.next_block_y;
 
+      // 同時押しの場合，優先順位は
+      // Down > Left > Up > Right
+      int mut_dst_block_x = Player_2.next_block_x;
+      int mut_dst_block_y = Player_2.next_block_y;
       if (Press_key[1][input_device::down]) {
         Player_2.dir = 0;
-        ++dst_block_y;
+        ++mut_dst_block_y;
       } else if (Press_key[1][input_device::left]) {
         Player_2.dir = 1;
-        --dst_block_x;
+        --mut_dst_block_x;
       } else if (Press_key[1][input_device::up]) {
         Player_2.dir = 2;
-        --dst_block_y;
+        --mut_dst_block_y;
       } else if (Press_key[1][input_device::right]) {
         Player_2.dir = 3;
-        ++dst_block_x;
+        ++mut_dst_block_x;
+      }
+      const int dst_block_x = mut_dst_block_x;
+      const int dst_block_y = mut_dst_block_y;
+
+      const unsigned int dst_block_state =
+          map::check_state(dst_block_x, dst_block_y);
+      const unsigned int dst_right_block_state =
+          map::check_state(dst_block_x + 1, dst_block_y);
+      const unsigned int dst_left_block_state =
+          map::check_state(dst_block_x - 1, dst_block_y);
+      if ((dst_block_state == 0) || (dst_block_state == 3) ||
+          (dst_block_state == 4) || (dst_block_state == 5) ||
+          (dst_block_state == 6) || (dst_right_block_state == 6) ||
+          (dst_block_state == 7) || (dst_left_block_state == 7) ||
+          (dst_block_state == 8)) {
+        Player_2.next_block_x = dst_block_x;
+        Player_2.next_block_y = dst_block_y;
       }
 
-      if ((map::check_state(dst_block_x, dst_block_y) == 0) ||
-          (map::check_state(dst_block_x, dst_block_y) == 3) ||
-          (map::check_state(dst_block_x, dst_block_y) == 4) ||
-          (map::check_state(dst_block_x, dst_block_y) == 5) ||
-          (map::check_state(dst_block_x, dst_block_y) == 6) ||
-          (map::check_state(dst_block_x + 1, dst_block_y) == 6) ||
-          (map::check_state(dst_block_x, dst_block_y) == 7) ||
-          (map::check_state(dst_block_x - 1, dst_block_y) == 7) ||
-          (map::check_state(dst_block_x, dst_block_y) == 8)) {
-        Player_2.nextblock_x = dst_block_x;
-        Player_2.nextblock_y = dst_block_y;
-      }
-
+      // Circle corner
       if (map::check_state(dst_block_x + 2, dst_block_y) == 6) {
-        Player_2.nextblock_x = NUM_BLOCK_X;
-        Player_2.pos_x = BLOCK_SIZE * Player_2.nextblock_x;
+        Player_2.next_block_x = NUM_BLOCK_X;
+        Player_2.pos_x = BLOCK_SIZE * Player_2.next_block_x;
       }
-
       if (map::check_state(dst_block_x - 2, dst_block_y) == 7) {
-        Player_2.nextblock_x = -1;
-        Player_2.pos_x = BLOCK_SIZE * Player_2.nextblock_x;
+        Player_2.next_block_x = -1;
+        Player_2.pos_x = BLOCK_SIZE * Player_2.next_block_x;
       }
     }
   }
