@@ -3,39 +3,77 @@ language: c++
 matrix:
   include:
     - os: linux
-      env: TARGET=x86_64-unknown-linux-gnu
-      compiler: g++
-    - os: linux
-      env: TARGET=x86_64-unknown-linux-gnu
-      compiler: clang++
-    - os: linux
-      env: TARGET=i686-unknown-linux-gnu
-      compiler: g++
-    - os: linux
-      env: TARGET=i686-unknown-linux-gnu
-      compiler: clang++
-    - os: osx
       env:
-        - TARGET=x86_64-apple-darwin
-        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
+        - TARGET=x86_64-unknown-linux-gnu
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - libsdl1.2-dev
+            - libsdl-image1.2-dev
+            - libsdl-mixer1.2-dev
+      compiler: g++-7
+    - os: linux
+      env:
+        - TARGET=x86_64-unknown-linux-gnu
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+            - libsdl1.2-dev
+            - libsdl-image1.2-dev
+            - libsdl-mixer1.2-dev
+      compiler: clang++-5.0
+    - os: linux
+      env:
+        - TARGET=i686-unknown-linux-gnu
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - libsdl1.2-dev
+            - libsdl-image1.2-dev
+            - libsdl-mixer1.2-dev
+      compiler: g++-7
+    - os: linux
+      env:
+        - TARGET=i686-unknown-linux-gnu
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+            - libsdl1.2-dev
+            - libsdl-image1.2-dev
+            - libsdl-mixer1.2-dev
+      compiler: clang++-5.0
+    - os: osx
+      osx_image: xcode9.3
+      env:
+        - MATRIX_EVAL="brew install gcc; brew link --overwrite gcc && CC=gcc && CXX=g++"
       compiler: g++
     - os: osx
-      env: TARGET=x86_64-apple-darwin
+      osx_image: xcode9.3
       compiler: clang++
-
-addons:
-  apt:
-    packages:
-      - libsdl1.2-dev
-      - libsdl-image1.2-dev
-      - libsdl-mixer1.2-dev
 
 before_install:
+  - eval "${MATRIX_EVAL}"
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl sdl_image sdl_mixer; fi
 
 script:
-  - make
+  - make CXX=${CXX}
 
 notifications:
   email:
