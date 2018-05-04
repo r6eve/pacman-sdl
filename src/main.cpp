@@ -785,6 +785,10 @@ void draw_fps() {
 }
 
 void end() {
+  for (unsigned int i = 0; i < 2; ++i) {
+    TTF_CloseFont(Ttf_fonts[i]);
+  }
+
   image_manager::delete_all_image();
 
   input::end_joystick();
