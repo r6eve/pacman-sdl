@@ -21,9 +21,6 @@ using namespace std;
 
 namespace {
 
-// TODO: enum class
-enum { FONT_SIZE_16, FONT_SIZE_24, NUM_FONT };
-
 game_state Game_state;
 TTF_Font *Ttf_fonts[2];
 int Player_1_life;
@@ -31,6 +28,7 @@ int Player_2_life;
 unsigned int Blink_count;
 unsigned int Game_count;
 unsigned int Num_player;
+
 }  // namespace
 
 bool init();
@@ -50,7 +48,7 @@ void game_pause();
 void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
                const char *str);
 void draw_score();
-int poll_event();
+bool poll_event();
 void wait_game();
 void draw_fps();
 void end();
@@ -58,11 +56,11 @@ void draw_translucence();
 
 int main(int, char **) {
   if (!init()) {
-    return EXIT_FAILURE;
+    exit(EXIT_FAILURE);
   }
   main_loop();
   end();
-  return EXIT_SUCCESS;
+  exit(EXIT_SUCCESS);
 }
 
 bool init() {
@@ -201,7 +199,7 @@ void main_loop() {
 #ifdef DEBUG
     draw_fps();
 #endif
-    SDL_Flip(SDL_GetVideoSurface());
+    SDL_Flip(Screen);
     wait_game();
   }
 }
@@ -282,8 +280,8 @@ void title() {
         ++Game_count;
       }
 
-      if (Press_key[0][input_device::bUTTON_2] ||
-          Press_key[1][input_device::bUTTON_2]) {
+      if (Press_key[0][input_device::button_2] ||
+          Press_key[1][input_device::button_2]) {
         Game_count -= 2;
         Game_mode = game_mode::single;
       }
@@ -728,15 +726,15 @@ void draw_score() {
   }
 }
 
-int poll_event() {
+bool poll_event() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
       case SDL_QUIT:
-        return 0;
+        return false;
       case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_ESCAPE) {
-          return 0;
+          return false;
         }
         break;
       default:
@@ -744,7 +742,7 @@ int poll_event() {
         break;
     }
   }
-  return 1;
+  return true;
 }
 
 void wait_game() {

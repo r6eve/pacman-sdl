@@ -20,6 +20,7 @@
 
 // Keyboard and Joystick
 namespace input_device {
+
 enum {
   up = 0,
   down,
@@ -31,19 +32,20 @@ enum {
   space,
 
   // used by only Joystick
-  bUTTON_2,
-  bUTTON_3,
-  bUTTON_4,
-  bUTTON_5,
-  bUTTON_6,
-  bUTTON_7,
-  bUTTON_8,
-  bUTTON_9,
+  button_2,
+  button_3,
+  button_4,
+  button_5,
+  button_6,
+  button_7,
+  button_8,
+  button_9,
 
   start,
   select,
   count,
 };
+
 }  // namespace input_device
 
 enum class game_state {

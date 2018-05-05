@@ -36,21 +36,21 @@ void update() {
           SDL_JoystickGetButton(Joystick[i], 0) == SDL_PRESSED;
       new_press_key[i][input_device::c] =
           SDL_JoystickGetButton(Joystick[i], 1) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_2] =
+      new_press_key[i][input_device::button_2] =
           SDL_JoystickGetButton(Joystick[i], 2) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_3] =
+      new_press_key[i][input_device::button_3] =
           SDL_JoystickGetButton(Joystick[i], 3) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_4] =
+      new_press_key[i][input_device::button_4] =
           SDL_JoystickGetButton(Joystick[i], 4) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_5] =
+      new_press_key[i][input_device::button_5] =
           SDL_JoystickGetButton(Joystick[i], 5) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_6] =
+      new_press_key[i][input_device::button_6] =
           SDL_JoystickGetButton(Joystick[i], 6) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_7] =
+      new_press_key[i][input_device::button_7] =
           SDL_JoystickGetButton(Joystick[i], 7) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_8] =
+      new_press_key[i][input_device::button_8] =
           SDL_JoystickGetButton(Joystick[i], 8) == SDL_PRESSED;
-      new_press_key[i][input_device::bUTTON_9] =
+      new_press_key[i][input_device::button_9] =
           SDL_JoystickGetButton(Joystick[i], 9) == SDL_PRESSED;
       new_press_key[i][input_device::start] =
           SDL_JoystickGetButton(Joystick[i], 10) == SDL_PRESSED;
