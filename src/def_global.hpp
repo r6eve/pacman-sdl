@@ -4,8 +4,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 
-#define DEBUG
-
 namespace screen {
 
 enum {
@@ -83,7 +81,6 @@ enum class enemy_state {
   lose,
 };
 
-// game mode
 enum class game_mode {
   single,
   battle,
@@ -95,6 +92,7 @@ enum class game_mode {
 #define GLOBAL extern
 #endif
 
+GLOBAL bool Debug_mode;
 GLOBAL SDL_Surface *Screen;
 GLOBAL unsigned int Now_score[2];  // 0: 1P, 1: 2P
 GLOBAL int Game_level;

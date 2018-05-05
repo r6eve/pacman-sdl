@@ -86,10 +86,12 @@ void update() {
 
   new_press_key[0][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
   new_press_key[1][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
-#ifdef DEBUG
-  new_press_key[0][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
-  new_press_key[1][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
-#endif
+
+  if (Debug_mode) {
+    new_press_key[0][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
+    new_press_key[1][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
+  }
+
   for (unsigned int i = 0; i < Num_devices; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
       Edge_key[i][j] = !Press_key[i][j] && new_press_key[i][j];

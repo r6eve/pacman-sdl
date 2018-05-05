@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <getopt.h>
 
 #include "def_global.hpp"
 #include "enemy.hpp"
@@ -57,7 +58,51 @@ void draw_fps();
 void end();
 void draw_translucence();
 
-int main(int, char **) {
+int main(int argc, char **argv) {
+  Debug_mode = false;
+  opterr = 0;
+  const option long_options[] = {
+    {"debug", no_argument, nullptr, 'd'},
+    {"help", no_argument, nullptr, 'h'},
+    {nullptr, 0, nullptr, 0},
+  };
+
+  int c;
+  for (;;) {
+    int curind = optind;
+    c = getopt_long(argc, argv, "dh", long_options, nullptr);
+    if (c == -1) {
+      break;
+    }
+
+    switch (c) {
+      case 'h':
+        cout << R"(Usage: pacman-sdl [options]
+
+Options:
+    -d  --debug         debug mode
+    -h, --help          print this help menu
+)";
+        exit(EXIT_SUCCESS);
+      case 'd':
+        Debug_mode = true;
+        break;
+      case '?': {
+        string av(argv[curind]);
+        int n = 0;
+        while (av[n] == '-') {
+          ++n;
+        }
+        av.erase(av.begin(), av.begin() + n);
+        cerr << "Unrecognized option: '" << av << "'\n";
+        exit(EXIT_FAILURE);
+      }
+      default:
+        // do nothing
+        break;
+    }
+  }
+
   if (!init()) {
     exit(EXIT_FAILURE);
   }
@@ -105,13 +150,13 @@ void init_sdl() {
     throw SDL_GetError();
   }
   SDL_WM_SetCaption("pacman-sdl", nullptr);
-#ifdef DEBUG
-  Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
-                            SDL_HWSURFACE | SDL_DOUBLEBUF);
-#else
-  Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
-                            SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
-#endif
+  if (Debug_mode) {
+    Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
+                              SDL_HWSURFACE | SDL_DOUBLEBUF);
+  } else {
+    Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
+                              SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+  }
   if (!Screen) {
     throw SDL_GetError();
   }
@@ -199,9 +244,9 @@ void main_loop() {
     if (!poll_event()) {
       return;
     }
-#ifdef DEBUG
-    draw_fps();
-#endif
+    if (Debug_mode) {
+      draw_fps();
+    }
     SDL_Flip(Screen);
     wait_game();
   }
@@ -716,13 +761,15 @@ void draw_score() {
   {
     if (Power_chara_mode[0]) {
       SDL_Rect dst = {Offset_x + 10, screen::height / 6 * 4,
-                      static_cast<Uint16>(Power_chara_mode[0] / 4), block::size};
+                      static_cast<Uint16>(Power_chara_mode[0] / 4),
+                      block::size};
       SDL_FillRect(Screen, &dst, 0xffff00);
       --Power_chara_mode[0];
     }
     if (Power_chara_mode[1]) {
       SDL_Rect dst = {Offset_x + 10, screen::height / 6 * 4 + 30,
-                      static_cast<Uint16>(Power_chara_mode[1] / 4), block::size};
+                      static_cast<Uint16>(Power_chara_mode[1] / 4),
+                      block::size};
       SDL_FillRect(Screen, &dst, 0x808080);
       --Power_chara_mode[1];
     }
