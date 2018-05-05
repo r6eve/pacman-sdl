@@ -11,13 +11,13 @@ namespace {
 
 // TODO: enum class
 // -1: no food, 0: counter food, 1: food, 2: get food
-char food[NUM_BLOCK_Y][NUM_BLOCK_X];
+char food[block::count_y][block::count_x];
 
 }  // namespace
 
 void init() {
-  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < block::count_y; ++y) {
+    for (unsigned int x = 0; x < block::count_x; ++x) {
       food[y][x] = -1;
       if (map::check_state(x, y) == 0) {  // field where player can move
         food[y][x] = 1;
@@ -29,19 +29,19 @@ void init() {
 }
 
 void draw() {
-  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < block::count_y; ++y) {
+    for (unsigned int x = 0; x < block::count_x; ++x) {
       if (food[y][x] == 2) {
         food[y][x] = -1;
       }
     }
   }
 
-  SDL_Rect src = {0, 0, BLOCK_SIZE, BLOCK_SIZE};
-  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
-      SDL_Rect dst = {static_cast<Sint16>(BLOCK_SIZE * x),
-                      static_cast<Sint16>(BLOCK_SIZE * y), 0, 0};
+  SDL_Rect src = {0, 0, block::size, block::size};
+  for (unsigned int y = 0; y < block::count_y; ++y) {
+    for (unsigned int x = 0; x < block::count_x; ++x) {
+      SDL_Rect dst = {static_cast<Sint16>(block::size * x),
+                      static_cast<Sint16>(block::size * y), 0, 0};
       if (food[y][x] == 1) {  // food
         SDL_Surface *p_surface = image_manager::get_image("food");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
@@ -92,8 +92,8 @@ bool check_state() {
     }
   }
   int rest_food = 0;
-  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < block::count_y; ++y) {
+    for (unsigned int x = 0; x < block::count_x; ++x) {
       if ((food[y][x] == 0) || (food[y][x] == 1)) {
         ++rest_food;
       }

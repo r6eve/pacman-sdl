@@ -9,6 +9,8 @@ namespace enemy {
 
 namespace {
 
+const unsigned int Hit_distance = block::size / 2;
+
 // TODO: use class
 typedef struct {
   int pos_x;
@@ -41,8 +43,8 @@ void init() {
   const unsigned int start_block[enemy_character::count][2] = {
       {11, 12}, {12, 12}, {11, 11}, {12, 11}};
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
-    Enemy[i].pos_x = BLOCK_SIZE * start_block[i][0];
-    Enemy[i].pos_y = BLOCK_SIZE * start_block[i][1];
+    Enemy[i].pos_x = block::size * start_block[i][0];
+    Enemy[i].pos_y = block::size * start_block[i][1];
     Enemy[i].block_x = Enemy[i].next_block_x = start_block[i][0];
     Enemy[i].block_y = Enemy[i].next_block_y = start_block[i][1];
     Enemy[i].dir = 2;
@@ -63,16 +65,16 @@ void draw() {
                     static_cast<Sint16>(Enemy[i].pos_y), 0, 0};
     switch (Enemy_state[i]) {
       case enemy_state::normal: {
-        SDL_Rect src = {static_cast<Sint16>(BLOCK_SIZE * Enemy[i].dir),
-                        static_cast<Sint16>(BLOCK_SIZE * Enemy[i].anime_count),
-                        BLOCK_SIZE, BLOCK_SIZE};
+        SDL_Rect src = {static_cast<Sint16>(block::size * Enemy[i].dir),
+                        static_cast<Sint16>(block::size * Enemy[i].anime_count),
+                        block::size, block::size};
         SDL_BlitSurface(p_surface[i], &src, Screen, &dst);
         break;
       }
       case enemy_state::lose: {
         SDL_Rect src = {0,
-                        static_cast<Sint16>(BLOCK_SIZE * Enemy[i].anime_count),
-                        BLOCK_SIZE, BLOCK_SIZE};
+                        static_cast<Sint16>(block::size * Enemy[i].anime_count),
+                        block::size, block::size};
         SDL_BlitSurface(p_surface[4], &src, Screen, &dst);
         break;
       }
@@ -90,8 +92,8 @@ void move_normal_enemy(unsigned int enemy_type) {
     case enemy_character::pinky:
     case enemy_character::aosuke:
     case enemy_character::guzuta: {
-      const int dst_pos_x = Enemy[enemy_type].next_block_x * BLOCK_SIZE;
-      const int dst_pos_y = Enemy[enemy_type].next_block_y * BLOCK_SIZE;
+      const int dst_pos_x = Enemy[enemy_type].next_block_x * block::size;
+      const int dst_pos_y = Enemy[enemy_type].next_block_y * block::size;
       if ((Enemy[enemy_type].pos_x != dst_pos_x) ||
           (Enemy[enemy_type].pos_y != dst_pos_y)) {
         update();
@@ -296,8 +298,8 @@ void move_lose_enemy(unsigned int enemy_type) {
     Enemy_state[enemy_type] = enemy_state::normal;
   }
 
-  const int dst_pos_x = Enemy[enemy_type].next_block_x * BLOCK_SIZE;
-  const int dst_pos_y = Enemy[enemy_type].next_block_y * BLOCK_SIZE;
+  const int dst_pos_x = Enemy[enemy_type].next_block_x * block::size;
+  const int dst_pos_y = Enemy[enemy_type].next_block_y * block::size;
   if ((Enemy[enemy_type].pos_x != dst_pos_x) ||
       (Enemy[enemy_type].pos_y != dst_pos_y)) {
     update();
@@ -354,7 +356,7 @@ bool check_hit_enemy() {
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     const unsigned int d = util::get_distance(player_1_pos_x, player_1_pos_y,
                                               Enemy[i].pos_x, Enemy[i].pos_y);
-    if (d < HIT_DISTANCE) {
+    if (d < Hit_distance) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
         return true;
@@ -372,7 +374,7 @@ bool check_hit_enemy() {
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
       const unsigned int d = util::get_distance(player_2_pos_x, player_2_pos_y,
                                                 Enemy[i].pos_x, Enemy[i].pos_y);
-      if (d < HIT_DISTANCE) {
+      if (d < Hit_distance) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;
           return true;

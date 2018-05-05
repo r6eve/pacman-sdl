@@ -21,6 +21,9 @@ using namespace std;
 
 namespace {
 
+const unsigned int Offset_x = 480;
+const unsigned int Max_fps = 60;
+
 game_state Game_state;
 TTF_Font *Ttf_fonts[2];
 int Player_1_life;
@@ -103,10 +106,10 @@ void init_sdl() {
   }
   SDL_WM_SetCaption("pacman-sdl", nullptr);
 #ifdef DEBUG
-  Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
+  Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
                             SDL_HWSURFACE | SDL_DOUBLEBUF);
 #else
-  Screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
+  Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
                             SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
 #endif
   if (!Screen) {
@@ -205,19 +208,19 @@ void main_loop() {
 }
 
 void title() {
-  SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
   switch (Game_count) {
     case 0: {
       wipe::set_wipe_in();
-      wipe::draw(SCREEN_WIDTH);
+      wipe::draw(screen::width);
       ++Game_count;
       break;
     }
     case 1: {
       draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
-      wipe::draw(SCREEN_WIDTH);
+      wipe::draw(screen::width);
       if (wipe::update()) {
         ++Game_count;
       }
@@ -276,7 +279,7 @@ void title() {
       if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
           Press_key[0][input_device::space]) {
         wipe::set_wipe_out();
-        wipe::draw(SCREEN_WIDTH);
+        wipe::draw(screen::width);
         ++Game_count;
       }
 
@@ -317,7 +320,7 @@ void title() {
           break;
       }
 
-      wipe::draw(SCREEN_WIDTH);
+      wipe::draw(screen::width);
 
       // initialize globals
       if (wipe::update()) {
@@ -361,12 +364,12 @@ void game_start() {
         Mix_PlayMusic(Music[2], 0);
       }
       wipe::set_wipe_in();
-      wipe::draw(OFFSET_X);
+      wipe::draw(Offset_x);
       ++Game_count;
       break;
     }
     case 1: {
-      wipe::draw(OFFSET_X);
+      wipe::draw(Offset_x);
       if (wipe::update()) {
         ++Game_count;
       }
@@ -438,12 +441,12 @@ void game_clear() {
 
   if (Game_count == 0) {
     wipe::set_wipe_out();
-    wipe::draw(OFFSET_X);
+    wipe::draw(Offset_x);
     ++Game_count;
     return;
   }
 
-  wipe::draw(OFFSET_X);
+  wipe::draw(Offset_x);
   if (wipe::update()) {
     if (Game_level >= 256) {
       Game_count = 0;
@@ -470,18 +473,18 @@ void game_miss() {
     Mix_PlayMusic(Music[3], 0);
     wipe::set_wipe_out();
     if ((Player_1_life == 0) || (Player_2_life == 0)) {
-      wipe::draw(SCREEN_WIDTH);
+      wipe::draw(screen::width);
     } else {
-      wipe::draw(OFFSET_X);
+      wipe::draw(Offset_x);
     }
     ++Game_count;
     return;
   }
 
   if ((Player_1_life == 0) || (Player_2_life == 0)) {
-    wipe::draw(SCREEN_WIDTH);
+    wipe::draw(screen::width);
   } else {
-    wipe::draw(OFFSET_X);
+    wipe::draw(Offset_x);
   }
 
   // TODO: use pointer to delete if-clauses
@@ -519,7 +522,7 @@ void game_miss() {
 }
 
 void game_over() {
-  SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
   switch (Game_mode) {
@@ -528,13 +531,13 @@ void game_over() {
         case 0: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe::set_wipe_in();
-          wipe::draw(SCREEN_WIDTH);
+          wipe::draw(screen::width);
           ++Game_count;
           break;
         }
         case 1: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
-          wipe::draw(SCREEN_WIDTH);
+          wipe::draw(screen::width);
           if (wipe::update()) {
             ++Game_count;
           }
@@ -560,12 +563,12 @@ void game_over() {
               Press_key[0][input_device::space]) {
             ++Game_count;
             wipe::set_wipe_out();
-            wipe::draw(SCREEN_WIDTH);
+            wipe::draw(screen::width);
           }
           break;
         }
         case 3: {
-          wipe::draw(SCREEN_WIDTH);
+          wipe::draw(screen::width);
           if (wipe::update()) {
             Blink_count = 0;
             Game_count = 0;
@@ -584,13 +587,13 @@ void game_over() {
         case 0: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe::set_wipe_in();
-          wipe::draw(SCREEN_WIDTH);
+          wipe::draw(screen::width);
           ++Game_count;
           break;
         }
         case 1: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
-          wipe::draw(SCREEN_WIDTH);
+          wipe::draw(screen::width);
           if (wipe::update()) {
             ++Game_count;
           }
@@ -624,12 +627,12 @@ void game_over() {
               Press_key[0][input_device::space]) {
             ++Game_count;
             wipe::set_wipe_out();
-            wipe::draw(SCREEN_WIDTH);
+            wipe::draw(screen::width);
           }
           break;
         }
         case 3: {
-          wipe::draw(SCREEN_WIDTH);
+          wipe::draw(screen::width);
           if (wipe::update()) {
             Blink_count = 0;
             Game_count = 0;
@@ -679,47 +682,47 @@ void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
 void draw_score() {
   {
     SDL_Surface *p_surface = image_manager::get_image("plate");
-    SDL_Rect dst = {OFFSET_X, 0, 0, 0};
+    SDL_Rect dst = {Offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
   {
     stringstream score;
     score << "S c o r e  " << setw(6) << Now_score[0];
-    draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 20, SCREEN_HEIGHT / 7,
+    draw_text(1, 0xff, 0xff, 0xff, Offset_x + 20, screen::height / 7,
               score.str().c_str());
     SDL_Surface *p_surface = image_manager::get_image("player1");
-    SDL_Rect src = {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE};
-    SDL_Rect dst = {OFFSET_X + 60, (SCREEN_HEIGHT / 6 + 32) - 5, 0, 0};
+    SDL_Rect src = {block::size, 0, block::size, block::size};
+    SDL_Rect dst = {Offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     stringstream life;
     life << "x " << Player_1_life;
-    draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 90, SCREEN_HEIGHT / 7 + 40,
+    draw_text(1, 0xff, 0xff, 0xff, Offset_x + 90, screen::height / 7 + 40,
               life.str().c_str());
     if (Game_mode == game_mode::battle) {
       stringstream score;
       score << "S c o r e  " << setw(6) << Now_score[1];
-      draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 20, SCREEN_HEIGHT / 7 + 90,
+      draw_text(1, 0xff, 0xff, 0xff, Offset_x + 20, screen::height / 7 + 90,
                 score.str().c_str());
       SDL_Surface *p_surface = image_manager::get_image("player2");
-      SDL_Rect src = {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE};
-      SDL_Rect dst = {OFFSET_X + 60, (SCREEN_HEIGHT / 6 + 112) - 5, 0, 0};
+      SDL_Rect src = {block::size, 0, block::size, block::size};
+      SDL_Rect dst = {Offset_x + 60, (screen::height / 6 + 112) - 5, 0, 0};
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       stringstream life;
       life << "x " << Player_2_life;
-      draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 90, SCREEN_HEIGHT / 7 + 122,
+      draw_text(1, 0xff, 0xff, 0xff, Offset_x + 90, screen::height / 7 + 122,
                 life.str().c_str());
     }
   }
   {
     if (Power_chara_mode[0]) {
-      SDL_Rect dst = {OFFSET_X + 10, SCREEN_HEIGHT / 6 * 4,
-                      static_cast<Uint16>(Power_chara_mode[0] / 4), BLOCK_SIZE};
+      SDL_Rect dst = {Offset_x + 10, screen::height / 6 * 4,
+                      static_cast<Uint16>(Power_chara_mode[0] / 4), block::size};
       SDL_FillRect(Screen, &dst, 0xffff00);
       --Power_chara_mode[0];
     }
     if (Power_chara_mode[1]) {
-      SDL_Rect dst = {OFFSET_X + 10, SCREEN_HEIGHT / 6 * 4 + 30,
-                      static_cast<Uint16>(Power_chara_mode[1] / 4), BLOCK_SIZE};
+      SDL_Rect dst = {Offset_x + 10, screen::height / 6 * 4 + 30,
+                      static_cast<Uint16>(Power_chara_mode[1] / 4), block::size};
       SDL_FillRect(Screen, &dst, 0x808080);
       --Power_chara_mode[1];
     }
@@ -747,7 +750,7 @@ bool poll_event() {
 
 void wait_game() {
   static Uint32 pre_count;
-  const double wait_time = 1000.0 / FPS_MAX;
+  const double wait_time = 1000.0 / Max_fps;
   Uint32 wait_count = (wait_time + 0.5);
   if (pre_count) {
     Uint32 now_count = SDL_GetTicks();
@@ -777,7 +780,7 @@ void draw_fps() {
     stringstream ss;
     ss << "FrameRate[" << setprecision(2) << setiosflags(ios::fixed)
        << frame_rate << "]";
-    draw_text(1, 0xff, 0xff, 0xff, OFFSET_X + 15, 16, ss.str().c_str());
+    draw_text(1, 0xff, 0xff, 0xff, Offset_x + 15, 16, ss.str().c_str());
   }
   pre_count = now_count;
 }
@@ -820,7 +823,7 @@ void draw_translucence() {
 #endif
   SDL_Rect dst = {0, 0, 0, 0};
   SDL_Surface *trans_surface =
-      SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32,
+      SDL_CreateRGBSurface(SDL_SWSURFACE, screen::width, screen::height, 32,
                            rmask, gmask, bmask, amask);
   if (!trans_surface) {
     cerr << "CreateRGBSurface failed: " << SDL_GetError() << '\n';

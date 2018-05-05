@@ -7,8 +7,10 @@ namespace input {
 
 namespace {
 
-static SDL_Joystick *Joystick[2];  // TODO: 2
-static unsigned int Num_joysticks;
+const unsigned int Num_devices = 2;
+
+SDL_Joystick *Joystick[Num_devices];
+unsigned int Num_joysticks;
 
 }  // namespace
 
@@ -22,8 +24,8 @@ void init_joystick() {
 }
 
 void update() {
-  bool new_press_key[NUM_DEVICES][input_device::count];
-  for (unsigned int i = 0; i < NUM_DEVICES; ++i) {
+  bool new_press_key[Num_devices][input_device::count];
+  for (unsigned int i = 0; i < Num_devices; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
       new_press_key[i][j] = false;
     }
@@ -88,7 +90,7 @@ void update() {
   new_press_key[0][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
   new_press_key[1][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
 #endif
-  for (unsigned int i = 0; i < NUM_DEVICES; ++i) {
+  for (unsigned int i = 0; i < Num_devices; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
       Edge_key[i][j] = !Press_key[i][j] && new_press_key[i][j];
       Press_key[i][j] = new_press_key[i][j];

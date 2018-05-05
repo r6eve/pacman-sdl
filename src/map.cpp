@@ -10,7 +10,7 @@ namespace map {
 
 namespace {
 
-unsigned int Block[NUM_BLOCK_Y][NUM_BLOCK_X];
+unsigned int Block[block::count_y][block::count_x];
 
 }  // namespace
 
@@ -18,7 +18,7 @@ void init() {
   // TODO: use enum class
   // 0: can move, 1: cannot move, 2: enemy's house
   // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
-  unsigned int block_src[NUM_BLOCK_Y][NUM_BLOCK_X] = {
+  unsigned int block_src[block::count_y][block::count_x] = {
   // 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 1
@@ -46,8 +46,8 @@ void init() {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 23
   };
 
-  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < block::count_y; ++y) {
+    for (unsigned int x = 0; x < block::count_x; ++x) {
       Block[y][x] = block_src[y][x];
     }
   }
@@ -57,7 +57,7 @@ void init() {
   }
 
   // 1: enemy house, 0: cannot move
-  const unsigned int way_to_home[NUM_BLOCK_Y][NUM_BLOCK_X] = {
+  const unsigned int way_to_home[block::count_y][block::count_x] = {
    // 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, //99
     {99, 22, 21, 20, 19, 20, 21, 22, 21, 20, 19, 99, 99, 20, 21, 22, 23, 22, 21, 20, 21, 22, 23, 99}, // 1
@@ -85,8 +85,8 @@ void init() {
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, // 23
   };
 
-  for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-    for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+  for (unsigned int y = 0; y < block::count_y; ++y) {
+    for (unsigned int x = 0; x < block::count_x; ++x) {
       Home_way[y][x] = way_to_home[y][x];
     }
   }
@@ -99,7 +99,7 @@ unsigned int check_state(int x, int y) { return Block[y][x]; }
 
 // TODO: reduce magic numbers
 void draw() {
-  SDL_Rect dst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0x00000000);
 
   SDL_Surface *p_surface = nullptr;
@@ -115,12 +115,12 @@ void draw() {
   }
 
   {
-    SDL_Rect src[2] = {{0, 0, BLOCK_SIZE, BLOCK_SIZE},
-                       {BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE}};
-    for (unsigned int y = 0; y < NUM_BLOCK_Y; ++y) {
-      for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
-        SDL_Rect dst = {static_cast<Sint16>(BLOCK_SIZE * x),
-                        static_cast<Sint16>(BLOCK_SIZE * y), 0, 0};
+    SDL_Rect src[2] = {{0, 0, block::size, block::size},
+                       {block::size, 0, block::size, block::size}};
+    for (unsigned int y = 0; y < block::count_y; ++y) {
+      for (unsigned int x = 0; x < block::count_x; ++x) {
+        SDL_Rect dst = {static_cast<Sint16>(block::size * x),
+                        static_cast<Sint16>(block::size * y), 0, 0};
         int mut_block = Block[y][x];
         if ((mut_block == 2) || (mut_block == 3) || (mut_block == 4) ||
             (mut_block == 5) || (mut_block == 6) || (mut_block == 7) ||
@@ -133,9 +133,9 @@ void draw() {
     }
   }
   {
-    SDL_Rect src = {BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE / 2};
-    for (unsigned int y = 0; y < NUM_BLOCK_Y - 1; ++y) {
-      for (unsigned int x = 0; x < NUM_BLOCK_X; ++x) {
+    SDL_Rect src = {block::size, block::size, block::size, block::size / 2};
+    for (unsigned int y = 0; y < block::count_y - 1; ++y) {
+      for (unsigned int x = 0; x < block::count_x; ++x) {
         const int block = Block[y][x];
         int mut_under_block = Block[y + 1][x];
         if ((mut_under_block == 2) || (mut_under_block == 3) ||
@@ -147,8 +147,8 @@ void draw() {
         const int under_block = mut_under_block;
 
         if ((block == 1) && (under_block == 0)) {
-          SDL_Rect dst = {static_cast<Sint16>(BLOCK_SIZE * x),
-                          static_cast<Sint16>(BLOCK_SIZE * y + BLOCK_SIZE / 2),
+          SDL_Rect dst = {static_cast<Sint16>(block::size * x),
+                          static_cast<Sint16>(block::size * y + block::size / 2),
                           0, 0};
           SDL_BlitSurface(p_surface, &src, Screen, &dst);
         }
