@@ -27,6 +27,7 @@ TTF_Font *Ttf_fonts[2];
 unsigned int Blink_count;
 unsigned int Game_count;
 unsigned int Num_player;
+bool Enemy_run_debug;
 
 }  // namespace
 
