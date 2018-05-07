@@ -38,6 +38,13 @@ Options:
 > ./pacman-sdl -d  # debug mode
 ```
 
+### Key Config
+
+* Player1
+  * UP: Up Arrow, LEFT: Left Arrow, DOWN: Down Arrow, RIGHT: Right Arrow
+* Player2
+  * UP: W, LEFT: A, DOWN: S, RIGHT: D
+
 ## Requirement
 
 * g++ / clang++

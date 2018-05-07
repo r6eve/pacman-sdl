@@ -80,9 +80,9 @@ void update() {
   new_press_key[0][input_device::right] =
       (keys[SDLK_RIGHT] == SDL_PRESSED) || (keys[SDLK_l] == SDL_PRESSED);
   new_press_key[1][input_device::up] = keys[SDLK_w] == SDL_PRESSED;
-  new_press_key[1][input_device::down] = keys[SDLK_z] == SDL_PRESSED;
+  new_press_key[1][input_device::down] = keys[SDLK_s] == SDL_PRESSED;
   new_press_key[1][input_device::left] = keys[SDLK_a] == SDL_PRESSED;
-  new_press_key[1][input_device::right] = keys[SDLK_s] == SDL_PRESSED;
+  new_press_key[1][input_device::right] = keys[SDLK_d] == SDL_PRESSED;
 
   new_press_key[0][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
   new_press_key[1][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
