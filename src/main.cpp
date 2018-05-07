@@ -38,7 +38,7 @@ void init_font();
 void init_img();
 void init_music();
 void main_loop();
-void title(Wipe &wipe);
+void game_title(Wipe &wipe);
 void game_start(Wipe &wipe);
 void play_game();
 void game_clear(Wipe &wipe);
@@ -220,7 +220,7 @@ void main_loop() {
     input::update();
     switch (Game_state) {
       case game_state::title:
-        title(wipe);
+        game_title(wipe);
         break;
       case game_state::start:
         game_start(wipe);
@@ -241,8 +241,8 @@ void main_loop() {
         game_pause();
         break;
       default:
-        cerr << "error: undefined state." << '\n';
-        return;
+        // NOTREACHED
+        break;;
     }
     if (!poll_event()) {
       return;
@@ -255,7 +255,7 @@ void main_loop() {
   }
 }
 
-void title(Wipe &wipe) {
+void game_title(Wipe &wipe) {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
