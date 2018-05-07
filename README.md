@@ -12,22 +12,30 @@ Pacman written in C++.
 
 ```console
 # Arch
-$ pacman -S sdl sdl_image sdl_mixer sdl_ttf
+> pacman -S sdl sdl_image sdl_mixer sdl_ttf
 # Ubuntu
-$ apt-get -y install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+> apt-get -y install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 # macOS
-$ brew update
-$ brew install sdl sdl_image sdl_mixer sdl_ttf
+> brew update
+> brew install sdl sdl_image sdl_mixer sdl_ttf
 # If you use others, install those from package manager or source.
 
-$ git clone git@github.com:r6eve/pacman-sdl.git
+> git clone git@github.com:r6eve/pacman-sdl.git  # Or download ZIP archive and extract pacman-sdl.
+> cd pacman-sdl
+> make
 ```
 
 ## Usage
 
 ```console
-$ make
-$ ./pacman-sdl
+> ./pacman-sdl --help
+Usage: pacman-sdl [options]
+
+Options:
+    -d  --debug         debug mode
+    -h, --help          print this help menu
+> ./pacman-sdl  # normal mode
+> ./pacman-sdl -d  # debug mode
 ```
 
 ## Requirement
