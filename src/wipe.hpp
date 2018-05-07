@@ -28,7 +28,7 @@ class Wipe {
    * `limit_x` is the limit for the x-axis to draw. It's bounded on closed
    * interval [0-screen::width] .
    */
-  void draw(unsigned int limit_x);
+  void draw(unsigned int limit_x) const;
 
   /**
    * Return true if wipe finishes.
