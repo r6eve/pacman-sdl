@@ -139,8 +139,6 @@ void init() {
   Game_count = 0;
   Game_mode = game_mode::single;
   Game_state = game_state::title;
-  Num_player = 1;
-  player::set_player_2_life(2);
 }
 
 void init_sdl() {
@@ -383,10 +381,9 @@ void game_title(Wipe &wipe, Enemy &enemy) {
         Game_state = game_state::start;
         Game_level = 1;
         player::set_player_1_life(2);  // TODO: set it in constructor
+        player::set_player_2_life(2);
 
-        if (Game_mode == game_mode::battle) {
-          Num_player = 2;
-        }
+        Num_player = Game_mode == game_mode::single ? 1 : 2;
 
         for (unsigned int i = 0; i < Num_player; ++i) {
           Now_score[i] = 0;
