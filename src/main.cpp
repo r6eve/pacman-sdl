@@ -35,7 +35,8 @@ unsigned int Num_player;
 
 }  // namespace
 
-bool init();
+bool parse_options(const int argc, char **argv);
+void init();
 void init_sdl();
 void init_font();
 void init_img();
@@ -59,7 +60,15 @@ void end();
 void draw_translucence();
 
 int main(int argc, char **argv) {
-  Debug_mode = false;
+  Debug_mode = parse_options(argc, argv);
+  init();
+  main_loop();
+  end();
+  exit(EXIT_SUCCESS);
+}
+
+bool parse_options(const int argc, char **argv) {
+  bool ret = false;
   opterr = 0;
   const option long_options[] = {
     {"debug", no_argument, nullptr, 'd'},
@@ -85,7 +94,7 @@ Options:
 )";
         exit(EXIT_SUCCESS);
       case 'd':
-        Debug_mode = true;
+        ret = true;
         break;
       case '?': {
         string av(argv[curind]);
@@ -103,32 +112,26 @@ Options:
     }
   }
 
-  if (!init()) {
-    exit(EXIT_FAILURE);
-  }
-  main_loop();
-  end();
-  exit(EXIT_SUCCESS);
+  return ret;
 }
 
-bool init() {
-  // TODO: exit() here
+void init() {
   try {
     init_sdl();
-  } catch (const char *e) {
+  } catch (const char &e) {
     cerr << "error: " << e << '\n';
     atexit(SDL_Quit);
-    return false;
+    exit(EXIT_FAILURE);
   }
 
   try {
     init_font();
     init_img();
     init_music();
-  } catch (const char *e) {
+  } catch (const char &e) {
     cerr << "error: " << e << '\n';
     end();
-    return false;
+    exit(EXIT_FAILURE);
   }
 
   input::init_joystick();
@@ -141,8 +144,6 @@ bool init() {
   Game_state = game_state::title;
   Num_player = 1;
   Player_2_life = 2;
-
-  return true;
 }
 
 void init_sdl() {
@@ -196,7 +197,7 @@ void init_img() {
     image_manager::load_image("./data/guzuta.png", "guzuta");
     image_manager::load_image("./data/mon_run.png", "mon_run");
     image_manager::load_image("./data/plate.png", "plate");
-  } catch (const char *e) {
+  } catch (const char &e) {
     throw e;
   }
 }
