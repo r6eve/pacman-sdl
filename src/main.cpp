@@ -837,8 +837,10 @@ void end() {
   for (unsigned int i = 0; i < 2; ++i) {
     TTF_CloseFont(Ttf_fonts[i]);
   }
+  atexit(TTF_Quit);
 
   image_manager::delete_all_image();
+  atexit(IMG_Quit);
 
   input::end_joystick();
 
@@ -850,8 +852,8 @@ void end() {
   }
   Mix_FreeChunk(Se[0]);
   Mix_CloseAudio();
+  atexit(Mix_Quit);
 
-  atexit(TTF_Quit);
   atexit(SDL_Quit);
 }
 
