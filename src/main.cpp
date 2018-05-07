@@ -37,6 +37,7 @@ unsigned int Num_player;
 
 bool parse_options(const int argc, char **argv);
 void init();
+// TODO: use those in each constructor
 void init_sdl();
 void init_font();
 void init_img();
@@ -182,6 +183,11 @@ void init_font() {
 }
 
 void init_img() {
+  int flag = IMG_INIT_PNG;
+  if (IMG_Init(flag) != flag) {
+    throw IMG_GetError();
+  }
+
   try {
     image_manager::load_image("./data/player1.png", "player1");
     image_manager::load_image("./data/player2.png", "player2");
