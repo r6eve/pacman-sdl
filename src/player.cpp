@@ -17,9 +17,10 @@ typedef struct {
   int block_y;
   int next_block_x;
   int next_block_y;
-  unsigned char dir; // 0: down, 1: left, 2: up, 3: right
-  unsigned char anime_count;  // 0 or 1
-  unsigned char anime_weight; // max value is 4
+  unsigned char dir;           // 0: down, 1: left, 2: up, 3: right
+  unsigned char anime_count;   // 0 or 1
+  unsigned char anime_weight;  // max value is 4
+  int life;
 } Player;
 
 Player Player_1;
@@ -245,5 +246,13 @@ int get_player_2_block_x() { return Player_2.block_x; }
 int get_player_1_block_y() { return Player_1.block_y; }
 
 int get_player_2_block_y() { return Player_2.block_y; }
+
+int get_player_1_life() { return Player_1.life; }
+
+int get_player_2_life() { return Player_2.life; }
+
+void set_player_1_life(const int life) { Player_1.life = life; }
+
+void set_player_2_life(const int life) { Player_2.life = life; }
 
 }  // namespace player

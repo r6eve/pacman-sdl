@@ -2,11 +2,11 @@
 
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
+#include <getopt.h>
 #include <time.h>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <getopt.h>
 
 #include "def_global.hpp"
 #include "enemy.hpp"
@@ -22,13 +22,8 @@ using namespace std;
 
 namespace {
 
-const unsigned int Offset_x = 480;
-const unsigned int Max_fps = 60;
-
 game_state Game_state;
 TTF_Font *Ttf_fonts[2];
-int Player_1_life;
-int Player_2_life;
 unsigned int Blink_count;
 unsigned int Game_count;
 unsigned int Num_player;
@@ -72,9 +67,9 @@ bool parse_options(const int argc, char **argv) {
   bool ret = false;
   opterr = 0;
   const option long_options[] = {
-    {"debug", no_argument, nullptr, 'd'},
-    {"help", no_argument, nullptr, 'h'},
-    {nullptr, 0, nullptr, 0},
+      {"debug", no_argument, nullptr, 'd'},
+      {"help", no_argument, nullptr, 'h'},
+      {nullptr, 0, nullptr, 0},
   };
 
   int c;
@@ -144,7 +139,7 @@ void init() {
   Game_mode = game_mode::single;
   Game_state = game_state::title;
   Num_player = 1;
-  Player_2_life = 2;
+  player::set_player_2_life(2);
 }
 
 void init_sdl() {
@@ -385,7 +380,7 @@ void title(Wipe &wipe) {
         Game_count = 0;
         Game_state = game_state::start;
         Game_level = 1;
-        Player_1_life = 2;
+        player::set_player_1_life(2);  // TODO: set it in constructor
 
         if (Game_mode == game_mode::battle) {
           Num_player = 2;
@@ -413,16 +408,17 @@ void game_start(Wipe &wipe) {
   draw_score();
   switch (Game_count) {
     case 0: {
-      if ((Player_1_life == 2) && (Player_2_life == 2)) {
+      if ((player::get_player_1_life() == 2) &&
+          (player::get_player_2_life() == 2)) {
         Mix_PlayMusic(Music[2], 0);
       }
       wipe.set_wipe_in();
-      wipe.draw(Offset_x);
+      wipe.draw(screen::offset_x);
       ++Game_count;
       break;
     }
     case 1: {
-      wipe.draw(Offset_x);
+      wipe.draw(screen::offset_x);
       if (wipe.update()) {
         ++Game_count;
       }
@@ -494,12 +490,12 @@ void game_clear(Wipe &wipe) {
 
   if (Game_count == 0) {
     wipe.set_wipe_out();
-    wipe.draw(Offset_x);
+    wipe.draw(screen::offset_x);
     ++Game_count;
     return;
   }
 
-  wipe.draw(Offset_x);
+  wipe.draw(screen::offset_x);
   if (wipe.update()) {
     if (Game_level >= 256) {
       Game_count = 0;
@@ -525,27 +521,30 @@ void game_miss(Wipe &wipe) {
   if (Game_count == 0) {
     Mix_PlayMusic(Music[3], 0);
     wipe.set_wipe_out();
-    if ((Player_1_life == 0) || (Player_2_life == 0)) {
+    if ((player::get_player_1_life() == 0) ||
+        (player::get_player_2_life() == 0)) {
       wipe.draw(screen::width);
     } else {
-      wipe.draw(Offset_x);
+      wipe.draw(screen::offset_x);
     }
     ++Game_count;
     return;
   }
 
-  if ((Player_1_life == 0) || (Player_2_life == 0)) {
+  if ((player::get_player_1_life() == 0) ||
+      (player::get_player_2_life() == 0)) {
     wipe.draw(screen::width);
   } else {
-    wipe.draw(Offset_x);
+    wipe.draw(screen::offset_x);
   }
 
   // TODO: use pointer to delete if-clauses
   if (Choice_hit) {
     player::add_player_1_pos(0, -1);
     if (wipe.update()) {
-      --Player_1_life;
-      if (Player_1_life >= 0) {
+      const int life = player::get_player_1_life() - 1;
+      player::set_player_1_life(life);
+      if (life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
         enemy::init();
@@ -559,8 +558,9 @@ void game_miss(Wipe &wipe) {
   } else {
     player::add_player_2_pos(0, -1);
     if (wipe.update()) {
-      --Player_2_life;
-      if (Player_2_life >= 0) {
+      const int life = player::get_player_2_life() - 1;
+      player::set_player_2_life(life);
+      if (life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
         enemy::init();
@@ -689,7 +689,7 @@ void game_over(Wipe &wipe) {
           if (wipe.update()) {
             Blink_count = 0;
             Game_count = 0;
-            Player_2_life = 2;
+            player::set_player_2_life(2);
             Game_state = game_state::title;
           }
           break;
@@ -735,47 +735,48 @@ void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
 void draw_score() {
   {
     SDL_Surface *p_surface = image_manager::get_image("plate");
-    SDL_Rect dst = {Offset_x, 0, 0, 0};
+    SDL_Rect dst = {screen::offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
   {
     stringstream score;
     score << "S c o r e  " << setw(6) << Now_score[0];
-    draw_text(1, 0xff, 0xff, 0xff, Offset_x + 20, screen::height / 7,
+    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20, screen::height / 7,
               score.str().c_str());
     SDL_Surface *p_surface = image_manager::get_image("player1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
-    SDL_Rect dst = {Offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
+    SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     stringstream life;
-    life << "x " << Player_1_life;
-    draw_text(1, 0xff, 0xff, 0xff, Offset_x + 90, screen::height / 7 + 40,
-              life.str().c_str());
+    life << "x " << player::get_player_1_life();
+    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 90,
+              screen::height / 7 + 40, life.str().c_str());
     if (Game_mode == game_mode::battle) {
       stringstream score;
       score << "S c o r e  " << setw(6) << Now_score[1];
-      draw_text(1, 0xff, 0xff, 0xff, Offset_x + 20, screen::height / 7 + 90,
-                score.str().c_str());
+      draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
+                screen::height / 7 + 90, score.str().c_str());
       SDL_Surface *p_surface = image_manager::get_image("player2");
       SDL_Rect src = {block::size, 0, block::size, block::size};
-      SDL_Rect dst = {Offset_x + 60, (screen::height / 6 + 112) - 5, 0, 0};
+      SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
+                      0};
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       stringstream life;
-      life << "x " << Player_2_life;
-      draw_text(1, 0xff, 0xff, 0xff, Offset_x + 90, screen::height / 7 + 122,
-                life.str().c_str());
+      life << "x " << player::get_player_2_life();
+      draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 90,
+                screen::height / 7 + 122, life.str().c_str());
     }
   }
   {
     if (Power_chara_mode[0]) {
-      SDL_Rect dst = {Offset_x + 10, screen::height / 6 * 4,
+      SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4,
                       static_cast<Uint16>(Power_chara_mode[0] / 4),
                       block::size};
       SDL_FillRect(Screen, &dst, 0xffff00);
       --Power_chara_mode[0];
     }
     if (Power_chara_mode[1]) {
-      SDL_Rect dst = {Offset_x + 10, screen::height / 6 * 4 + 30,
+      SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4 + 30,
                       static_cast<Uint16>(Power_chara_mode[1] / 4),
                       block::size};
       SDL_FillRect(Screen, &dst, 0x808080);
@@ -805,7 +806,7 @@ bool poll_event() {
 
 void wait_game() {
   static Uint32 pre_count;
-  const double wait_time = 1000.0 / Max_fps;
+  const double wait_time = 1000.0 / screen::max_fps;
   Uint32 wait_count = (wait_time + 0.5);
   if (pre_count) {
     Uint32 now_count = SDL_GetTicks();
@@ -835,7 +836,7 @@ void draw_fps() {
     stringstream ss;
     ss << "FrameRate[" << setprecision(2) << setiosflags(ios::fixed)
        << frame_rate << "]";
-    draw_text(1, 0xff, 0xff, 0xff, Offset_x + 15, 16, ss.str().c_str());
+    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 15, 16, ss.str().c_str());
   }
   pre_count = now_count;
 }

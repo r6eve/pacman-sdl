@@ -10,6 +10,8 @@ enum {
   width = 640,
   height = 480,
   bpp = 32,
+  offset_x = 480,
+  max_fps = 60,
 };
 
 }  // namespace screen
