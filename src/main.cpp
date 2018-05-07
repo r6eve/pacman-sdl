@@ -43,12 +43,12 @@ void init_font();
 void init_img();
 void init_music();
 void main_loop();
-void title();
-void game_start();
+void title(Wipe &wipe);
+void game_start(Wipe &wipe);
 void play_game();
-void game_clear();
-void game_miss();
-void game_over();
+void game_clear(Wipe &wipe);
+void game_miss(Wipe &wipe);
+void game_over(Wipe &wipe);
 void game_pause();
 // TODO: make enum class `font_type` and `color`
 void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
@@ -220,26 +220,27 @@ void init_music() {
 }
 
 void main_loop() {
+  Wipe wipe;
   for (;;) {
     input::update();
     switch (Game_state) {
       case game_state::title:
-        title();
+        title(wipe);
         break;
       case game_state::start:
-        game_start();
+        game_start(wipe);
         break;
       case game_state::playing:
         play_game();
         break;
       case game_state::clear:
-        game_clear();
+        game_clear(wipe);
         break;
       case game_state::miss:
-        game_miss();
+        game_miss(wipe);
         break;
       case game_state::gameover:
-        game_over();
+        game_over(wipe);
         break;
       case game_state::pause:
         game_pause();
@@ -259,21 +260,21 @@ void main_loop() {
   }
 }
 
-void title() {
+void title(Wipe &wipe) {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
   switch (Game_count) {
     case 0: {
-      wipe::set_wipe_in();
-      wipe::draw(screen::width);
+      wipe.set_wipe_in();
+      wipe.draw(screen::width);
       ++Game_count;
       break;
     }
     case 1: {
       draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
-      wipe::draw(screen::width);
-      if (wipe::update()) {
+      wipe.draw(screen::width);
+      if (wipe.update()) {
         ++Game_count;
       }
       break;
@@ -330,8 +331,8 @@ void title() {
 
       if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
           Press_key[0][input_device::space]) {
-        wipe::set_wipe_out();
-        wipe::draw(screen::width);
+        wipe.set_wipe_out();
+        wipe.draw(screen::width);
         ++Game_count;
       }
 
@@ -372,10 +373,10 @@ void title() {
           break;
       }
 
-      wipe::draw(screen::width);
+      wipe.draw(screen::width);
 
       // initialize globals
-      if (wipe::update()) {
+      if (wipe.update()) {
         map::init();
         food::init();
         player::init();
@@ -404,7 +405,7 @@ void title() {
   }
 }
 
-void game_start() {
+void game_start(Wipe &wipe) {
   map::draw();
   food::draw();
   enemy::draw();
@@ -415,14 +416,14 @@ void game_start() {
       if ((Player_1_life == 2) && (Player_2_life == 2)) {
         Mix_PlayMusic(Music[2], 0);
       }
-      wipe::set_wipe_in();
-      wipe::draw(Offset_x);
+      wipe.set_wipe_in();
+      wipe.draw(Offset_x);
       ++Game_count;
       break;
     }
     case 1: {
-      wipe::draw(Offset_x);
-      if (wipe::update()) {
+      wipe.draw(Offset_x);
+      if (wipe.update()) {
         ++Game_count;
       }
       break;
@@ -484,7 +485,7 @@ void play_game() {
   }
 }
 
-void game_clear() {
+void game_clear(Wipe &wipe) {
   map::draw();
   food::draw();
   enemy::draw();
@@ -492,14 +493,14 @@ void game_clear() {
   draw_score();
 
   if (Game_count == 0) {
-    wipe::set_wipe_out();
-    wipe::draw(Offset_x);
+    wipe.set_wipe_out();
+    wipe.draw(Offset_x);
     ++Game_count;
     return;
   }
 
-  wipe::draw(Offset_x);
-  if (wipe::update()) {
+  wipe.draw(Offset_x);
+  if (wipe.update()) {
     if (Game_level >= 256) {
       Game_count = 0;
       Game_state = game_state::gameover;
@@ -514,7 +515,7 @@ void game_clear() {
   }
 }
 
-void game_miss() {
+void game_miss(Wipe &wipe) {
   map::draw();
   food::draw();
   enemy::draw();
@@ -523,26 +524,26 @@ void game_miss() {
 
   if (Game_count == 0) {
     Mix_PlayMusic(Music[3], 0);
-    wipe::set_wipe_out();
+    wipe.set_wipe_out();
     if ((Player_1_life == 0) || (Player_2_life == 0)) {
-      wipe::draw(screen::width);
+      wipe.draw(screen::width);
     } else {
-      wipe::draw(Offset_x);
+      wipe.draw(Offset_x);
     }
     ++Game_count;
     return;
   }
 
   if ((Player_1_life == 0) || (Player_2_life == 0)) {
-    wipe::draw(screen::width);
+    wipe.draw(screen::width);
   } else {
-    wipe::draw(Offset_x);
+    wipe.draw(Offset_x);
   }
 
   // TODO: use pointer to delete if-clauses
   if (Choice_hit) {
     player::add_player_1_pos(0, -1);
-    if (wipe::update()) {
+    if (wipe.update()) {
       --Player_1_life;
       if (Player_1_life >= 0) {
         Game_count = 0;
@@ -557,7 +558,7 @@ void game_miss() {
     }
   } else {
     player::add_player_2_pos(0, -1);
-    if (wipe::update()) {
+    if (wipe.update()) {
       --Player_2_life;
       if (Player_2_life >= 0) {
         Game_count = 0;
@@ -573,7 +574,7 @@ void game_miss() {
   }
 }
 
-void game_over() {
+void game_over(Wipe &wipe) {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -582,15 +583,15 @@ void game_over() {
       switch (Game_count) {
         case 0: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
-          wipe::set_wipe_in();
-          wipe::draw(screen::width);
+          wipe.set_wipe_in();
+          wipe.draw(screen::width);
           ++Game_count;
           break;
         }
         case 1: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
-          wipe::draw(screen::width);
-          if (wipe::update()) {
+          wipe.draw(screen::width);
+          if (wipe.update()) {
             ++Game_count;
           }
           break;
@@ -614,14 +615,14 @@ void game_over() {
           if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
               Press_key[0][input_device::space]) {
             ++Game_count;
-            wipe::set_wipe_out();
-            wipe::draw(screen::width);
+            wipe.set_wipe_out();
+            wipe.draw(screen::width);
           }
           break;
         }
         case 3: {
-          wipe::draw(screen::width);
-          if (wipe::update()) {
+          wipe.draw(screen::width);
+          if (wipe.update()) {
             Blink_count = 0;
             Game_count = 0;
             Game_state = game_state::title;
@@ -638,15 +639,15 @@ void game_over() {
       switch (Game_count) {
         case 0: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
-          wipe::set_wipe_in();
-          wipe::draw(screen::width);
+          wipe.set_wipe_in();
+          wipe.draw(screen::width);
           ++Game_count;
           break;
         }
         case 1: {
           draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
-          wipe::draw(screen::width);
-          if (wipe::update()) {
+          wipe.draw(screen::width);
+          if (wipe.update()) {
             ++Game_count;
           }
           break;
@@ -678,14 +679,14 @@ void game_over() {
           if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
               Press_key[0][input_device::space]) {
             ++Game_count;
-            wipe::set_wipe_out();
-            wipe::draw(screen::width);
+            wipe.set_wipe_out();
+            wipe.draw(screen::width);
           }
           break;
         }
         case 3: {
-          wipe::draw(screen::width);
-          if (wipe::update()) {
+          wipe.draw(screen::width);
+          if (wipe.update()) {
             Blink_count = 0;
             Game_count = 0;
             Player_2_life = 2;
