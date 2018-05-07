@@ -38,13 +38,13 @@ void init_font();
 void init_img();
 void init_music();
 void main_loop();
-void game_title(Wipe &wipe);
-void game_start(Wipe &wipe);
-void play_game();
-void game_clear(Wipe &wipe);
-void game_miss(Wipe &wipe);
+void game_title(Wipe &wipe, Enemy &enemy);
+void game_start(Wipe &wipe, Enemy &enemy);
+void play_game(Enemy &enemy);
+void game_clear(Wipe &wipe, Enemy &enemy);
+void game_miss(Wipe &wipe, Enemy &enemy);
 void game_over(Wipe &wipe);
-void game_pause();
+void game_pause(Enemy &enemy);
 // TODO: make enum class `font_type` and `color`
 void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
                const char *str);
@@ -216,29 +216,30 @@ void init_music() {
 
 void main_loop() {
   Wipe wipe;
+  Enemy enemy;
   for (;;) {
     input::update();
     switch (Game_state) {
       case game_state::title:
-        game_title(wipe);
+        game_title(wipe, enemy);
         break;
       case game_state::start:
-        game_start(wipe);
+        game_start(wipe, enemy);
         break;
       case game_state::playing:
-        play_game();
+        play_game(enemy);
         break;
       case game_state::clear:
-        game_clear(wipe);
+        game_clear(wipe, enemy);
         break;
       case game_state::miss:
-        game_miss(wipe);
+        game_miss(wipe, enemy);
         break;
       case game_state::gameover:
         game_over(wipe);
         break;
       case game_state::pause:
-        game_pause();
+        game_pause(enemy);
         break;
       default:
         // NOTREACHED
@@ -255,7 +256,7 @@ void main_loop() {
   }
 }
 
-void game_title(Wipe &wipe) {
+void game_title(Wipe &wipe, Enemy &enemy) {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -375,7 +376,7 @@ void game_title(Wipe &wipe) {
         map::init();
         food::init();
         player::init();
-        enemy::init();
+        enemy.init();
 
         Game_count = 0;
         Game_state = game_state::start;
@@ -400,10 +401,10 @@ void game_title(Wipe &wipe) {
   }
 }
 
-void game_start(Wipe &wipe) {
+void game_start(Wipe &wipe, Enemy &enemy) {
   map::draw();
   food::draw();
-  enemy::draw();
+  enemy.draw();
   player::draw();
   draw_score();
   switch (Game_count) {
@@ -448,24 +449,24 @@ void game_start(Wipe &wipe) {
   }
 }
 
-void play_game() {
+void play_game(Enemy &enemy) {
   map::draw();
   food::draw();
-  enemy::draw();
+  enemy.draw();
   player::draw();
   draw_score();
   player::move();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
-      enemy::move_lose_enemy(i);
+      enemy.move_lose_enemy(i);
     } else {
-      enemy::move_normal_enemy(i);
+      enemy.move_normal_enemy(i);
     }
   }
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
   const bool food_state = food::check_state();
-  const bool hit_enemy = enemy::check_hit_enemy();
+  const bool hit_enemy = enemy.check_hit_enemy();
   if (food_state) {
     Game_state = game_state::clear;
   } else if (hit_enemy) {
@@ -481,10 +482,10 @@ void play_game() {
   }
 }
 
-void game_clear(Wipe &wipe) {
+void game_clear(Wipe &wipe, Enemy &enemy) {
   map::draw();
   food::draw();
-  enemy::draw();
+  enemy.draw();
   player::draw();
   draw_score();
 
@@ -505,16 +506,16 @@ void game_clear(Wipe &wipe) {
       Game_state = game_state::start;
       ++Game_level;
       food::init();
-      enemy::init();
+      enemy.init();
       player::init();
     }
   }
 }
 
-void game_miss(Wipe &wipe) {
+void game_miss(Wipe &wipe, Enemy &enemy) {
   map::draw();
   food::draw();
-  enemy::draw();
+  enemy.draw();
   player::draw();
   draw_score();
 
@@ -547,7 +548,7 @@ void game_miss(Wipe &wipe) {
       if (life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
-        enemy::init();
+        enemy.init();
         player::init();
       } else {
         Game_count = 0;
@@ -563,7 +564,7 @@ void game_miss(Wipe &wipe) {
       if (life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
-        enemy::init();
+        enemy.init();
         player::init();
       } else {
         Game_count = 0;
@@ -708,10 +709,10 @@ void game_over(Wipe &wipe) {
   }
 }
 
-void game_pause() {
+void game_pause(Enemy &enemy) {
   map::draw();
   food::draw();
-  enemy::draw();
+  enemy.draw();
   player::draw();
   draw_score();
   draw_translucence();
