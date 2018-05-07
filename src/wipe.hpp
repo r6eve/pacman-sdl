@@ -25,8 +25,8 @@ class Wipe {
    * Start drawing. Before execute this function, call set_wipe_in() or
    * set_wipe_out().
    *
-   * `limit_x` is the limit for the x-axis between to draw. It's bounded on
-   * closed interval [0-screen::width] .
+   * `limit_x` is the limit for the x-axis to draw. It's bounded on closed
+   * interval [0-screen::width] .
    */
   void draw(unsigned int limit_x);
 
