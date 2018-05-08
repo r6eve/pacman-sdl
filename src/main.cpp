@@ -739,20 +739,20 @@ void draw_score() {
   }
   {
     stringstream score;
-    score << "S c o r e  " << setw(6) << Now_score[0];
-    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20, screen::height / 7,
+    score << "S c o r e  :  " << setw(6) << Now_score[0];
+    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20, screen::height / 7 + 10,
               score.str().c_str());
     SDL_Surface *p_surface = image_manager::get_image("player1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     stringstream life;
-    life << "x " << player::get_player_1_life();
+    life << "x  " << player::get_player_1_life();
     draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 90,
               screen::height / 7 + 40, life.str().c_str());
     if (Game_mode == game_mode::battle) {
       stringstream score;
-      score << "S c o r e  " << setw(6) << Now_score[1];
+      score << "S c o r e  :  " << setw(6) << Now_score[1];
       draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
                 screen::height / 7 + 90, score.str().c_str());
       SDL_Surface *p_surface = image_manager::get_image("player2");
@@ -761,7 +761,7 @@ void draw_score() {
                       0};
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       stringstream life;
-      life << "x " << player::get_player_2_life();
+      life << "x  " << player::get_player_2_life();
       draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 90,
                 screen::height / 7 + 122, life.str().c_str());
     }
