@@ -14,7 +14,7 @@ typedef struct Img_list_rec {
   struct Img_list_rec *next;
 } Img_list;
 
-static Img_list *Img_list_top = nullptr;
+Img_list *Img_list_top = nullptr;
 
 }  // namespace
 
