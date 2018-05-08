@@ -22,7 +22,7 @@ class Enemy {
   void update();
 
  public:
-  Enemy() : enemies_(new Enemy_data[enemy_character::count]) {}
+  Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}
 
   void init();
 
