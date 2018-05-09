@@ -9,7 +9,6 @@ namespace player {
 namespace {
 
 // TODO: class
-// TODO: add a member of life descriving Player_1_life/Player_2_life
 typedef struct {
   int pos_x;
   int pos_y;
