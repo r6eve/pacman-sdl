@@ -131,7 +131,7 @@ void init() {
     exit(EXIT_FAILURE);
   }
 
-  input::init_joystick();
+  Input::init_joystick();
 
   // initialize global variables
   Blink_count = 0;
@@ -217,7 +217,7 @@ void main_loop() {
   Wipe wipe;
   Enemy enemy;
   for (;;) {
-    input::update();
+    Input::update();
     switch (Game_state) {
       case game_state::title:
         game_title(wipe, enemy);
@@ -849,7 +849,7 @@ void end() {
   image_manager::delete_all_image();
   atexit(IMG_Quit);
 
-  input::end_joystick();
+  Input::end_joystick();
 
   Mix_HaltMusic();
   Mix_HaltChannel(-1);

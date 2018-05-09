@@ -1,12 +1,18 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-namespace input {
+#include <vector>
+#include "def_global.hpp"
 
-void init_joystick();
-void update();
-void end_joystick();
+class Input {
+  static const unsigned int num_devices_;
+  static unsigned int num_joysticks_;
+  static std::vector<SDL_Joystick*> joystick_;
 
-}  // namespace input
+ public:
+  static void init_joystick();
+  static void update();
+  static void end_joystick();
+};
 
 #endif
