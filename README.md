@@ -4,9 +4,9 @@ Pacman-SDL
 
 Pacman written in C++.
 
-## Demo
+## Demo Video
 
-![pacman-sdl-demo][]
+[![Demo Image][]][Demo Video]
 
 ## Installation
 
@@ -66,7 +66,8 @@ Options:
 
 [Build Status on Travis CI]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
 [Travis CI Results]: https://travis-ci.org/r6eve/pacman-sdl
-[pacman-sdl-demo]: https://raw.githubusercontent.com/r6eve/screenshots/master/pacman-sdl/pacman-sdl.gif
+[Demo Image]: http://img.youtube.com/vi/jTj5H4HFE68/0.jpg
+[Demo Video]: https://youtu.be/jTj5H4HFE68
 [SDL 1.2]: http://www.libsdl.org/
 [SDL_image 1.2]: https://www.libsdl.org/projects/SDL_image/release-1.2.html
 [SDL_mixer 1.2]: https://www.libsdl.org/projects/SDL_mixer/release-1.2.html
