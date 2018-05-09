@@ -183,20 +183,20 @@ void init_img() {
   }
 
   try {
-    image_manager::load_image("./data/player1.png", "player1");
-    image_manager::load_image("./data/player2.png", "player2");
-    image_manager::load_image("./data/bg.png", "bg");
-    image_manager::load_image("./data/bg_red.png", "bg_red");
-    image_manager::load_image("./data/bg_green.png", "bg_green");
-    image_manager::load_image("./data/bg_blue.png", "bg_blue");
-    image_manager::load_image("./data/food.png", "food");
-    image_manager::load_image("./data/food_counter.png", "food_counter");
-    image_manager::load_image("./data/akabei.png", "akabei");
-    image_manager::load_image("./data/pinky.png", "pinky");
-    image_manager::load_image("./data/aosuke.png", "aosuke");
-    image_manager::load_image("./data/guzuta.png", "guzuta");
-    image_manager::load_image("./data/mon_run.png", "mon_run");
-    image_manager::load_image("./data/plate.png", "plate");
+    Image_manager::load_image("./data/player1.png", "player1");
+    Image_manager::load_image("./data/player2.png", "player2");
+    Image_manager::load_image("./data/bg.png", "bg");
+    Image_manager::load_image("./data/bg_red.png", "bg_red");
+    Image_manager::load_image("./data/bg_green.png", "bg_green");
+    Image_manager::load_image("./data/bg_blue.png", "bg_blue");
+    Image_manager::load_image("./data/food.png", "food");
+    Image_manager::load_image("./data/food_counter.png", "food_counter");
+    Image_manager::load_image("./data/akabei.png", "akabei");
+    Image_manager::load_image("./data/pinky.png", "pinky");
+    Image_manager::load_image("./data/aosuke.png", "aosuke");
+    Image_manager::load_image("./data/guzuta.png", "guzuta");
+    Image_manager::load_image("./data/mon_run.png", "mon_run");
+    Image_manager::load_image("./data/plate.png", "plate");
   } catch (const char &e) {
     throw e;
   }
@@ -734,7 +734,7 @@ void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
 // TODO: reduce magic numbers
 void draw_score() {
   {
-    SDL_Surface *p_surface = image_manager::get_image("plate");
+    SDL_Surface *p_surface = Image_manager::get_image("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
@@ -743,7 +743,7 @@ void draw_score() {
     score << "S c o r e  :  " << setw(6) << Now_score[0];
     draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20, screen::height / 7 + 10,
               score.str().c_str());
-    SDL_Surface *p_surface = image_manager::get_image("player1");
+    SDL_Surface *p_surface = Image_manager::get_image("player1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
@@ -756,7 +756,7 @@ void draw_score() {
       score << "S c o r e  :  " << setw(6) << Now_score[1];
       draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
                 screen::height / 7 + 90, score.str().c_str());
-      SDL_Surface *p_surface = image_manager::get_image("player2");
+      SDL_Surface *p_surface = Image_manager::get_image("player2");
       SDL_Rect src = {block::size, 0, block::size, block::size};
       SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
                       0};
@@ -847,7 +847,7 @@ void end() {
   }
   atexit(TTF_Quit);
 
-  image_manager::delete_all_image();
+  Image_manager::delete_all_image();
   atexit(IMG_Quit);
 
   Input::end_joystick();

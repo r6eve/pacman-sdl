@@ -1,24 +1,12 @@
+#include <SDL/SDL_image.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "image_manager.hpp"
 
-namespace image_manager {
+Image_manager::Img_list *Image_manager::Img_list_top = nullptr;
 
-namespace {
-
-typedef struct Img_list_rec {
-  char name[64];
-  SDL_Surface *img;
-  struct Img_list_rec *prev;
-  struct Img_list_rec *next;
-} Img_list;
-
-Img_list *Img_list_top = nullptr;
-
-}  // namespace
-
-void load_image(const char *path, const char *name) {
+void Image_manager::load_image(const char *path, const char *name) {
   SDL_Surface *img = IMG_Load(path);
   if (!img) {
     throw IMG_GetError();
@@ -39,7 +27,7 @@ void load_image(const char *path, const char *name) {
   Img_list_top = list;
 }
 
-SDL_Surface *get_image(const char *name) {
+SDL_Surface *Image_manager::get_image(const char *name) {
   Img_list *p = Img_list_top;
   while (p) {
     if (!strcmp(p->name, name)) {
@@ -51,7 +39,7 @@ SDL_Surface *get_image(const char *name) {
   return nullptr;
 }
 
-void delete_all_image() {
+void Image_manager::delete_all_image() {
   while (Img_list_top) {
     Img_list *p = Img_list_top->next;
     SDL_FreeSurface(Img_list_top->img);
@@ -62,5 +50,3 @@ void delete_all_image() {
     }
   }
 }
-
-}  // namespace image_manager

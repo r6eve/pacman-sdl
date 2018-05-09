@@ -3,12 +3,20 @@
 
 #include <SDL/SDL_image.h>
 
-namespace image_manager {
+class Image_manager {
+  typedef struct Img_list_rec {
+    char name[64];
+    SDL_Surface *img;
+    struct Img_list_rec *prev;
+    struct Img_list_rec *next;
+  } Img_list;
 
-void load_image(const char *path, const char *name);
-SDL_Surface *get_image(const char *name);
-void delete_all_image();
+  static Img_list *Img_list_top;
 
-}  // namespace image_manager
+ public:
+  static void load_image(const char *path, const char *name);
+  static SDL_Surface *get_image(const char *name);
+  static void delete_all_image();
+};
 
 #endif
