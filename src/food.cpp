@@ -5,17 +5,7 @@
 #include "map.hpp"
 #include "player.hpp"
 
-namespace food {
-
-namespace {
-
-// TODO: enum class
-// -1: no food, 0: counter food, 1: food, 2: get food
-char food[block::count_y][block::count_x];
-
-}  // namespace
-
-void init() {
+void Food::init() {
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       food[y][x] = -1;
@@ -28,7 +18,7 @@ void init() {
   }
 }
 
-void draw() {
+void Food::draw() {
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       if (food[y][x] == 2) {
@@ -53,7 +43,7 @@ void draw() {
   }
 }
 
-bool check_state() {
+bool Food::check_state() {
   const int x = player::get_player_1_block_x();
   const int y = player::get_player_1_block_y();
   if (food[y][x] == 1) {
@@ -102,5 +92,3 @@ bool check_state() {
 
   return (rest_food == 0);
 }
-
-}  // namespace food
