@@ -329,6 +329,7 @@ void Enemy::move_lose_enemy(unsigned int enemy_type) {
   // enemy is in enemy's home
 }
 
+// TODO: move this to other class
 bool Enemy::check_hit_enemy() const {
   const int player_1_pos_x = player::get_player_1_pos_x();
   const int player_1_pos_y = player::get_player_1_pos_y();

@@ -43,6 +43,7 @@ void Food::draw() {
   }
 }
 
+// TODO: move this to other class
 bool Food::check_state() {
   const int x = player::get_player_1_block_x();
   const int y = player::get_player_1_block_y();
