@@ -94,7 +94,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) {
 
       enemies_[enemy_type].block_x = enemies_[enemy_type].next_block_x;
       enemies_[enemy_type].block_y = enemies_[enemy_type].next_block_y;
-      if (map::check_state(enemies_[enemy_type].block_x,
+      if (Map::check_state(enemies_[enemy_type].block_x,
                            enemies_[enemy_type].block_y) == 2) {
         enemies_[enemy_type].dir = 2;
         --enemies_[enemy_type].next_block_y;
@@ -112,7 +112,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) {
       const int front_block_y =
           enemies_[enemy_type].block_y + front_pos[enemies_[enemy_type].dir][1];
       unsigned int mut_front_block =
-          map::check_state(front_block_x, front_block_y);
+          Map::check_state(front_block_x, front_block_y);
       if ((mut_front_block == 3) || (mut_front_block == 4) ||
           (mut_front_block == 5) || (mut_front_block == 6) ||
           (mut_front_block == 7) || (mut_front_block == 8)) {
@@ -125,7 +125,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) {
       const int left_block_y =
           enemies_[enemy_type].block_y + left_pos[enemies_[enemy_type].dir][1];
       unsigned int mut_left_block =
-          map::check_state(left_block_x, left_block_y);
+          Map::check_state(left_block_x, left_block_y);
       if ((mut_left_block == 3) || (mut_left_block == 4) ||
           (mut_left_block == 5) || (front_block == 8)) {
         mut_left_block = 0;
@@ -137,7 +137,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) {
       const int right_block_y =
           enemies_[enemy_type].block_y + right_pos[enemies_[enemy_type].dir][1];
       unsigned int mut_right_block =
-          map::check_state(right_block_x, right_block_y);
+          Map::check_state(right_block_x, right_block_y);
       if ((mut_right_block == 3) || (mut_right_block == 4) ||
           (mut_right_block == 5) || (front_block == 8)) {
         mut_right_block = 0;
@@ -148,7 +148,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) {
       if (((rand() % 100) == 0) ||
           ((390 <= Power_chara_mode[0]) && (Power_chara_mode[0] <= 400)) ||
           ((390 <= Power_chara_mode[1]) && (Power_chara_mode[1] <= 400))) {
-        if (map::check_state(
+        if (Map::check_state(
                 enemies_[enemy_type].block_x + back_pos[enemies_[enemy_type].dir][0],
                 enemies_[enemy_type].block_y +
                     back_pos[enemies_[enemy_type].dir][1]) == 2) {

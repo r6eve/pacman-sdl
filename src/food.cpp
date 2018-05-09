@@ -9,9 +9,9 @@ void Food::init() {
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       food[y][x] = -1;
-      if (map::check_state(x, y) == 0) {  // field where player can move
+      if (Map::check_state(x, y) == 0) {  // field where player can move
         food[y][x] = 1;
-      } else if (map::check_state(x, y) == 4) {  // counter food
+      } else if (Map::check_state(x, y) == 4) {  // counter food
         food[y][x] = 0;
       }
     }

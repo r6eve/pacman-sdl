@@ -121,11 +121,11 @@ void move() {
     const int dst_block_y = mut_dst_block_y;
 
     const unsigned int dst_block_state =
-        map::check_state(dst_block_x, dst_block_y);
+        Map::check_state(dst_block_x, dst_block_y);
     const unsigned int dst_right_block_state =
-        map::check_state(dst_block_x + 1, dst_block_y);
+        Map::check_state(dst_block_x + 1, dst_block_y);
     const unsigned int dst_left_block_state =
-        map::check_state(dst_block_x - 1, dst_block_y);
+        Map::check_state(dst_block_x - 1, dst_block_y);
     if ((dst_block_state == 0) || (dst_block_state == 3) ||
         (dst_block_state == 4) || (dst_block_state == 5) ||
         (dst_block_state == 6) || (dst_right_block_state == 6) ||
@@ -136,11 +136,11 @@ void move() {
     }
 
     // Circle corner
-    if (map::check_state(dst_block_x + 2, dst_block_y) == 6) {
+    if (Map::check_state(dst_block_x + 2, dst_block_y) == 6) {
       Player_1.next_block_x = block::count_x;
       Player_1.pos_x = block::size * Player_1.next_block_x;
     }
-    if (map::check_state(dst_block_x - 2, dst_block_y) == 7) {
+    if (Map::check_state(dst_block_x - 2, dst_block_y) == 7) {
       Player_1.next_block_x = -1;
       Player_1.pos_x = block::size * Player_1.next_block_x;
     }
@@ -194,11 +194,11 @@ void move() {
       const int dst_block_y = mut_dst_block_y;
 
       const unsigned int dst_block_state =
-          map::check_state(dst_block_x, dst_block_y);
+          Map::check_state(dst_block_x, dst_block_y);
       const unsigned int dst_right_block_state =
-          map::check_state(dst_block_x + 1, dst_block_y);
+          Map::check_state(dst_block_x + 1, dst_block_y);
       const unsigned int dst_left_block_state =
-          map::check_state(dst_block_x - 1, dst_block_y);
+          Map::check_state(dst_block_x - 1, dst_block_y);
       if ((dst_block_state == 0) || (dst_block_state == 3) ||
           (dst_block_state == 4) || (dst_block_state == 5) ||
           (dst_block_state == 6) || (dst_right_block_state == 6) ||
@@ -209,11 +209,11 @@ void move() {
       }
 
       // Circle corner
-      if (map::check_state(dst_block_x + 2, dst_block_y) == 6) {
+      if (Map::check_state(dst_block_x + 2, dst_block_y) == 6) {
         Player_2.next_block_x = block::count_x;
         Player_2.pos_x = block::size * Player_2.next_block_x;
       }
-      if (map::check_state(dst_block_x - 2, dst_block_y) == 7) {
+      if (Map::check_state(dst_block_x - 2, dst_block_y) == 7) {
         Player_2.next_block_x = -1;
         Player_2.pos_x = block::size * Player_2.next_block_x;
       }

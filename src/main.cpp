@@ -373,7 +373,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) {
 
       // initialize globals
       if (wipe.update()) {
-        map::init();
+        Map::init();
         food.init();
         player::init();
         enemy.init();
@@ -401,7 +401,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) {
 }
 
 void game_start(Wipe &wipe, Food &food, Enemy &enemy) {
-  map::draw();
+  Map::draw();
   food.draw();
   enemy.draw();
   player::draw();
@@ -449,7 +449,7 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) {
 }
 
 void play_game(Food &food, Enemy &enemy) {
-  map::draw();
+  Map::draw();
   food.draw();
   enemy.draw();
   player::draw();
@@ -482,7 +482,7 @@ void play_game(Food &food, Enemy &enemy) {
 }
 
 void game_clear(Wipe &wipe, Food &food, Enemy &enemy) {
-  map::draw();
+  Map::draw();
   food.draw();
   enemy.draw();
   player::draw();
@@ -512,7 +512,7 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy) {
 }
 
 void game_miss(Wipe &wipe, Food &food, Enemy &enemy) {
-  map::draw();
+  Map::draw();
   food.draw();
   enemy.draw();
   player::draw();
@@ -709,7 +709,7 @@ void game_over(Wipe &wipe) {
 }
 
 void game_pause(Food &food, Enemy &enemy) {
-  map::draw();
+  Map::draw();
   food.draw();
   enemy.draw();
   player::draw();
