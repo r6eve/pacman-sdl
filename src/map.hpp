@@ -4,7 +4,7 @@
 #include "def_global.hpp"
 
 class Map {
-  static unsigned int Block[block::count_y][block::count_x];
+  static unsigned int block_[block::count_y][block::count_x];
 
  public:
   static void init();

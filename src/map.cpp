@@ -6,7 +6,7 @@
 #include "image_manager.hpp"
 #include "map.hpp"
 
-unsigned int Map::Block[block::count_y][block::count_x];
+unsigned int Map::block_[block::count_y][block::count_x];
 
 void Map::init() {
   // TODO: use enum class
@@ -42,12 +42,12 @@ void Map::init() {
 
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      Block[y][x] = block_src[y][x];
+      block_[y][x] = block_src[y][x];
     }
   }
 
   if (Game_mode == game_mode::battle) {
-    Block[18][14] = 8;
+    block_[18][14] = 8;
   }
 
   // 1: enemy house, 0: cannot move
@@ -90,7 +90,7 @@ void Map::init() {
 // TODO:
 // Why is the parameter of x=-1 and y=12 OK?
 // Cf. https://ideone.com/u1QKTJ
-unsigned int Map::check_state(int x, int y) { return Block[y][x]; }
+unsigned int Map::check_state(int x, int y) { return block_[y][x]; }
 
 // TODO: reduce magic numbers
 void Map::draw() {
@@ -116,7 +116,7 @@ void Map::draw() {
       for (unsigned int x = 0; x < block::count_x; ++x) {
         SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                         static_cast<Sint16>(block::size * y), 0, 0};
-        int mut_block = Block[y][x];
+        int mut_block = block_[y][x];
         if ((mut_block == 2) || (mut_block == 3) || (mut_block == 4) ||
             (mut_block == 5) || (mut_block == 6) || (mut_block == 7) ||
             (mut_block == 8)) {
@@ -131,8 +131,8 @@ void Map::draw() {
     SDL_Rect src = {block::size, block::size, block::size, block::size / 2};
     for (unsigned int y = 0; y < block::count_y - 1; ++y) {
       for (unsigned int x = 0; x < block::count_x; ++x) {
-        const int block = Block[y][x];
-        int mut_under_block = Block[y + 1][x];
+        const int block = block_[y][x];
+        int mut_under_block = block_[y + 1][x];
         if ((mut_under_block == 2) || (mut_under_block == 3) ||
             (mut_under_block == 4) || (mut_under_block == 5) ||
             (mut_under_block == 6) || (mut_under_block == 7) ||
