@@ -1,6 +1,5 @@
 #define MAIN
 
-#include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 #include <getopt.h>
 #include <time.h>
@@ -36,7 +35,6 @@ void init();
 // TODO: use those in each constructor
 void init_sdl();
 void init_font();
-void init_img();
 void init_music();
 void main_loop();
 void game_title(Wipe &wipe, Food &food, Enemy &enemy);
@@ -123,7 +121,7 @@ void init() {
 
   try {
     init_font();
-    init_img();
+    Image_manager::init_image();
     init_music();
   } catch (const char &e) {
     cerr << "error: " << e << '\n';
@@ -173,32 +171,6 @@ void init_font() {
   Ttf_fonts[1] = TTF_OpenFont("./data/GenEiGothicP-Regular.otf", 16);
   if (!Ttf_fonts[0] || !Ttf_fonts[1]) {
     throw TTF_GetError();
-  }
-}
-
-void init_img() {
-  int flag = IMG_INIT_PNG;
-  if (IMG_Init(flag) != flag) {
-    throw IMG_GetError();
-  }
-
-  try {
-    Image_manager::load_image("./data/player1.png", "player1");
-    Image_manager::load_image("./data/player2.png", "player2");
-    Image_manager::load_image("./data/bg.png", "bg");
-    Image_manager::load_image("./data/bg_red.png", "bg_red");
-    Image_manager::load_image("./data/bg_green.png", "bg_green");
-    Image_manager::load_image("./data/bg_blue.png", "bg_blue");
-    Image_manager::load_image("./data/food.png", "food");
-    Image_manager::load_image("./data/food_counter.png", "food_counter");
-    Image_manager::load_image("./data/akabei.png", "akabei");
-    Image_manager::load_image("./data/pinky.png", "pinky");
-    Image_manager::load_image("./data/aosuke.png", "aosuke");
-    Image_manager::load_image("./data/guzuta.png", "guzuta");
-    Image_manager::load_image("./data/mon_run.png", "mon_run");
-    Image_manager::load_image("./data/plate.png", "plate");
-  } catch (const char &e) {
-    throw e;
   }
 }
 
@@ -848,7 +820,6 @@ void end() {
   atexit(TTF_Quit);
 
   Image_manager::delete_all_image();
-  atexit(IMG_Quit);
 
   Input::end_joystick();
 
