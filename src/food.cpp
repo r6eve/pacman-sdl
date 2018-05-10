@@ -19,6 +19,7 @@ void Food::init() {
 }
 
 void Food::draw() {
+  // update
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       if (food_[y][x] == 2) {
