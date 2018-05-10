@@ -17,7 +17,7 @@ class Image_manager {
 
  public:
   /**
-   * Call this function before using get_image() .
+   * Call this function before using get() .
    */
   static void init();
 

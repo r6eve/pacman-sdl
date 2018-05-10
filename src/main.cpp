@@ -1,6 +1,5 @@
 #define MAIN
 
-#include <SDL/SDL_ttf.h>
 #include <getopt.h>
 #include <time.h>
 #include <iomanip>
@@ -9,6 +8,7 @@
 
 #include "def_global.hpp"
 #include "enemy.hpp"
+#include "font_manager.hpp"
 #include "food.hpp"
 #include "image_manager.hpp"
 #include "input.hpp"
@@ -22,7 +22,6 @@ using namespace std;
 namespace {
 
 game_state Game_state;
-TTF_Font *Ttf_fonts[2];
 unsigned int Blink_count;
 unsigned int Game_count;
 unsigned int Num_player;
@@ -34,7 +33,6 @@ bool parse_options(const int argc, char **argv) noexcept;
 void init() noexcept;
 // TODO: use those in each constructor
 void init_sdl();
-void init_font();
 void init_music();
 void main_loop() noexcept;
 void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
@@ -45,7 +43,7 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
 void game_over(Wipe &wipe) noexcept;
 void game_pause(Food &food, Enemy &enemy) noexcept;
 // TODO: make enum class `font_type` and `color`
-void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
+void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x, int y,
                const char *str) noexcept;
 void draw_score() noexcept;
 bool poll_event() noexcept;
@@ -120,7 +118,7 @@ void init() noexcept {
   }
 
   try {
-    init_font();
+    Font_manager::init();
     Image_manager::init();
     init_music();
   } catch (const char &e) {
@@ -156,18 +154,6 @@ void init_sdl() {
   }
 
   SDL_ShowCursor(SDL_DISABLE);
-}
-
-void init_font() {
-  if (TTF_Init() != 0) {
-    throw TTF_GetError();
-  }
-
-  Ttf_fonts[0] = TTF_OpenFont("./data/GenEiGothicP-Heavy.otf", 36);
-  Ttf_fonts[1] = TTF_OpenFont("./data/GenEiGothicP-Regular.otf", 16);
-  if (!Ttf_fonts[0] || !Ttf_fonts[1]) {
-    throw TTF_GetError();
-  }
 }
 
 void init_music() {
@@ -240,7 +226,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       break;
     }
     case 1: {
-      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
+      draw_text(36, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
       wipe.draw(screen::width);
       if (wipe.update()) {
         ++Game_count;
@@ -248,9 +234,9 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       break;
     }
     case 2: {
-      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
+      draw_text(36, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
       if (Blink_count < 30) {
-        draw_text(1, 0x00, 0x00, 0x00, 205, 300,
+        draw_text(16, 0x00, 0x00, 0x00, 205, 300,
                   "P r e s s   S p a c e   K e y");
         ++Blink_count;
       } else if (Blink_count < 60) {
@@ -267,7 +253,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       break;
     }
     case 3: {
-      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
+      draw_text(36, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
       if (!Press_key[0][input_device::x] && !Press_key[1][input_device::x] &&
           !Press_key[0][input_device::space]) {
         ++Game_count;
@@ -275,21 +261,21 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       break;
     }
     case 4: {
-      draw_text(0, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
+      draw_text(36, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
 
       switch (Game_mode) {
         case game_mode::single: {
           SDL_Rect dst = {250, 298, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(1, 0xff, 0xff, 0xff, 270, 300, "1P MODE");
-          draw_text(1, 0x00, 0x00, 0x00, 270, 350, "VS MODE");
+          draw_text(16, 0xff, 0xff, 0xff, 270, 300, "1P MODE");
+          draw_text(16, 0x00, 0x00, 0x00, 270, 350, "VS MODE");
           break;
         }
         case game_mode::battle: {
           SDL_Rect dst = {250, 348, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(1, 0x00, 0x00, 0x00, 270, 300, "1P MODE");
-          draw_text(1, 0xff, 0xff, 0xff, 270, 350, "VS MODE");
+          draw_text(16, 0x00, 0x00, 0x00, 270, 300, "1P MODE");
+          draw_text(16, 0xff, 0xff, 0xff, 270, 350, "VS MODE");
           break;
         }
         default:
@@ -324,15 +310,15 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
         case game_mode::single: {
           SDL_Rect dst = {250, 298, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(1, 0xff, 0xff, 0xff, 270, 300, "1P MODE");
-          draw_text(1, 0x00, 0x00, 0x00, 270, 350, "VS MODE");
+          draw_text(16, 0xff, 0xff, 0xff, 270, 300, "1P MODE");
+          draw_text(16, 0x00, 0x00, 0x00, 270, 350, "VS MODE");
           break;
         }
         case game_mode::battle: {
           SDL_Rect dst = {250, 348, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(1, 0x00, 0x00, 0x00, 270, 300, "1P MODE");
-          draw_text(1, 0xff, 0xff, 0xff, 270, 350, "VS MODE");
+          draw_text(16, 0x00, 0x00, 0x00, 270, 300, "1P MODE");
+          draw_text(16, 0xff, 0xff, 0xff, 270, 350, "VS MODE");
           break;
         }
         default:
@@ -403,9 +389,9 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   if (Game_count < 130) {
     stringstream ss;
     ss << "S t a g e " << Game_level;
-    draw_text(0, 0xff, 0x00, 0x00, 153, 170, ss.str().c_str());
+    draw_text(36, 0xff, 0x00, 0x00, 153, 170, ss.str().c_str());
   } else if (Game_count < 200) {
-    draw_text(0, 0xff, 0x00, 0x00, 165, 170, "S t a r t");
+    draw_text(36, 0xff, 0x00, 0x00, 165, 170, "S t a r t");
   }
 
   if (Game_count > 220) {
@@ -554,14 +540,14 @@ void game_over(Wipe &wipe) noexcept {
     case game_mode::single: {
       switch (Game_count) {
         case 0: {
-          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe.set_wipe_in();
           wipe.draw(screen::width);
           ++Game_count;
           break;
         }
         case 1: {
-          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe.draw(screen::width);
           if (wipe.update()) {
             ++Game_count;
@@ -569,13 +555,13 @@ void game_over(Wipe &wipe) noexcept {
           break;
         }
         case 2: {
-          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           stringstream ss;
           ss << "Y o u r  S c o r e   " << Now_score[0];
-          draw_text(0, 0x00, 0x00, 0x00, 120, 220, ss.str().c_str());
+          draw_text(36, 0x00, 0x00, 0x00, 120, 220, ss.str().c_str());
 
           if (Blink_count < 30) {
-            draw_text(1, 0x00, 0x00, 0x00, 210, 350,
+            draw_text(16, 0x00, 0x00, 0x00, 210, 350,
                       "P r e s s  S p a c e  K e y");
             ++Blink_count;
           } else if (Blink_count < 60) {
@@ -610,14 +596,14 @@ void game_over(Wipe &wipe) noexcept {
     case game_mode::battle: {
       switch (Game_count) {
         case 0: {
-          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe.set_wipe_in();
           wipe.draw(screen::width);
           ++Game_count;
           break;
         }
         case 1: {
-          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           wipe.draw(screen::width);
           if (wipe.update()) {
             ++Game_count;
@@ -625,21 +611,21 @@ void game_over(Wipe &wipe) noexcept {
           break;
         }
         case 2: {
-          draw_text(0, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
+          draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           stringstream ss;
           if (Now_score[0] > Now_score[1]) {
             ss << "1 P  W I N  " << Now_score[0];
-            draw_text(0, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
+            draw_text(36, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           } else if (Now_score[1] > Now_score[0]) {
             ss << "2 P  W I N  " << Now_score[1];
-            draw_text(0, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
+            draw_text(36, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           } else {
             ss << "D R A W  " << Now_score[0];
-            draw_text(0, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
+            draw_text(36, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           }
 
           if (Blink_count < 30) {
-            draw_text(1, 0x00, 0x00, 0x00, 210, 380,
+            draw_text(16, 0x00, 0x00, 0x00, 210, 380,
                       "P r e s s  S p a c e  K e y");
             ++Blink_count;
           } else if (Blink_count < 60) {
@@ -692,11 +678,11 @@ void game_pause(Food &food, Enemy &enemy) noexcept {
   }
 }
 
-void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
+void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x, int y,
                const char *str) noexcept {
   SDL_Color black = {r, g, b, 0};
   SDL_Surface *font_surface =
-      TTF_RenderUTF8_Blended(Ttf_fonts[font_type], str, black);
+      TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, black);
   SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
                   static_cast<Uint16>(font_surface->h)};
   SDL_Rect dst = {static_cast<Sint16>(x), static_cast<Sint16>(y), 0, 0};
@@ -713,7 +699,7 @@ void draw_score() noexcept {
   {
     stringstream score;
     score << "S c o r e  :  " << setw(6) << Now_score[0];
-    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
+    draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 20,
               screen::height / 7 + 10, score.str().c_str());
     SDL_Surface *p_surface = Image_manager::get("player1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
@@ -721,12 +707,12 @@ void draw_score() noexcept {
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     stringstream life;
     life << "x  " << player::get_player_1_life();
-    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 90,
+    draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 90,
               screen::height / 7 + 40, life.str().c_str());
     if (Game_mode == game_mode::battle) {
       stringstream score;
       score << "S c o r e  :  " << setw(6) << Now_score[1];
-      draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
+      draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 20,
                 screen::height / 7 + 90, score.str().c_str());
       SDL_Surface *p_surface = Image_manager::get("player2");
       SDL_Rect src = {block::size, 0, block::size, block::size};
@@ -735,7 +721,7 @@ void draw_score() noexcept {
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       stringstream life;
       life << "x  " << player::get_player_2_life();
-      draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 90,
+      draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 90,
                 screen::height / 7 + 122, life.str().c_str());
     }
   }
@@ -808,16 +794,13 @@ void draw_fps() noexcept {
     stringstream ss;
     ss << "FrameRate[" << setprecision(2) << setiosflags(ios::fixed)
        << frame_rate << "]";
-    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 15, 16, ss.str().c_str());
+    draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 15, 16, ss.str().c_str());
   }
   pre_count = now_count;
 }
 
 void end() noexcept {
-  for (unsigned int i = 0; i < 2; ++i) {
-    TTF_CloseFont(Ttf_fonts[i]);
-  }
-  atexit(TTF_Quit);
+  Font_manager::end();
 
   Image_manager::end();
 
@@ -861,7 +844,7 @@ void draw_translucence() noexcept {
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
   SDL_BlitSurface(trans_surface, nullptr, Screen, &dst);
   if (Blink_count < 30) {
-    draw_text(0, 0xff, 0xff, 0xff, 165, 170, "P a u s e");
+    draw_text(36, 0xff, 0xff, 0xff, 165, 170, "P a u s e");
     ++Blink_count;
   } else if (Blink_count < 60) {
     ++Blink_count;
