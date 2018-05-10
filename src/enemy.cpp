@@ -34,11 +34,11 @@ void Enemy::init() noexcept {
 
 void Enemy::draw() const noexcept {
   SDL_Surface *p_surface[5];  // TODO: 5
-  p_surface[0] = Image_manager::get_image("akabei");
-  p_surface[1] = Image_manager::get_image("pinky");
-  p_surface[2] = Image_manager::get_image("aosuke");
-  p_surface[3] = Image_manager::get_image("guzuta");
-  p_surface[4] = Image_manager::get_image("mon_run");
+  p_surface[0] = Image_manager::get("akabei");
+  p_surface[1] = Image_manager::get("pinky");
+  p_surface[2] = Image_manager::get("aosuke");
+  p_surface[3] = Image_manager::get("guzuta");
+  p_surface[4] = Image_manager::get("mon_run");
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     SDL_Rect dst = {static_cast<Sint16>(enemies_[i].pos_x),
                     static_cast<Sint16>(enemies_[i].pos_y), 0, 0};

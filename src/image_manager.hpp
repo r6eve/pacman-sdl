@@ -13,20 +13,20 @@ class Image_manager {
 
   static Img_list *img_list_top_;
 
-  static void load_image(const char *path, const char *name);
+  static void load(const char *path, const char *name);
 
  public:
   /**
    * Call this function before using get_image() .
    */
-  static void init_image();
+  static void init();
 
-  static SDL_Surface *get_image(const char *name) noexcept;
+  static SDL_Surface *get(const char *name) noexcept;
 
   /**
    * Call this function when program exits.
    */
-  static void delete_all_image() noexcept;
+  static void end() noexcept;
 };
 
 #endif

@@ -34,10 +34,10 @@ void Food::draw() noexcept {
       SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                       static_cast<Sint16>(block::size * y), 0, 0};
       if (food_[y][x] == 1) {  // food
-        SDL_Surface *p_surface = Image_manager::get_image("food");
+        SDL_Surface *p_surface = Image_manager::get("food");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
       } else if (food_[y][x] == 0) {  // counter food
-        SDL_Surface *p_surface = Image_manager::get_image("food_counter");
+        SDL_Surface *p_surface = Image_manager::get("food_counter");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
       }
     }

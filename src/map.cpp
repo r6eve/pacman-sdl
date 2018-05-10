@@ -100,13 +100,13 @@ void Map::draw() noexcept {
   SDL_Surface *p_surface = nullptr;
   const unsigned int mod = Game_level % 4;
   if (mod == 1) {
-    p_surface = Image_manager::get_image("bg");
+    p_surface = Image_manager::get("bg");
   } else if (mod == 2) {
-    p_surface = Image_manager::get_image("bg_red");
+    p_surface = Image_manager::get("bg_red");
   } else if (mod == 3) {
-    p_surface = Image_manager::get_image("bg_green");
+    p_surface = Image_manager::get("bg_green");
   } else {
-    p_surface = Image_manager::get_image("bg_blue");
+    p_surface = Image_manager::get("bg_blue");
   }
 
   {

@@ -121,7 +121,7 @@ void init() noexcept {
 
   try {
     init_font();
-    Image_manager::init_image();
+    Image_manager::init();
     init_music();
   } catch (const char &e) {
     cerr << "error: " << e << '\n';
@@ -706,7 +706,7 @@ void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
 // TODO: reduce magic numbers
 void draw_score() noexcept {
   {
-    SDL_Surface *p_surface = Image_manager::get_image("plate");
+    SDL_Surface *p_surface = Image_manager::get("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
   }
@@ -715,7 +715,7 @@ void draw_score() noexcept {
     score << "S c o r e  :  " << setw(6) << Now_score[0];
     draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
               screen::height / 7 + 10, score.str().c_str());
-    SDL_Surface *p_surface = Image_manager::get_image("player1");
+    SDL_Surface *p_surface = Image_manager::get("player1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
@@ -728,7 +728,7 @@ void draw_score() noexcept {
       score << "S c o r e  :  " << setw(6) << Now_score[1];
       draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
                 screen::height / 7 + 90, score.str().c_str());
-      SDL_Surface *p_surface = Image_manager::get_image("player2");
+      SDL_Surface *p_surface = Image_manager::get("player2");
       SDL_Rect src = {block::size, 0, block::size, block::size};
       SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
                       0};
@@ -819,7 +819,7 @@ void end() noexcept {
   }
   atexit(TTF_Quit);
 
-  Image_manager::delete_all_image();
+  Image_manager::end();
 
   Input::end_joystick();
 
