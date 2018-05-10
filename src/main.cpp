@@ -155,18 +155,14 @@ void init_sdl() {
     throw SDL_GetError();
   }
 
-  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
-    throw Mix_GetError();
-  }
-
-  if (TTF_Init() != 0) {
-    throw TTF_GetError();
-  }
-
   SDL_ShowCursor(SDL_DISABLE);
 }
 
 void init_font() {
+  if (TTF_Init() != 0) {
+    throw TTF_GetError();
+  }
+
   Ttf_fonts[0] = TTF_OpenFont("./data/GenEiGothicP-Heavy.otf", 36);
   Ttf_fonts[1] = TTF_OpenFont("./data/GenEiGothicP-Regular.otf", 16);
   if (!Ttf_fonts[0] || !Ttf_fonts[1]) {
@@ -175,6 +171,10 @@ void init_font() {
 }
 
 void init_music() {
+  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
+    throw Mix_GetError();
+  }
+
   Music[0] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
   Music[1] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
   Music[2] = Mix_LoadMUS("./data/pacman_beginning.wav");
