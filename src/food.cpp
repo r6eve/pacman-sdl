@@ -8,11 +8,11 @@
 void Food::init() {
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      food[y][x] = -1;
+      food_[y][x] = -1;
       if (Map::check_state(x, y) == 0) {  // field where player can move
-        food[y][x] = 1;
+        food_[y][x] = 1;
       } else if (Map::check_state(x, y) == 4) {  // counter food
-        food[y][x] = 0;
+        food_[y][x] = 0;
       }
     }
   }
@@ -21,8 +21,8 @@ void Food::init() {
 void Food::draw() {
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      if (food[y][x] == 2) {
-        food[y][x] = -1;
+      if (food_[y][x] == 2) {
+        food_[y][x] = -1;
       }
     }
   }
@@ -32,10 +32,10 @@ void Food::draw() {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                       static_cast<Sint16>(block::size * y), 0, 0};
-      if (food[y][x] == 1) {  // food
+      if (food_[y][x] == 1) {  // food
         SDL_Surface *p_surface = Image_manager::get_image("food");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      } else if (food[y][x] == 0) {  // counter food
+      } else if (food_[y][x] == 0) {  // counter food
         SDL_Surface *p_surface = Image_manager::get_image("food_counter");
         SDL_BlitSurface(p_surface, &src, Screen, &dst);
       }
@@ -47,15 +47,15 @@ void Food::draw() {
 bool Food::check_state() {
   const int x = player::get_player_1_block_x();
   const int y = player::get_player_1_block_y();
-  if (food[y][x] == 1) {
+  if (food_[y][x] == 1) {
     Mix_PlayChannel(-1, Se[0], 0);
-    ++food[y][x];
+    ++food_[y][x];
     Now_score[0] += 10;
   }
-  if (food[y][x] == 0) {
+  if (food_[y][x] == 0) {
     Power_chara_mode[0] = 400;
     Mix_PlayMusic(Music[0], -1);
-    food[y][x] += 2;
+    food_[y][x] += 2;
   }
   if ((Power_chara_mode[0] == 0) && (Power_chara_mode[1] == 0)) {
     while (!Mix_FadeOutMusic(800) && Mix_PlayingMusic()) {
@@ -66,15 +66,15 @@ bool Food::check_state() {
   if (Game_mode == game_mode::battle) {
     const int x = player::get_player_2_block_x();
     const int y = player::get_player_2_block_y();
-    if (food[y][x] == 1) {
+    if (food_[y][x] == 1) {
       Mix_PlayChannel(-1, Se[0], 0);
-      ++food[y][x];
+      ++food_[y][x];
       Now_score[1] += 10;
     }
-    if (food[y][x] == 0) {
+    if (food_[y][x] == 0) {
       Power_chara_mode[1] = 400;
       Mix_PlayMusic(Music[1], -1);
-      food[y][x] += 2;
+      food_[y][x] += 2;
     }
     if ((Power_chara_mode[0] == 0) && (Power_chara_mode[1] == 0)) {
       while (!Mix_FadeOutMusic(800) && Mix_PlayingMusic()) {
@@ -85,7 +85,7 @@ bool Food::check_state() {
   int rest_food = 0;
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      if ((food[y][x] == 0) || (food[y][x] == 1)) {
+      if ((food_[y][x] == 0) || (food_[y][x] == 1)) {
         ++rest_food;
       }
     }
