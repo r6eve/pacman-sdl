@@ -1,7 +1,6 @@
 #include "player.hpp"
 #include "def_global.hpp"
 #include "image_manager.hpp"
-#include "input.hpp"
 #include "map.hpp"
 
 namespace player {

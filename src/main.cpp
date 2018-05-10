@@ -11,7 +11,7 @@
 #include "font_manager.hpp"
 #include "food.hpp"
 #include "image_manager.hpp"
-#include "input.hpp"
+#include "input_manager.hpp"
 #include "map.hpp"
 #include "player.hpp"
 #include "util.hpp"
@@ -43,8 +43,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
 void game_over(Wipe &wipe) noexcept;
 void game_pause(Food &food, Enemy &enemy) noexcept;
 // TODO: make enum class `font_type` and `color`
-void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x, int y,
-               const char *str) noexcept;
+void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
+               int y, const char *str) noexcept;
 void draw_score() noexcept;
 bool poll_event() noexcept;
 void wait_game() noexcept;
@@ -127,7 +127,7 @@ void init() noexcept {
     exit(EXIT_FAILURE);
   }
 
-  Input::init_joystick();
+  Input_manager::init_joystick();
 
   // initialize global variables
   Blink_count = 0;
@@ -176,7 +176,7 @@ void main_loop() noexcept {
   Food food;
   Enemy enemy;
   for (;;) {
-    Input::update();
+    Input_manager::update();
     switch (Game_state) {
       case game_state::title:
         game_title(wipe, food, enemy);
@@ -678,8 +678,8 @@ void game_pause(Food &food, Enemy &enemy) noexcept {
   }
 }
 
-void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x, int y,
-               const char *str) noexcept {
+void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
+               int y, const char *str) noexcept {
   SDL_Color black = {r, g, b, 0};
   SDL_Surface *font_surface =
       TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, black);
@@ -794,17 +794,16 @@ void draw_fps() noexcept {
     stringstream ss;
     ss << "FrameRate[" << setprecision(2) << setiosflags(ios::fixed)
        << frame_rate << "]";
-    draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 15, 16, ss.str().c_str());
+    draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 15, 16,
+              ss.str().c_str());
   }
   pre_count = now_count;
 }
 
 void end() noexcept {
   Font_manager::end();
-
   Image_manager::end();
-
-  Input::end_joystick();
+  Input_manager::end_joystick();
 
   Mix_HaltMusic();
   Mix_HaltChannel(-1);
