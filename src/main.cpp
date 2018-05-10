@@ -1,5 +1,7 @@
 #define MAIN
 
+#include <SDL/SDL_mixer.h>
+
 #include <getopt.h>
 #include <time.h>
 #include <iomanip>
@@ -13,6 +15,7 @@
 #include "image_manager.hpp"
 #include "input_manager.hpp"
 #include "map.hpp"
+#include "mixer_manager.hpp"
 #include "player.hpp"
 #include "util.hpp"
 #include "wipe.hpp"
@@ -33,7 +36,6 @@ bool parse_options(const int argc, char **argv) noexcept;
 void init() noexcept;
 // TODO: use those in each constructor
 void init_sdl();
-void init_music();
 void main_loop() noexcept;
 void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
 void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
@@ -111,19 +113,11 @@ Options:
 void init() noexcept {
   try {
     init_sdl();
-  } catch (const char &e) {
-    cerr << "error: " << e << '\n';
-    atexit(SDL_Quit);
-    exit(EXIT_FAILURE);
-  }
-
-  try {
     Font_manager::init();
     Image_manager::init();
-    init_music();
+    Mixer_manager::init();
   } catch (const char &e) {
     cerr << "error: " << e << '\n';
-    end();
     exit(EXIT_FAILURE);
   }
 
@@ -154,21 +148,6 @@ void init_sdl() {
   }
 
   SDL_ShowCursor(SDL_DISABLE);
-}
-
-void init_music() {
-  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
-    throw Mix_GetError();
-  }
-
-  Music[0] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
-  Music[1] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
-  Music[2] = Mix_LoadMUS("./data/pacman_beginning.wav");
-  Music[3] = Mix_LoadMUS("./data/pacman_death.wav");
-  Se[0] = Mix_LoadWAV("./data/pacman_chomp.wav");
-  if (!Music[0] || !Music[1] || !Music[2] || !Music[3] || !Se[0]) {
-    throw Mix_GetError();
-  }
 }
 
 void main_loop() noexcept {
@@ -368,7 +347,7 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
     case 0: {
       if ((player::get_player_1_life() == 2) &&
           (player::get_player_2_life() == 2)) {
-        Mix_PlayMusic(Music[2], 0);
+        Mix_PlayMusic(Mixer_manager::get_music("beginning"), 0);
       }
       wipe.set_wipe_in();
       wipe.draw(screen::offset_x);
@@ -477,7 +456,7 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   draw_score();
 
   if (Game_count == 0) {
-    Mix_PlayMusic(Music[3], 0);
+    Mix_PlayMusic(Mixer_manager::get_music("death"), 0);
     wipe.set_wipe_out();
     if ((player::get_player_1_life() == 0) ||
         (player::get_player_2_life() == 0)) {
@@ -804,17 +783,7 @@ void end() noexcept {
   Font_manager::end();
   Image_manager::end();
   Input_manager::end_joystick();
-
-  Mix_HaltMusic();
-  Mix_HaltChannel(-1);
-  // TODO: What's the number of 2?
-  for (unsigned int i = 0; i < 2; ++i) {
-    Mix_FreeMusic(Music[i]);
-  }
-  Mix_FreeChunk(Se[0]);
-  Mix_CloseAudio();
-  atexit(Mix_Quit);
-
+  Mixer_manager::end();
   atexit(SDL_Quit);
 }
 

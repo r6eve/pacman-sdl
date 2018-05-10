@@ -1,8 +1,11 @@
-#include "food.hpp"
+#include <SDL/SDL_mixer.h>
+
 #include "def_global.hpp"
 #include "enemy.hpp"
+#include "food.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
+#include "mixer_manager.hpp"
 #include "player.hpp"
 
 void Food::init() noexcept {
@@ -49,13 +52,13 @@ bool Food::check_state() noexcept {
   const int x = player::get_player_1_block_x();
   const int y = player::get_player_1_block_y();
   if (food_[y][x] == 1) {
-    Mix_PlayChannel(-1, Se[0], 0);
+    Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
     ++food_[y][x];
     Now_score[0] += 10;
   }
   if (food_[y][x] == 0) {
     Power_chara_mode[0] = 400;
-    Mix_PlayMusic(Music[0], -1);
+    Mix_PlayMusic(Mixer_manager::get_music("siren"), -1);
     food_[y][x] += 2;
   }
   if ((Power_chara_mode[0] == 0) && (Power_chara_mode[1] == 0)) {
@@ -68,13 +71,13 @@ bool Food::check_state() noexcept {
     const int x = player::get_player_2_block_x();
     const int y = player::get_player_2_block_y();
     if (food_[y][x] == 1) {
-      Mix_PlayChannel(-1, Se[0], 0);
+      Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
       ++food_[y][x];
       Now_score[1] += 10;
     }
     if (food_[y][x] == 0) {
       Power_chara_mode[1] = 400;
-      Mix_PlayMusic(Music[1], -1);
+      Mix_PlayMusic(Mixer_manager::get_music("siren"), -1);
       food_[y][x] += 2;
     }
     if ((Power_chara_mode[0] == 0) && (Power_chara_mode[1] == 0)) {
