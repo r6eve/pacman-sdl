@@ -14,12 +14,12 @@ class Wipe {
   /**
    * Set wipe-in mode for drawing.
    */
-  void set_wipe_in();
+  void set_wipe_in() noexcept;
 
   /**
    * Set wipe-out mode for drawing.
    */
-  void set_wipe_out();
+  void set_wipe_out() noexcept;
 
   /**
    * Start drawing. Before execute this function, call set_wipe_in() or
@@ -28,12 +28,12 @@ class Wipe {
    * `limit_x` is the limit for the x-axis to draw. It's bounded on closed
    * interval [0-screen::width] .
    */
-  void draw(unsigned int limit_x) const;
+  void draw(unsigned int limit_x) const noexcept;
 
   /**
    * Return true if wipe finishes.
    */
-  bool update();
+  bool update() noexcept;
 
   ~Wipe() {}
 };

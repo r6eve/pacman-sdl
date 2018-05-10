@@ -30,29 +30,29 @@ bool Enemy_run_debug;
 
 }  // namespace
 
-bool parse_options(const int argc, char **argv);
-void init();
+bool parse_options(const int argc, char **argv) noexcept;
+void init() noexcept;
 // TODO: use those in each constructor
 void init_sdl();
 void init_font();
 void init_music();
-void main_loop();
-void game_title(Wipe &wipe, Food &food, Enemy &enemy);
-void game_start(Wipe &wipe, Food &food, Enemy &enemy);
-void play_game(Food &food, Enemy &enemy);
-void game_clear(Wipe &wipe, Food &food, Enemy &enemy);
-void game_miss(Wipe &wipe, Food &food, Enemy &enemy);
-void game_over(Wipe &wipe);
-void game_pause(Food &food, Enemy &enemy);
+void main_loop() noexcept;
+void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
+void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
+void play_game(Food &food, Enemy &enemy) noexcept;
+void game_clear(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
+void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
+void game_over(Wipe &wipe) noexcept;
+void game_pause(Food &food, Enemy &enemy) noexcept;
 // TODO: make enum class `font_type` and `color`
 void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
-               const char *str);
-void draw_score();
-bool poll_event();
-void wait_game();
-void draw_fps();
-void end();
-void draw_translucence();
+               const char *str) noexcept;
+void draw_score() noexcept;
+bool poll_event() noexcept;
+void wait_game() noexcept;
+void draw_fps() noexcept;
+void end() noexcept;
+void draw_translucence() noexcept;
 
 int main(int argc, char **argv) {
   Debug_mode = parse_options(argc, argv);
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
   exit(EXIT_SUCCESS);
 }
 
-bool parse_options(const int argc, char **argv) {
+bool parse_options(const int argc, char **argv) noexcept {
   bool ret = false;
   opterr = 0;
   const option long_options[] = {
@@ -110,7 +110,7 @@ Options:
   return ret;
 }
 
-void init() {
+void init() noexcept {
   try {
     init_sdl();
   } catch (const char &e) {
@@ -185,7 +185,7 @@ void init_music() {
   }
 }
 
-void main_loop() {
+void main_loop() noexcept {
   Wipe wipe;
   Food food;
   Enemy enemy;
@@ -215,7 +215,7 @@ void main_loop() {
         break;
       default:
         // NOTREACHED
-        break;;
+        break;
     }
     if (!poll_event()) {
       return;
@@ -228,7 +228,7 @@ void main_loop() {
   }
 }
 
-void game_title(Wipe &wipe, Food &food, Enemy &enemy) {
+void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -372,7 +372,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) {
   }
 }
 
-void game_start(Wipe &wipe, Food &food, Enemy &enemy) {
+void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
@@ -420,7 +420,7 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) {
   }
 }
 
-void play_game(Food &food, Enemy &enemy) {
+void play_game(Food &food, Enemy &enemy) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
@@ -453,7 +453,7 @@ void play_game(Food &food, Enemy &enemy) {
   }
 }
 
-void game_clear(Wipe &wipe, Food &food, Enemy &enemy) {
+void game_clear(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
@@ -483,7 +483,7 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy) {
   }
 }
 
-void game_miss(Wipe &wipe, Food &food, Enemy &enemy) {
+void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
@@ -546,7 +546,7 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) {
   }
 }
 
-void game_over(Wipe &wipe) {
+void game_over(Wipe &wipe) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -680,7 +680,7 @@ void game_over(Wipe &wipe) {
   }
 }
 
-void game_pause(Food &food, Enemy &enemy) {
+void game_pause(Food &food, Enemy &enemy) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
@@ -693,7 +693,7 @@ void game_pause(Food &food, Enemy &enemy) {
 }
 
 void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
-               const char *str) {
+               const char *str) noexcept {
   SDL_Color black = {r, g, b, 0};
   SDL_Surface *font_surface =
       TTF_RenderUTF8_Blended(Ttf_fonts[font_type], str, black);
@@ -704,7 +704,7 @@ void draw_text(int font_type, Uint8 r, Uint8 g, Uint8 b, int x, int y,
 }
 
 // TODO: reduce magic numbers
-void draw_score() {
+void draw_score() noexcept {
   {
     SDL_Surface *p_surface = Image_manager::get_image("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
@@ -713,8 +713,8 @@ void draw_score() {
   {
     stringstream score;
     score << "S c o r e  :  " << setw(6) << Now_score[0];
-    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20, screen::height / 7 + 10,
-              score.str().c_str());
+    draw_text(1, 0xff, 0xff, 0xff, screen::offset_x + 20,
+              screen::height / 7 + 10, score.str().c_str());
     SDL_Surface *p_surface = Image_manager::get_image("player1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
@@ -757,7 +757,7 @@ void draw_score() {
   }
 }
 
-bool poll_event() {
+bool poll_event() noexcept {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
@@ -776,7 +776,7 @@ bool poll_event() {
   return true;
 }
 
-void wait_game() {
+void wait_game() noexcept {
   static Uint32 pre_count;
   const double wait_time = 1000.0 / screen::max_fps;
   Uint32 wait_count = (wait_time + 0.5);
@@ -791,7 +791,7 @@ void wait_game() {
   pre_count = SDL_GetTicks();
 }
 
-void draw_fps() {
+void draw_fps() noexcept {
   static Uint32 pre_count;
   Uint32 now_count = SDL_GetTicks();
   if (pre_count) {
@@ -813,7 +813,7 @@ void draw_fps() {
   pre_count = now_count;
 }
 
-void end() {
+void end() noexcept {
   for (unsigned int i = 0; i < 2; ++i) {
     TTF_CloseFont(Ttf_fonts[i]);
   }
@@ -836,7 +836,7 @@ void end() {
   atexit(SDL_Quit);
 }
 
-void draw_translucence() {
+void draw_translucence() noexcept {
   Uint32 rmask, gmask, bmask, amask;
   const Uint8 alpha = 128;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN

@@ -11,14 +11,14 @@ class Food {
  public:
   Food() {}
 
-  void init();
+  void init() noexcept;
 
-  void draw();
+  void draw() noexcept;
 
   /**
    * Return true if all of the food are eaten, and false otherwise.
    */
-  bool check_state();
+  bool check_state() noexcept;
 
   ~Food() {}
 };

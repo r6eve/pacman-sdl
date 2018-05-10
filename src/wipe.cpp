@@ -1,19 +1,19 @@
 #include "wipe.hpp"
 #include "def_global.hpp"
 
-void Wipe::set_wipe_in() {
+void Wipe::set_wipe_in() noexcept {
   wipe_variation_ = wipe_type::in;
   wipe_count_ = screen::height / 10;
   wipe_count_reach_ = 0;
 }
 
-void Wipe::set_wipe_out() {
+void Wipe::set_wipe_out() noexcept {
   wipe_variation_ = wipe_type::out;
   wipe_count_ = 0;
   wipe_count_reach_ = screen::height / 10;
 }
 
-void Wipe::draw(unsigned int limit_x) const {
+void Wipe::draw(unsigned int limit_x) const noexcept {
   SDL_Rect dst = {0, 0, static_cast<Uint16>(limit_x),
                   static_cast<Uint16>(wipe_count_)};
   const unsigned int dy = screen::height / 10;
@@ -22,7 +22,7 @@ void Wipe::draw(unsigned int limit_x) const {
   }
 }
 
-bool Wipe::update() {
+bool Wipe::update() noexcept {
   if (wipe_count_ == wipe_count_reach_) {
     return true;
   }

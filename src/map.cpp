@@ -8,7 +8,7 @@
 
 unsigned int Map::block_[block::count_y][block::count_x];
 
-void Map::init() {
+void Map::init() noexcept {
   // TODO: use enum class
   // 0: can move, 1: cannot move, 2: enemy's house
   // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
@@ -90,10 +90,10 @@ void Map::init() {
 // TODO:
 // Why is the parameter of x=-1 and y=12 OK?
 // Cf. https://ideone.com/u1QKTJ
-unsigned int Map::check_state(int x, int y) { return block_[y][x]; }
+unsigned int Map::check_state(int x, int y) noexcept { return block_[y][x]; }
 
 // TODO: reduce magic numbers
-void Map::draw() {
+void Map::draw() noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0x00000000);
 

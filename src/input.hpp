@@ -10,9 +10,9 @@ class Input {
   static std::vector<SDL_Joystick*> joystick_;
 
  public:
-  static void init_joystick();
-  static void update();
-  static void end_joystick();
+  static void init_joystick() noexcept;
+  static void update() noexcept;
+  static void end_joystick() noexcept;
 };
 
 #endif

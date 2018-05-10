@@ -5,7 +5,7 @@
 #include "map.hpp"
 #include "player.hpp"
 
-void Food::init() {
+void Food::init() noexcept {
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       food_[y][x] = -1;
@@ -18,7 +18,7 @@ void Food::init() {
   }
 }
 
-void Food::draw() {
+void Food::draw() noexcept {
   // update
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
@@ -45,7 +45,7 @@ void Food::draw() {
 }
 
 // TODO: move this to other class
-bool Food::check_state() {
+bool Food::check_state() noexcept {
   const int x = player::get_player_1_block_x();
   const int y = player::get_player_1_block_y();
   if (food_[y][x] == 1) {

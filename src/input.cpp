@@ -8,7 +8,7 @@ const unsigned int Input::num_devices_ = 2;
 unsigned int Input::num_joysticks_;
 std::vector<SDL_Joystick*> Input::joystick_;
 
-void Input::init_joystick() {
+void Input::init_joystick() noexcept {
   // SDL_NumJoysticks() definitely returns int type. However, as far as I read
   // source code, it always returns unsigned int type.
   num_joysticks_ = static_cast<unsigned int>(SDL_NumJoysticks());
@@ -17,7 +17,7 @@ void Input::init_joystick() {
   }
 }
 
-void Input::update() {
+void Input::update() noexcept {
   bool new_press_key[num_devices_][input_device::count];
   for (unsigned int i = 0; i < num_devices_; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
@@ -94,7 +94,7 @@ void Input::update() {
   }
 }
 
-void Input::end_joystick() {
+void Input::end_joystick() noexcept {
   for (unsigned int i = 0; i < num_joysticks_; ++i) {
     SDL_JoystickClose(joystick_[i]);
   }

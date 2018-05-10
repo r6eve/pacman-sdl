@@ -7,7 +7,7 @@
 
 const unsigned int Hit_distance = block::size / 2;
 
-void Enemy::update() {
+void Enemy::update() noexcept {
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     ++enemies_[i].anime_weight;
     if (enemies_[i].anime_weight >= 8) {
@@ -18,7 +18,7 @@ void Enemy::update() {
   }
 }
 
-void Enemy::init() {
+void Enemy::init() noexcept {
   const unsigned int start_block[enemy_character::count][2] = {
       {11, 12}, {12, 12}, {11, 11}, {12, 11}};
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
@@ -32,7 +32,7 @@ void Enemy::init() {
   }
 }
 
-void Enemy::draw() const {
+void Enemy::draw() const noexcept {
   SDL_Surface *p_surface[5];  // TODO: 5
   p_surface[0] = Image_manager::get_image("akabei");
   p_surface[1] = Image_manager::get_image("pinky");
@@ -64,7 +64,7 @@ void Enemy::draw() const {
   }
 }
 
-void Enemy::move_normal_enemy(unsigned int enemy_type) {
+void Enemy::move_normal_enemy(unsigned int enemy_type) noexcept {
   switch (enemy_type) {
     // TODO: change moving algorithm for each enemies.
     case enemy_character::akabei:
@@ -272,7 +272,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) {
   }
 }
 
-void Enemy::move_lose_enemy(unsigned int enemy_type) {
+void Enemy::move_lose_enemy(unsigned int enemy_type) noexcept {
   if (!(Power_chara_mode[0] || Power_chara_mode[1])) {
     Enemy_state[enemy_type] = enemy_state::normal;
   }
@@ -330,7 +330,7 @@ void Enemy::move_lose_enemy(unsigned int enemy_type) {
 }
 
 // TODO: move this to other class
-bool Enemy::check_hit_enemy() const {
+bool Enemy::check_hit_enemy() const noexcept {
   const int player_1_pos_x = player::get_player_1_pos_x();
   const int player_1_pos_y = player::get_player_1_pos_y();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {

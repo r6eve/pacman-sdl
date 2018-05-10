@@ -19,26 +19,26 @@ class Enemy {
 
   std::unique_ptr<Enemy_data[]> enemies_;
 
-  void update();
+  void update() noexcept;
 
  public:
   Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}
 
-  void init();
+  void init() noexcept;
 
-  void draw() const;
-
-  // TODO: take parameter as enemy_charater
-  void move_normal_enemy(unsigned int enemy_type);
+  void draw() const noexcept;
 
   // TODO: take parameter as enemy_charater
-  void move_lose_enemy(unsigned int enemy_type);
+  void move_normal_enemy(unsigned int enemy_type) noexcept;
+
+  // TODO: take parameter as enemy_charater
+  void move_lose_enemy(unsigned int enemy_type) noexcept;
 
   /**
    * Return true if the player whose state is normal hits enemy, and false
    * otherwise.
    */
-  bool check_hit_enemy() const;
+  bool check_hit_enemy() const noexcept;
 
   ~Enemy() {}
 };
