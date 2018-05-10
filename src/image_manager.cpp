@@ -4,7 +4,7 @@
 
 #include "image_manager.hpp"
 
-Image_manager::Img_list *Image_manager::Img_list_top = nullptr;
+Image_manager::Img_list *Image_manager::img_list_top_ = nullptr;
 
 void Image_manager::load_image(const char *path, const char *name) {
   SDL_Surface *img = IMG_Load(path);
@@ -20,15 +20,15 @@ void Image_manager::load_image(const char *path, const char *name) {
   strcpy(list->name, name);
   list->img = img;
   list->prev = nullptr;
-  list->next = Img_list_top;
-  if (Img_list_top) {
-    Img_list_top->prev = list;
+  list->next = img_list_top_;
+  if (img_list_top_) {
+    img_list_top_->prev = list;
   }
-  Img_list_top = list;
+  img_list_top_ = list;
 }
 
 SDL_Surface *Image_manager::get_image(const char *name) {
-  Img_list *p = Img_list_top;
+  Img_list *p = img_list_top_;
   while (p) {
     if (!strcmp(p->name, name)) {
       return p->img;
@@ -40,13 +40,13 @@ SDL_Surface *Image_manager::get_image(const char *name) {
 }
 
 void Image_manager::delete_all_image() {
-  while (Img_list_top) {
-    Img_list *p = Img_list_top->next;
-    SDL_FreeSurface(Img_list_top->img);
-    delete Img_list_top;  // TODO: Correct code of freeing dynamic memory?
-    Img_list_top = p;
-    if (Img_list_top) {
-      Img_list_top->prev = nullptr;
+  while (img_list_top_) {
+    Img_list *p = img_list_top_->next;
+    SDL_FreeSurface(img_list_top_->img);
+    delete img_list_top_;  // TODO: Correct code of freeing dynamic memory?
+    img_list_top_ = p;
+    if (img_list_top_) {
+      img_list_top_->prev = nullptr;
     }
   }
 }

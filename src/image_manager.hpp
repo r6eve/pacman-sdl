@@ -11,7 +11,7 @@ class Image_manager {
     struct Img_list_rec *next;
   } Img_list;
 
-  static Img_list *Img_list_top;
+  static Img_list *img_list_top_;
 
  public:
   static void load_image(const char *path, const char *name);
