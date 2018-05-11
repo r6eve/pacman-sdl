@@ -95,7 +95,7 @@ enum class game_mode {
 
 GLOBAL bool Debug_mode;
 GLOBAL SDL_Surface *Screen;
-GLOBAL unsigned int Now_score[2];  // 0: 1P, 1: 2P
+GLOBAL unsigned int Now_score[2];  // 0: 1P, 1: 2P // TODO: set this as a number of Player class
 GLOBAL int Game_level;
 GLOBAL game_mode Game_mode;
 GLOBAL enemy_state Enemy_state[enemy_character::count];

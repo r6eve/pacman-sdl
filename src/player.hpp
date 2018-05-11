@@ -1,28 +1,31 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-namespace player {
+class Player {
+  int pos_x_;
+  int pos_y_;
+  int block_x_;
+  int block_y_;
+  int next_block_x_;
+  int next_block_y_;
+  unsigned char dir_;           // 0: down, 1: left, 2: up, 3: right
+  unsigned char anime_count_;   // 0 or 1
+  unsigned char anime_weight_;  // max value is 4
+  int life_;
 
-void init();
-void draw();
-void move();
-
-// TODO: use class
-void add_player_1_pos(int x, int y);
-void add_player_2_pos(int x, int y);
-int get_player_1_pos_x();
-int get_player_2_pos_x();
-int get_player_1_pos_y();
-int get_player_2_pos_y();
-int get_player_1_block_x();
-int get_player_2_block_x();
-int get_player_1_block_y();
-int get_player_2_block_y();
-int get_player_1_life();
-int get_player_2_life();
-void set_player_1_life(const int life);
-void set_player_2_life(const int life);
-
-}  // namespace player
+ public:
+  Player() {}
+  void init_pos(const unsigned int player_type) noexcept;
+  void draw(const unsigned int player_type) const noexcept;
+  void move(const unsigned int player_type) noexcept;
+  void add_pos(int x, int y) noexcept;
+  int get_pos_x() const noexcept;
+  int get_pos_y() const noexcept;
+  int get_block_x() const noexcept;
+  int get_block_y() const noexcept;
+  int get_life() const noexcept;
+  void set_life(const int life) noexcept;
+  ~Player() {}
+};
 
 #endif

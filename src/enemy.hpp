@@ -1,8 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "def_global.hpp"
 #include <memory>
+#include "def_global.hpp"
+#include "player.hpp"
 
 class Enemy {
   typedef struct {
@@ -38,7 +39,7 @@ class Enemy {
    * Return true if the player whose state is normal hits enemy, and false
    * otherwise.
    */
-  bool check_hit_enemy() const noexcept;
+  bool check_hit_enemy(Player &player1, Player &player2) const noexcept;
 
   ~Enemy() {}
 };

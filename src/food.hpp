@@ -2,6 +2,7 @@
 #define FOOD_H
 
 #include "def_global.hpp"
+#include "player.hpp"
 
 class Food {
   // TODO: enum class
@@ -18,7 +19,7 @@ class Food {
   /**
    * Return true if all of the food are eaten, and false otherwise.
    */
-  bool check_state() noexcept;
+  bool check_state(Player &player1, Player &player2) noexcept;
 
   ~Food() {}
 };

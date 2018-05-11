@@ -44,16 +44,17 @@ void Enemy::draw() const noexcept {
                     static_cast<Sint16>(enemies_[i].pos_y), 0, 0};
     switch (Enemy_state[i]) {
       case enemy_state::normal: {
-        SDL_Rect src = {static_cast<Sint16>(block::size * enemies_[i].dir),
-                        static_cast<Sint16>(block::size * enemies_[i].anime_count),
-                        block::size, block::size};
+        SDL_Rect src = {
+            static_cast<Sint16>(block::size * enemies_[i].dir),
+            static_cast<Sint16>(block::size * enemies_[i].anime_count),
+            block::size, block::size};
         SDL_BlitSurface(p_surface[i], &src, Screen, &dst);
         break;
       }
       case enemy_state::lose: {
-        SDL_Rect src = {0,
-                        static_cast<Sint16>(block::size * enemies_[i].anime_count),
-                        block::size, block::size};
+        SDL_Rect src = {
+            0, static_cast<Sint16>(block::size * enemies_[i].anime_count),
+            block::size, block::size};
         SDL_BlitSurface(p_surface[4], &src, Screen, &dst);
         break;
       }
@@ -148,17 +149,19 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) noexcept {
       if (((rand() % 100) == 0) ||
           ((390 <= Power_chara_mode[0]) && (Power_chara_mode[0] <= 400)) ||
           ((390 <= Power_chara_mode[1]) && (Power_chara_mode[1] <= 400))) {
-        if (Map::check_state(
-                enemies_[enemy_type].block_x + back_pos[enemies_[enemy_type].dir][0],
-                enemies_[enemy_type].block_y +
-                    back_pos[enemies_[enemy_type].dir][1]) == 2) {
+        if (Map::check_state(enemies_[enemy_type].block_x +
+                                 back_pos[enemies_[enemy_type].dir][0],
+                             enemies_[enemy_type].block_y +
+                                 back_pos[enemies_[enemy_type].dir][1]) == 2) {
           enemies_[enemy_type].next_block_x = left_block_x;
           enemies_[enemy_type].next_block_y = left_block_y;
           enemies_[enemy_type].dir += 3;
           enemies_[enemy_type].dir %= 4;
         } else {
-          enemies_[enemy_type].next_block_x += back_pos[enemies_[enemy_type].dir][0];
-          enemies_[enemy_type].next_block_y += back_pos[enemies_[enemy_type].dir][1];
+          enemies_[enemy_type].next_block_x +=
+              back_pos[enemies_[enemy_type].dir][0];
+          enemies_[enemy_type].next_block_y +=
+              back_pos[enemies_[enemy_type].dir][1];
           enemies_[enemy_type].dir += 2;
           enemies_[enemy_type].dir %= 4;
         }
@@ -259,8 +262,10 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) noexcept {
 
       // move back
       if ((front_block != 0) && (left_block != 0) && (right_block != 0)) {
-        enemies_[enemy_type].next_block_x += back_pos[enemies_[enemy_type].dir][0];
-        enemies_[enemy_type].next_block_y += back_pos[enemies_[enemy_type].dir][1];
+        enemies_[enemy_type].next_block_x +=
+            back_pos[enemies_[enemy_type].dir][0];
+        enemies_[enemy_type].next_block_y +=
+            back_pos[enemies_[enemy_type].dir][1];
         enemies_[enemy_type].dir += 2;
         enemies_[enemy_type].dir %= 4;
         return;
@@ -302,26 +307,26 @@ void Enemy::move_lose_enemy(unsigned int enemy_type) noexcept {
   enemies_[enemy_type].block_y = enemies_[enemy_type].next_block_y;
   const unsigned int now_value =
       Home_way[enemies_[enemy_type].block_y][enemies_[enemy_type].block_x];
-  if (now_value >
-      Home_way[enemies_[enemy_type].block_y - 1][enemies_[enemy_type].block_x]) {
+  if (now_value > Home_way[enemies_[enemy_type].block_y - 1]
+                          [enemies_[enemy_type].block_x]) {
     --enemies_[enemy_type].next_block_y;
     return;
   }
 
-  if (now_value >
-      Home_way[enemies_[enemy_type].block_y][enemies_[enemy_type].block_x - 1]) {
+  if (now_value > Home_way[enemies_[enemy_type].block_y]
+                          [enemies_[enemy_type].block_x - 1]) {
     --enemies_[enemy_type].next_block_x;
     return;
   }
 
-  if (now_value >
-      Home_way[enemies_[enemy_type].block_y][enemies_[enemy_type].block_x + 1]) {
+  if (now_value > Home_way[enemies_[enemy_type].block_y]
+                          [enemies_[enemy_type].block_x + 1]) {
     ++enemies_[enemy_type].next_block_x;
     return;
   }
 
-  if (now_value >
-      Home_way[enemies_[enemy_type].block_y + 1][enemies_[enemy_type].block_x]) {
+  if (now_value > Home_way[enemies_[enemy_type].block_y + 1]
+                          [enemies_[enemy_type].block_x]) {
     ++enemies_[enemy_type].next_block_y;
     return;
   }
@@ -330,12 +335,12 @@ void Enemy::move_lose_enemy(unsigned int enemy_type) noexcept {
 }
 
 // TODO: move this to other class
-bool Enemy::check_hit_enemy() const noexcept {
-  const int player_1_pos_x = player::get_player_1_pos_x();
-  const int player_1_pos_y = player::get_player_1_pos_y();
+bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
+  const int pos_x = player1.get_pos_x();
+  const int pos_y = player1.get_pos_y();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
-    const unsigned int d = util::get_distance(player_1_pos_x, player_1_pos_y,
-                                              enemies_[i].pos_x, enemies_[i].pos_y);
+    const unsigned int d =
+        util::get_distance(pos_x, pos_y, enemies_[i].pos_x, enemies_[i].pos_y);
     if (d < Hit_distance) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
@@ -349,11 +354,11 @@ bool Enemy::check_hit_enemy() const noexcept {
   }
 
   if (Game_mode == game_mode::battle) {
-    const int player_2_pos_x = player::get_player_2_pos_x();
-    const int player_2_pos_y = player::get_player_2_pos_y();
+    const int pos_x = player2.get_pos_x();
+    const int pos_y = player2.get_pos_y();
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      const unsigned int d = util::get_distance(player_2_pos_x, player_2_pos_y,
-                                                enemies_[i].pos_x, enemies_[i].pos_y);
+      const unsigned int d = util::get_distance(pos_x, pos_y, enemies_[i].pos_x,
+                                                enemies_[i].pos_y);
       if (d < Hit_distance) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;

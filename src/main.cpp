@@ -35,17 +35,17 @@ bool parse_options(const int argc, char **argv) noexcept;
 void init() noexcept;
 void init_sdl();
 void main_loop() noexcept;
-void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
-void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
-void play_game(Food &food, Enemy &enemy) noexcept;
-void game_clear(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
-void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
+void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
+void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
+void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
+void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
+void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 void game_over(Wipe &wipe) noexcept;
-void game_pause(Food &food, Enemy &enemy) noexcept;
+void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 // TODO: make enum class `font_type` and `color`
 void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
                int y, const char *str) noexcept;
-void draw_score() noexcept;
+void draw_score(Player &player1, Player &player2) noexcept;
 bool poll_event() noexcept;
 void wait_game() noexcept;
 void draw_fps() noexcept;
@@ -151,29 +151,31 @@ void main_loop() noexcept {
   Wipe wipe;
   Food food;
   Enemy enemy;
+  Player player1;
+  Player player2;
   for (;;) {
     Input_manager::update();
     switch (Game_state) {
       case game_state::title:
-        game_title(wipe, food, enemy);
+        game_title(wipe, food, enemy, player1, player2);
         break;
       case game_state::start:
-        game_start(wipe, food, enemy);
+        game_start(wipe, food, enemy, player1, player2);
         break;
       case game_state::playing:
-        play_game(food, enemy);
+        play_game(food, enemy, player1, player2);
         break;
       case game_state::clear:
-        game_clear(wipe, food, enemy);
+        game_clear(wipe, food, enemy, player1, player2);
         break;
       case game_state::miss:
-        game_miss(wipe, food, enemy);
+        game_miss(wipe, food, enemy, player1, player2);
         break;
       case game_state::gameover:
         game_over(wipe);
         break;
       case game_state::pause:
-        game_pause(food, enemy);
+        game_pause(food, enemy, player1, player2);
         break;
       default:
         // NOTREACHED
@@ -190,7 +192,7 @@ void main_loop() noexcept {
   }
 }
 
-void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
+void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -308,18 +310,18 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       if (wipe.update()) {
         Map::init();
         food.init();
-        player::init();
         enemy.init();
+        player1.init_pos(0);
+        player2.init_pos(1);
+        player1.set_life(2);
+        player2.set_life(2);
+        for (unsigned int i = 0; i < 2; ++i) {
+          Now_score[i] = 0;
+        }
 
         Game_count = 0;
         Game_state = game_state::start;
         Game_level = 1;
-        player::set_player_1_life(2);  // TODO: set it in constructor
-        player::set_player_2_life(2);
-
-        for (unsigned int i = 0; i < 2; ++i) {
-          Now_score[i] = 0;
-        }
 
         srand((unsigned int)time(nullptr));
       }
@@ -331,16 +333,19 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   }
 }
 
-void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
+void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
-  player::draw();
-  draw_score();
+  player1.draw(0);
+  if (Game_mode == game_mode::battle) {
+    player2.draw(1);
+  }
+  draw_score(player1, player2);
   switch (Game_count) {
     case 0: {
-      if ((player::get_player_1_life() == 2) &&
-          (player::get_player_2_life() == 2)) {
+      // TODO: Is it correct?
+      if ((player1.get_life() == 2) && (player2.get_life() == 2)) {
         Mix_PlayMusic(Mixer_manager::get_music("beginning"), 0);
       }
       wipe.set_wipe_in();
@@ -370,6 +375,7 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   if (Game_count > 220) {
     Game_count = 0;
     Game_state = game_state::playing;
+    // TODO: set this as a member of Player class
     // initialize player as normal mode
     for (unsigned int i = 0; i < 2; ++i) {
       Power_chara_mode[i] = 0;
@@ -380,13 +386,19 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   }
 }
 
-void play_game(Food &food, Enemy &enemy) noexcept {
+void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
-  player::draw();
-  draw_score();
-  player::move();
+  player1.draw(0);
+  if (Game_mode == game_mode::battle) {
+    player2.draw(1);
+  }
+  draw_score(player1, player2);
+  player1.move(0);
+  if (Game_mode == game_mode::battle) {
+    player2.move(1);
+  }
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
       enemy.move_lose_enemy(i);
@@ -396,8 +408,8 @@ void play_game(Food &food, Enemy &enemy) noexcept {
   }
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
-  const bool food_state = food.check_state();
-  const bool hit_enemy = enemy.check_hit_enemy();
+  const bool food_state = food.check_state(player1, player2);
+  const bool hit_enemy = enemy.check_hit_enemy(player1, player2);
   if (food_state) {
     Game_state = game_state::clear;
   } else if (hit_enemy) {
@@ -413,12 +425,15 @@ void play_game(Food &food, Enemy &enemy) noexcept {
   }
 }
 
-void game_clear(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
+void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
-  player::draw();
-  draw_score();
+  player1.draw(0);
+  if (Game_mode == game_mode::battle) {
+    player2.draw(1);
+  }
+  draw_score(player1, player2);
 
   if (Game_count == 0) {
     wipe.set_wipe_out();
@@ -438,23 +453,26 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       ++Game_level;
       food.init();
       enemy.init();
-      player::init();
+      player1.init_pos(0);
+      player2.init_pos(1);
     }
   }
 }
 
-void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
+void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
-  player::draw();
-  draw_score();
+  player1.draw(0);
+  if (Game_mode == game_mode::battle) {
+    player2.draw(1);
+  }
+  draw_score(player1, player2);
 
   if (Game_count == 0) {
     Mix_PlayMusic(Mixer_manager::get_music("death"), 0);
     wipe.set_wipe_out();
-    if ((player::get_player_1_life() == 0) ||
-        (player::get_player_2_life() == 0)) {
+    if ((player1.get_life() == 0) || (player2.get_life() == 0)) {
       wipe.draw(screen::width);
     } else {
       wipe.draw(screen::offset_x);
@@ -463,8 +481,7 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
     return;
   }
 
-  if ((player::get_player_1_life() == 0) ||
-      (player::get_player_2_life() == 0)) {
+  if ((player1.get_life() == 0) || (player2.get_life() == 0)) {
     wipe.draw(screen::width);
   } else {
     wipe.draw(screen::offset_x);
@@ -472,15 +489,16 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
 
   // TODO: use pointer to delete if-clauses
   if (Choice_hit) {
-    player::add_player_1_pos(0, -1);
+    player1.add_pos(0, -1);
     if (wipe.update()) {
-      const int life = player::get_player_1_life() - 1;
-      player::set_player_1_life(life);
+      const int life = player1.get_life() - 1;
+      player1.set_life(life);
       if (life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
         enemy.init();
-        player::init();
+        player1.init_pos(0);
+        player2.init_pos(1);
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -488,15 +506,16 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       }
     }
   } else {
-    player::add_player_2_pos(0, -1);
+    player2.add_pos(0, -1);
     if (wipe.update()) {
-      const int life = player::get_player_2_life() - 1;
-      player::set_player_2_life(life);
+      const int life = player2.get_life() - 1;
+      player2.set_life(life);
       if (life >= 0) {
         Game_count = 0;
         Game_state = game_state::start;
         enemy.init();
-        player::init();
+        player1.init_pos(0);
+        player2.init_pos(1);
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -621,7 +640,6 @@ void game_over(Wipe &wipe) noexcept {
           if (wipe.update()) {
             Blink_count = 0;
             Game_count = 0;
-            player::set_player_2_life(2);
             Game_state = game_state::title;
           }
           break;
@@ -638,12 +656,15 @@ void game_over(Wipe &wipe) noexcept {
   }
 }
 
-void game_pause(Food &food, Enemy &enemy) noexcept {
+void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
   Map::draw();
   food.draw();
   enemy.draw();
-  player::draw();
-  draw_score();
+  player1.draw(0);
+  if (Game_mode == game_mode::battle) {
+    player2.draw(1);
+  }
+  draw_score(player1, player2);
   draw_translucence();
   if (Edge_key[0][input_device::space]) {
     Game_state = game_state::playing;
@@ -662,7 +683,7 @@ void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
 }
 
 // TODO: reduce magic numbers
-void draw_score() noexcept {
+void draw_score(Player &player1, Player &player2) noexcept {
   {
     SDL_Surface *p_surface = Image_manager::get("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
@@ -678,7 +699,7 @@ void draw_score() noexcept {
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     stringstream life;
-    life << "x  " << player::get_player_1_life();
+    life << "x  " << player1.get_life();
     draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 90,
               screen::height / 7 + 40, life.str().c_str());
     if (Game_mode == game_mode::battle) {
@@ -692,7 +713,7 @@ void draw_score() noexcept {
                       0};
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       stringstream life;
-      life << "x  " << player::get_player_2_life();
+      life << "x  " << player2.get_life();
       draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 90,
                 screen::height / 7 + 122, life.str().c_str());
     }
