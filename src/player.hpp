@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 class Player {
+  const unsigned int player_type_;
   int pos_x_;
   int pos_y_;
   int block_x_;
@@ -14,10 +15,10 @@ class Player {
   int life_;
 
  public:
-  Player() {}
-  void init_pos(const unsigned int player_type) noexcept;
-  void draw(const unsigned int player_type) const noexcept;
-  void move(const unsigned int player_type) noexcept;
+  Player(const unsigned int player_type) : player_type_(player_type) {}
+  void init_pos() noexcept;
+  void draw() const noexcept;
+  void move() noexcept;
   void add_pos(int x, int y) noexcept;
   int get_pos_x() const noexcept;
   int get_pos_y() const noexcept;

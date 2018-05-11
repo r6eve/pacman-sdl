@@ -5,8 +5,8 @@
 
 // TODO: set player_type as enum class
 
-void Player::init_pos(const unsigned int player_type) noexcept {
-  switch (player_type) {
+void Player::init_pos() noexcept {
+  switch (player_type_) {
     case 0: {
       pos_x_ = block::size * 9;
       pos_y_ = block::size * 18;
@@ -37,8 +37,8 @@ void Player::init_pos(const unsigned int player_type) noexcept {
   }
 }
 
-void Player::draw(const unsigned int player_type) const noexcept {
-  switch (player_type) {
+void Player::draw() const noexcept {
+  switch (player_type_) {
     case 0: {
       SDL_Surface *p_surface = Image_manager::get("player1");
       SDL_Rect src;
@@ -72,7 +72,7 @@ void Player::draw(const unsigned int player_type) const noexcept {
 }
 
 // TODO: reduce magic numbers
-void Player::move(const unsigned int player_type) noexcept {
+void Player::move() noexcept {
   const int dst_pos_x = next_block_x_ * block::size;
   const int dst_pos_y = next_block_y_ * block::size;
   if ((pos_x_ != dst_pos_x) || (pos_y_ != dst_pos_y)) {
@@ -104,16 +104,16 @@ void Player::move(const unsigned int player_type) noexcept {
   // Down > Left > Up > Right
   int mut_dst_block_x = next_block_x_;
   int mut_dst_block_y = next_block_y_;
-  if (Press_key[player_type][input_device::down]) {
+  if (Press_key[player_type_][input_device::down]) {
     dir_ = 0;
     ++mut_dst_block_y;
-  } else if (Press_key[player_type][input_device::left]) {
+  } else if (Press_key[player_type_][input_device::left]) {
     dir_ = 1;
     --mut_dst_block_x;
-  } else if (Press_key[player_type][input_device::up]) {
+  } else if (Press_key[player_type_][input_device::up]) {
     dir_ = 2;
     --mut_dst_block_y;
-  } else if (Press_key[player_type][input_device::right]) {
+  } else if (Press_key[player_type_][input_device::right]) {
     dir_ = 3;
     ++mut_dst_block_x;
   }

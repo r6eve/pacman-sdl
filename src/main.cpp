@@ -151,8 +151,8 @@ void main_loop() noexcept {
   Wipe wipe;
   Food food;
   Enemy enemy;
-  Player player1;
-  Player player2;
+  Player player1(0);
+  Player player2(1);
   for (;;) {
     Input_manager::update();
     switch (Game_state) {
@@ -311,8 +311,8 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
         Map::init();
         food.init();
         enemy.init();
-        player1.init_pos(0);
-        player2.init_pos(1);
+        player1.init_pos();
+        player2.init_pos();
         player1.set_life(2);
         player2.set_life(2);
         for (unsigned int i = 0; i < 2; ++i) {
@@ -337,9 +337,9 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
   Map::draw();
   food.draw();
   enemy.draw();
-  player1.draw(0);
+  player1.draw();
   if (Game_mode == game_mode::battle) {
-    player2.draw(1);
+    player2.draw();
   }
   draw_score(player1, player2);
   switch (Game_count) {
@@ -390,14 +390,14 @@ void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexc
   Map::draw();
   food.draw();
   enemy.draw();
-  player1.draw(0);
+  player1.draw();
   if (Game_mode == game_mode::battle) {
-    player2.draw(1);
+    player2.draw();
   }
   draw_score(player1, player2);
-  player1.move(0);
+  player1.move();
   if (Game_mode == game_mode::battle) {
-    player2.move(1);
+    player2.move();
   }
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
@@ -429,9 +429,9 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
   Map::draw();
   food.draw();
   enemy.draw();
-  player1.draw(0);
+  player1.draw();
   if (Game_mode == game_mode::battle) {
-    player2.draw(1);
+    player2.draw();
   }
   draw_score(player1, player2);
 
@@ -453,8 +453,8 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
       ++Game_level;
       food.init();
       enemy.init();
-      player1.init_pos(0);
-      player2.init_pos(1);
+      player1.init_pos();
+      player2.init_pos();
     }
   }
 }
@@ -463,9 +463,9 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
   Map::draw();
   food.draw();
   enemy.draw();
-  player1.draw(0);
+  player1.draw();
   if (Game_mode == game_mode::battle) {
-    player2.draw(1);
+    player2.draw();
   }
   draw_score(player1, player2);
 
@@ -497,8 +497,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
         Game_count = 0;
         Game_state = game_state::start;
         enemy.init();
-        player1.init_pos(0);
-        player2.init_pos(1);
+        player1.init_pos();
+        player2.init_pos();
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -514,8 +514,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
         Game_count = 0;
         Game_state = game_state::start;
         enemy.init();
-        player1.init_pos(0);
-        player2.init_pos(1);
+        player1.init_pos();
+        player2.init_pos();
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -660,9 +660,9 @@ void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noex
   Map::draw();
   food.draw();
   enemy.draw();
-  player1.draw(0);
+  player1.draw();
   if (Game_mode == game_mode::battle) {
-    player2.draw(1);
+    player2.draw();
   }
   draw_score(player1, player2);
   draw_translucence();
