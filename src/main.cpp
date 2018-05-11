@@ -34,7 +34,6 @@ bool Enemy_run_debug;
 
 bool parse_options(const int argc, char **argv) noexcept;
 void init() noexcept;
-// TODO: use those in each constructor
 void init_sdl();
 void main_loop() noexcept;
 void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept;
@@ -71,10 +70,9 @@ bool parse_options(const int argc, char **argv) noexcept {
       {nullptr, 0, nullptr, 0},
   };
 
-  int c;
   for (;;) {
-    int curind = optind;
-    c = getopt_long(argc, argv, "dh", long_options, nullptr);
+    const int curind = optind;
+    const int c = getopt_long(argc, argv, "dh", long_options, nullptr);
     if (c == -1) {
       break;
     }
@@ -258,7 +256,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
           break;
         }
         default:
-          cerr << "error: undefined game mode." << '\n';
+          // NOTREACHED
           break;
       }
 
@@ -301,8 +299,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
           break;
         }
         default:
-          cerr << "error: undefined game mode."
-               << "\n";
+          // NOTREACHED
           break;
       }
 
@@ -332,7 +329,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
       break;
     }
     default:
-      cerr << "error: undefined game count." << '\n';
+      // NOTREACHED
       break;
   }
 }
@@ -567,7 +564,7 @@ void game_over(Wipe &wipe) noexcept {
           break;
         }
         default:
-          cerr << "error: undefined game count." << '\n';
+          // NOTREACHED
           break;
       }
       break;
@@ -632,15 +629,13 @@ void game_over(Wipe &wipe) noexcept {
           break;
         }
         default:
-          // TODO: exit or throw exception
-          cerr << "error: undefined game count." << '\n';
+          // NOTREACHED
           break;
       }
       break;
     }
     default:
-      // TODO: exit or throw exception
-      cerr << "error: undefined game state." << '\n';
+      // NOTREACHED
       break;
   }
 }
