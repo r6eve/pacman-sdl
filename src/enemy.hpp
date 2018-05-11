@@ -5,7 +5,24 @@
 #include "def_global.hpp"
 #include "player.hpp"
 
+namespace enemy_character {
+
+enum {
+  akabei = 0,
+  pinky,
+  aosuke,
+  guzuta,
+  count,
+};
+
+}  // namespace enemy_character
+
 class Enemy {
+  enum class enemy_state {
+    normal,
+    lose,
+  };
+
   typedef struct {
     int pos_x;
     int pos_y;
@@ -16,11 +33,16 @@ class Enemy {
     unsigned char dir;           // max value is 4
     unsigned char anime_count;   // 0 or 1
     unsigned char anime_weight;  // max value is 8
+    enemy_state state;
   } Enemy_data;
 
   std::unique_ptr<Enemy_data[]> enemies_;
 
   void update() noexcept;
+
+  void move_normal_enemy(unsigned int enemy_type) noexcept;
+
+  void move_lose_enemy(unsigned int enemy_type) noexcept;
 
  public:
   Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}
@@ -29,11 +51,7 @@ class Enemy {
 
   void draw() const noexcept;
 
-  // TODO: take parameter as enemy_charater
-  void move_normal_enemy(unsigned int enemy_type) noexcept;
-
-  // TODO: take parameter as enemy_charater
-  void move_lose_enemy(unsigned int enemy_type) noexcept;
+  void move(const bool debug_lose_enemy) noexcept;
 
   /**
    * Return true if the player whose state is normal hits enemy, and false

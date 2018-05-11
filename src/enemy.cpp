@@ -29,6 +29,7 @@ void Enemy::init() noexcept {
     enemies_[i].dir = 2;
     enemies_[i].anime_count = 0;
     enemies_[i].anime_weight = 0;
+    enemies_[i].state = enemy_state::normal;
   }
 }
 
@@ -42,7 +43,7 @@ void Enemy::draw() const noexcept {
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     SDL_Rect dst = {static_cast<Sint16>(enemies_[i].pos_x),
                     static_cast<Sint16>(enemies_[i].pos_y), 0, 0};
-    switch (Enemy_state[i]) {
+    switch (enemies_[i].state) {
       case enemy_state::normal: {
         SDL_Rect src = {
             static_cast<Sint16>(block::size * enemies_[i].dir),
@@ -61,6 +62,16 @@ void Enemy::draw() const noexcept {
       default:
         // NOTREACHED
         break;
+    }
+  }
+}
+
+void Enemy::move(const bool debug_lose_enemy) noexcept {
+  for (unsigned int i = 0; i < enemy_character::count; ++i) {
+    if (debug_lose_enemy || (enemies_[i].state == enemy_state::lose)) {
+      move_lose_enemy(i);
+    } else {
+      move_normal_enemy(i);
     }
   }
 }
@@ -279,7 +290,7 @@ void Enemy::move_normal_enemy(unsigned int enemy_type) noexcept {
 
 void Enemy::move_lose_enemy(unsigned int enemy_type) noexcept {
   if (!(Power_chara_mode[0] || Power_chara_mode[1])) {
-    Enemy_state[enemy_type] = enemy_state::normal;
+    enemies_[enemy_type].state = enemy_state::normal;
   }
 
   const int dst_pos_x = enemies_[enemy_type].next_block_x * block::size;
@@ -345,10 +356,10 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
         Choice_hit = true;
         return true;
       }
-      if (Enemy_state[i] != enemy_state::lose) {
+      if (enemies_[i].state == enemy_state::normal) {
         player1.set_score(player1.get_score() + 100);
       }
-      Enemy_state[i] = enemy_state::lose;
+      enemies_[i].state = enemy_state::lose;
     }
   }
 
@@ -363,10 +374,10 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
           Choice_hit = false;
           return true;
         }
-        if (Enemy_state[i] != enemy_state::lose) {
+        if (enemies_[i].state == enemy_state::normal) {
           player2.set_score(player2.get_score() + 100);
         }
-        Enemy_state[i] = enemy_state::lose;
+        enemies_[i].state = enemy_state::lose;
       }
     }
   }

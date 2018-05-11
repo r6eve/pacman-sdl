@@ -28,7 +28,7 @@ unsigned int Game_level;
 game_state Game_state;
 unsigned int Blink_count;
 unsigned int Game_count;
-bool Enemy_run_debug;
+bool Debug_lose_enemy;
 
 }  // namespace
 
@@ -123,7 +123,7 @@ void init(const bool debug_mode) noexcept {
 
   // initialize global variables
   Blink_count = 0;
-  Enemy_run_debug = false;
+  Debug_lose_enemy = false;
   Game_count = 0;
   Game_mode = game_mode::single;
   Game_state = game_state::title;
@@ -379,9 +379,6 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
     for (unsigned int i = 0; i < 2; ++i) {
       Power_chara_mode[i] = 0;
     }
-    for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      Enemy_state[i] = enemy_state::normal;
-    }
   }
 }
 
@@ -392,15 +389,9 @@ void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexc
   player1.draw();
   player2.draw();
   draw_score(player1, player2);
+  enemy.move(Debug_lose_enemy);
   player1.move();
   player2.move();
-  for (unsigned int i = 0; i < enemy_character::count; ++i) {
-    if (Enemy_run_debug || (Enemy_state[i] == enemy_state::lose)) {
-      enemy.move_lose_enemy(i);
-    } else {
-      enemy.move_normal_enemy(i);
-    }
-  }
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
   const bool food_state = food.check_state(player1, player2);
@@ -416,7 +407,7 @@ void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexc
   }
 
   if (Edge_key[0][input_device::b]) {
-    Enemy_run_debug = !Enemy_run_debug;
+    Debug_lose_enemy = !Debug_lose_enemy;
   }
 }
 

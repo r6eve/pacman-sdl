@@ -65,23 +65,6 @@ enum class game_state {
   pause,
 };
 
-namespace enemy_character {
-
-enum {
-  akabei = 0,
-  pinky,
-  aosuke,
-  guzuta,
-  count,
-};
-
-}  // namespace enemy_character
-
-enum class enemy_state {
-  normal,
-  lose,
-};
-
 enum class game_mode {
   single,
   battle,
@@ -95,7 +78,6 @@ enum class game_mode {
 
 GLOBAL SDL_Surface *Screen;
 GLOBAL game_mode Game_mode;
-GLOBAL enemy_state Enemy_state[enemy_character::count];
 GLOBAL int Power_chara_mode[2];
 GLOBAL bool Press_key[2][input_device::count];
 GLOBAL bool Edge_key[2][input_device::count];
