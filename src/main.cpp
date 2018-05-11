@@ -27,7 +27,6 @@ namespace {
 game_state Game_state;
 unsigned int Blink_count;
 unsigned int Game_count;
-unsigned int Num_player;
 bool Enemy_run_debug;
 
 }  // namespace
@@ -318,9 +317,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
         player::set_player_1_life(2);  // TODO: set it in constructor
         player::set_player_2_life(2);
 
-        Num_player = Game_mode == game_mode::single ? 1 : 2;
-
-        for (unsigned int i = 0; i < Num_player; ++i) {
+        for (unsigned int i = 0; i < 2; ++i) {
           Now_score[i] = 0;
         }
 
@@ -373,7 +370,8 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy) noexcept {
   if (Game_count > 220) {
     Game_count = 0;
     Game_state = game_state::playing;
-    for (unsigned int i = 0; i < Num_player; ++i) {
+    // initialize player as normal mode
+    for (unsigned int i = 0; i < 2; ++i) {
       Power_chara_mode[i] = 0;
     }
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
