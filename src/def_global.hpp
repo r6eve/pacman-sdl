@@ -93,7 +93,6 @@ enum class game_mode {
 #define GLOBAL extern
 #endif
 
-GLOBAL bool Debug_mode;
 GLOBAL SDL_Surface *Screen;
 GLOBAL game_mode Game_mode;
 GLOBAL enemy_state Enemy_state[enemy_character::count];

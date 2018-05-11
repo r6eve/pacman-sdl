@@ -17,7 +17,7 @@ void Input_manager::init_joystick() noexcept {
   }
 }
 
-void Input_manager::update() noexcept {
+void Input_manager::update(const bool debug_mode) noexcept {
   bool new_press_key[num_devices_][input_device::count];
   for (unsigned int i = 0; i < num_devices_; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
@@ -81,7 +81,7 @@ void Input_manager::update() noexcept {
   new_press_key[0][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
   new_press_key[1][input_device::space] = keys[SDLK_SPACE] == SDL_PRESSED;
 
-  if (Debug_mode) {
+  if (debug_mode) {
     new_press_key[0][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
     new_press_key[1][input_device::b] = keys[SDLK_b] == SDL_PRESSED;
   }

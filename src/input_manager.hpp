@@ -11,7 +11,7 @@ class Input_manager {
 
  public:
   static void init_joystick() noexcept;
-  static void update() noexcept;
+  static void update(const bool debug_mode) noexcept;
   static void end_joystick() noexcept;
 };
 

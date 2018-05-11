@@ -33,9 +33,9 @@ bool Enemy_run_debug;
 }  // namespace
 
 bool parse_options(const int argc, char **argv) noexcept;
-void init() noexcept;
-void init_sdl();
-void main_loop() noexcept;
+void init(const bool debug_mode) noexcept;
+void init_sdl(const bool debug_mode);
+void main_loop(const bool debug_mode) noexcept;
 void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
@@ -54,9 +54,9 @@ void end() noexcept;
 void draw_translucence() noexcept;
 
 int main(int argc, char **argv) {
-  Debug_mode = parse_options(argc, argv);
-  init();
-  main_loop();
+  const bool debug_mode = parse_options(argc, argv);
+  init(debug_mode);
+  main_loop(debug_mode);
   end();
   exit(EXIT_SUCCESS);
 }
@@ -108,9 +108,9 @@ Options:
   return ret;
 }
 
-void init() noexcept {
+void init(const bool debug_mode) noexcept {
   try {
-    init_sdl();
+    init_sdl(debug_mode);
     Font_manager::init();
     Image_manager::init();
     Mixer_manager::init();
@@ -129,12 +129,13 @@ void init() noexcept {
   Game_state = game_state::title;
 }
 
-void init_sdl() {
+void init_sdl(const bool debug_mode) {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     throw SDL_GetError();
   }
+
   SDL_WM_SetCaption("pacman-sdl", nullptr);
-  if (Debug_mode) {
+  if (debug_mode) {
     Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
                               SDL_HWSURFACE | SDL_DOUBLEBUF);
   } else {
@@ -148,14 +149,14 @@ void init_sdl() {
   SDL_ShowCursor(SDL_DISABLE);
 }
 
-void main_loop() noexcept {
+void main_loop(const bool debug_mode) noexcept {
   Wipe wipe;
   Food food;
   Enemy enemy;
   Player player1(0);
   Player player2(1);
   for (;;) {
-    Input_manager::update();
+    Input_manager::update(debug_mode);
     switch (Game_state) {
       case game_state::title:
         game_title(wipe, food, enemy, player1, player2);
@@ -185,7 +186,7 @@ void main_loop() noexcept {
     if (!poll_event()) {
       return;
     }
-    if (Debug_mode) {
+    if (debug_mode) {
       draw_fps();
     }
     SDL_Flip(Screen);
