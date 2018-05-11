@@ -17,7 +17,6 @@
 #include "map.hpp"
 #include "mixer_manager.hpp"
 #include "player.hpp"
-#include "util.hpp"
 #include "wipe.hpp"
 
 using namespace std;

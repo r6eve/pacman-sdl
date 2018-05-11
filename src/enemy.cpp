@@ -3,7 +3,6 @@
 #include "image_manager.hpp"
 #include "map.hpp"
 #include "player.hpp"
-#include "util.hpp"
 
 const unsigned int Hit_distance = block::size / 2;
 
@@ -319,10 +318,9 @@ void Enemy::move_lose_enemy(const unsigned int enemy_type) noexcept {
 }
 
 bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
-  const Point pos = player1.get_pos();
+  Point pos = player1.get_pos();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
-    const unsigned int d =
-        util::get_distance(pos.x, pos.y, enemies_[i].pos.x, enemies_[i].pos.y);
+    const unsigned int d = pos.distance(enemies_[i].pos);
     if (d < Hit_distance) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
@@ -336,10 +334,9 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
   }
 
   if (Game_mode == game_mode::battle) {
-    const Point pos = player2.get_pos();
+    Point pos = player2.get_pos();
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      const unsigned int d = util::get_distance(pos.x, pos.y, enemies_[i].pos.x,
-                                                enemies_[i].pos.y);
+      const unsigned int d = pos.distance(enemies_[i].pos);
       if (d < Hit_distance) {
         if (!Power_chara_mode[1]) {
           Choice_hit = false;
