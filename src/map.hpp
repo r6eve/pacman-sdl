@@ -8,7 +8,8 @@ class Map {
 
  public:
   static void init() noexcept;
-  static unsigned int check_state(int x, int y) noexcept;
+  static unsigned int check_state(const Point &p) noexcept;
+  static unsigned int check_state(const Point &&p) noexcept;
   static void draw(const unsigned int game_level) noexcept;
 };
 

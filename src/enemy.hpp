@@ -24,12 +24,9 @@ class Enemy {
   };
 
   typedef struct {
-    int pos_x;
-    int pos_y;
-    int block_x;
-    int block_y;
-    int next_block_x;
-    int next_block_y;
+    Point pos;
+    Point block;
+    Point next_block;
     unsigned char dir;           // max value is 4
     unsigned char anime_count;   // 0 or 1
     unsigned char anime_weight;  // max value is 8
@@ -40,9 +37,9 @@ class Enemy {
 
   void update() noexcept;
 
-  void move_normal_enemy(unsigned int enemy_type) noexcept;
+  void move_normal_enemy(const unsigned int enemy_type) noexcept;
 
-  void move_lose_enemy(unsigned int enemy_type) noexcept;
+  void move_lose_enemy(const unsigned int enemy_type) noexcept;
 
  public:
   Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}

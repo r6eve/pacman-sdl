@@ -9,12 +9,12 @@
 #include "player.hpp"
 
 void Food::init() noexcept {
-  for (unsigned int y = 0; y < block::count_y; ++y) {
-    for (unsigned int x = 0; x < block::count_x; ++x) {
+  for (int y = 0; y < block::count_y; ++y) {
+    for (int x = 0; x < block::count_x; ++x) {
       food_[y][x] = -1;
-      if (Map::check_state(x, y) == 0) {  // field where player can move
+      if (Map::check_state(Point{x, y}) == 0) {  // field where player can move
         food_[y][x] = 1;
-      } else if (Map::check_state(x, y) == 4) {  // counter food
+      } else if (Map::check_state(Point{x, y}) == 4) {  // counter food
         food_[y][x] = 0;
       }
     }

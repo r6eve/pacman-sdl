@@ -90,7 +90,13 @@ void Map::init() noexcept {
 // TODO:
 // Why is the parameter of x=-1 and y=12 OK?
 // Cf. https://ideone.com/u1QKTJ
-unsigned int Map::check_state(int x, int y) noexcept { return block_[y][x]; }
+unsigned int Map::check_state(const Point &p) noexcept {
+  return block_[p.y][p.x];
+}
+
+unsigned int Map::check_state(const Point &&p) noexcept {
+  return block_[p.y][p.x];
+}
 
 // TODO: reduce magic numbers
 void Map::draw(const unsigned int game_level) noexcept {

@@ -70,10 +70,27 @@ enum class game_mode {
   battle,
 };
 
-typedef struct {
+struct Point {
   int x;
   int y;
-} Point;
+
+  bool operator==(const Point &rhs) {
+    return ((x == rhs.x) && (y == rhs.y));
+  }
+
+  bool operator!=(const Point &rhs) {
+    return ((x != rhs.x) || (y != rhs.y));
+  }
+
+  Point operator+(const Point &rhs) {
+    return Point{x + rhs.x, y + rhs.y};
+  }
+
+  void operator+=(const Point &rhs) {
+    x += rhs.x;
+    y += rhs.y;
+  }
+};
 
 #ifdef MAIN
 #define GLOBAL

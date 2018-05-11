@@ -74,7 +74,8 @@ void Player::move() noexcept {
     return;
   }
 
-  const Point dst_pos = {next_block_.x * block::size, next_block_.y * block::size};
+  const Point dst_pos = {next_block_.x * block::size,
+                         next_block_.y * block::size};
   if ((pos_.x != dst_pos.x) || (pos_.y != dst_pos.y)) {
     ++anime_weight_;
     if (anime_weight_ > 4) {
@@ -116,12 +117,11 @@ void Player::move() noexcept {
   }
   const Point dst_block = mut_dst_block;
 
-  const unsigned int dst_block_state =
-      Map::check_state(dst_block.x, dst_block.y);
+  const unsigned int dst_block_state = Map::check_state(dst_block);
   const unsigned int dst_right_block_state =
-      Map::check_state(dst_block.x + 1, dst_block.y);
+      Map::check_state(Point{dst_block.x + 1, dst_block.y});
   const unsigned int dst_left_block_state =
-      Map::check_state(dst_block.x - 1, dst_block.y);
+      Map::check_state(Point{dst_block.x - 1, dst_block.y});
   if ((dst_block_state == 0) || (dst_block_state == 3) ||
       (dst_block_state == 4) || (dst_block_state == 5) ||
       (dst_block_state == 6) || (dst_right_block_state == 6) ||
@@ -131,11 +131,11 @@ void Player::move() noexcept {
   }
 
   // Circle corner
-  if (Map::check_state(dst_block.x + 2, dst_block.y) == 6) {
+  if (Map::check_state(Point{dst_block.x + 2, dst_block.y}) == 6) {
     next_block_.x = block::count_x;
     pos_.x = block::size * next_block_.x;
   }
-  if (Map::check_state(dst_block.x - 2, dst_block.y) == 7) {
+  if (Map::check_state(Point{dst_block.x - 2, dst_block.y}) == 7) {
     next_block_.x = -1;
     pos_.x = block::size * next_block_.x;
   }
