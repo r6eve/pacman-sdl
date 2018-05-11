@@ -334,7 +334,6 @@ void Enemy::move_lose_enemy(unsigned int enemy_type) noexcept {
   // enemy is in enemy's home
 }
 
-// TODO: move this to other class
 bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
   const int pos_x = player1.get_pos_x();
   const int pos_y = player1.get_pos_y();
@@ -347,7 +346,7 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
         return true;
       }
       if (Enemy_state[i] != enemy_state::lose) {
-        Now_score[0] += 100;
+        player1.set_score(player1.get_score() + 100);
       }
       Enemy_state[i] = enemy_state::lose;
     }
@@ -365,7 +364,7 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
           return true;
         }
         if (Enemy_state[i] != enemy_state::lose) {
-          Now_score[1] += 100;
+          player2.set_score(player2.get_score() + 100);
         }
         Enemy_state[i] = enemy_state::lose;
       }

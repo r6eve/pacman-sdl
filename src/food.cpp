@@ -47,14 +47,13 @@ void Food::draw() noexcept {
   }
 }
 
-// TODO: move this to other class
 bool Food::check_state(Player &player1, Player &player2) noexcept {
   const int x = player1.get_block_x();
   const int y = player1.get_block_y();
   if (food_[y][x] == 1) {
     Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
     ++food_[y][x];
-    Now_score[0] += 10;
+    player1.set_score(player1.get_score() + 10);
   }
   if (food_[y][x] == 0) {
     Power_chara_mode[0] = 400;
@@ -73,7 +72,7 @@ bool Food::check_state(Player &player1, Player &player2) noexcept {
     if (food_[y][x] == 1) {
       Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
       ++food_[y][x];
-      Now_score[1] += 10;
+      player2.set_score(player2.get_score() + 10);
     }
     if (food_[y][x] == 0) {
       Power_chara_mode[1] = 400;
@@ -86,6 +85,7 @@ bool Food::check_state(Player &player1, Player &player2) noexcept {
       }
     }
   }
+
   int rest_food = 0;
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {

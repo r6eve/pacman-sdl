@@ -13,6 +13,7 @@ class Player {
   unsigned char anime_count_;   // 0 or 1
   unsigned char anime_weight_;  // max value is 4
   int life_;
+  unsigned int score_;
 
  public:
   Player(const unsigned int player_type) : player_type_(player_type) {}
@@ -26,6 +27,8 @@ class Player {
   int get_block_y() const noexcept;
   int get_life() const noexcept;
   void set_life(const int life) noexcept;
+  unsigned int get_score() const noexcept;
+  void set_score(const unsigned int score) noexcept;
   ~Player() {}
 };
 

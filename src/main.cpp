@@ -40,7 +40,7 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
 void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
-void game_over(Wipe &wipe) noexcept;
+void game_over(Wipe &wipe, Player &player1, Player &player2) noexcept;
 void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
 // TODO: make enum class `font_type` and `color`
 void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
@@ -172,7 +172,7 @@ void main_loop() noexcept {
         game_miss(wipe, food, enemy, player1, player2);
         break;
       case game_state::gameover:
-        game_over(wipe);
+        game_over(wipe, player1, player2);
         break;
       case game_state::pause:
         game_pause(food, enemy, player1, player2);
@@ -315,9 +315,8 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
         player2.init_pos();
         player1.set_life(2);
         player2.set_life(2);
-        for (unsigned int i = 0; i < 2; ++i) {
-          Now_score[i] = 0;
-        }
+        player1.set_score(0);
+        player2.set_score(0);
 
         Game_count = 0;
         Game_state = game_state::start;
@@ -525,7 +524,7 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
   }
 }
 
-void game_over(Wipe &wipe) noexcept {
+void game_over(Wipe &wipe, Player &player1, Player &player2) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -550,7 +549,7 @@ void game_over(Wipe &wipe) noexcept {
         case 2: {
           draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           stringstream ss;
-          ss << "Y o u r  S c o r e   " << Now_score[0];
+          ss << "Y o u r  S c o r e   " << player1.get_score();
           draw_text(36, 0x00, 0x00, 0x00, 120, 220, ss.str().c_str());
 
           if (Blink_count < 30) {
@@ -606,14 +605,16 @@ void game_over(Wipe &wipe) noexcept {
         case 2: {
           draw_text(36, 0xff, 0x00, 0x00, 165, 100, "G a m e O v e r");
           stringstream ss;
-          if (Now_score[0] > Now_score[1]) {
-            ss << "1 P  W I N  " << Now_score[0];
+          const unsigned int p1_score = player1.get_score();
+          const unsigned int p2_score = player2.get_score();
+          if (p1_score > p2_score) {
+            ss << "1 P  W I N  " << p1_score;
             draw_text(36, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
-          } else if (Now_score[1] > Now_score[0]) {
-            ss << "2 P  W I N  " << Now_score[1];
+          } else if (p1_score < p2_score) {
+            ss << "2 P  W I N  " << p2_score;
             draw_text(36, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           } else {
-            ss << "D R A W  " << Now_score[0];
+            ss << "D R A W  " << p1_score;
             draw_text(36, 0x00, 0x00, 0x00, 170, 240, ss.str().c_str());
           }
 
@@ -691,7 +692,7 @@ void draw_score(Player &player1, Player &player2) noexcept {
   }
   {
     stringstream score;
-    score << "S c o r e  :  " << setw(6) << Now_score[0];
+    score << "S c o r e  :  " << setw(6) << player1.get_score();;
     draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 20,
               screen::height / 7 + 10, score.str().c_str());
     SDL_Surface *p_surface = Image_manager::get("player1");
@@ -704,7 +705,7 @@ void draw_score(Player &player1, Player &player2) noexcept {
               screen::height / 7 + 40, life.str().c_str());
     if (Game_mode == game_mode::battle) {
       stringstream score;
-      score << "S c o r e  :  " << setw(6) << Now_score[1];
+      score << "S c o r e  :  " << setw(6) << player2.get_score();;
       draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 20,
                 screen::height / 7 + 90, score.str().c_str());
       SDL_Surface *p_surface = Image_manager::get("player2");

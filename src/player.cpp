@@ -162,3 +162,7 @@ int Player::get_block_y() const noexcept { return block_y_; }
 int Player::get_life() const noexcept { return life_; }
 
 void Player::set_life(const int life) noexcept { life_ = life; }
+
+unsigned int Player::get_score() const noexcept { return score_; }
+
+void Player::set_score(const unsigned int score) noexcept { score_ = score; }
