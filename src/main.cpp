@@ -471,7 +471,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
 
   // TODO: use pointer to delete if-clauses
   if (Choice_hit) {
-    player1.add_pos(0, -1);
+    Point pos = player1.get_pos();
+    player1.set_pos(Point{pos.x, pos.y - 1});
     if (wipe.update()) {
       const int life = player1.get_life() - 1;
       player1.set_life(life);
@@ -488,7 +489,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
       }
     }
   } else {
-    player2.add_pos(0, -1);
+    Point pos = player2.get_pos();
+    player2.set_pos(Point{pos.x, pos.y - 1});
     if (wipe.update()) {
       const int life = player2.get_life() - 1;
       player2.set_life(life);

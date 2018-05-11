@@ -1,14 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "def_global.hpp"
+
 class Player {
   const unsigned int player_type_;
-  int pos_x_;
-  int pos_y_;
-  int block_x_;
-  int block_y_;
-  int next_block_x_;
-  int next_block_y_;
+  Point pos_;
+  Point block_;
+  Point next_block_;
   unsigned char dir_;           // 0: down, 1: left, 2: up, 3: right
   unsigned char anime_count_;   // 0 or 1
   unsigned char anime_weight_;  // max value is 4
@@ -20,11 +19,10 @@ class Player {
   void init_pos() noexcept;
   void draw() const noexcept;
   void move() noexcept;
-  void add_pos(int x, int y) noexcept;
-  int get_pos_x() const noexcept;
-  int get_pos_y() const noexcept;
-  int get_block_x() const noexcept;
-  int get_block_y() const noexcept;
+  Point get_pos() const noexcept;
+  void set_pos(const Point &p) noexcept;
+  void set_pos(const Point &&p) noexcept;
+  Point get_block() const noexcept;
   int get_life() const noexcept;
   void set_life(const int life) noexcept;
   unsigned int get_score() const noexcept;

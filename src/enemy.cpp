@@ -346,11 +346,10 @@ void Enemy::move_lose_enemy(unsigned int enemy_type) noexcept {
 }
 
 bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
-  const int pos_x = player1.get_pos_x();
-  const int pos_y = player1.get_pos_y();
+  const Point pos = player1.get_pos();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     const unsigned int d =
-        util::get_distance(pos_x, pos_y, enemies_[i].pos_x, enemies_[i].pos_y);
+        util::get_distance(pos.x, pos.y, enemies_[i].pos_x, enemies_[i].pos_y);
     if (d < Hit_distance) {
       if (!Power_chara_mode[0]) {
         Choice_hit = true;
@@ -364,10 +363,9 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
   }
 
   if (Game_mode == game_mode::battle) {
-    const int pos_x = player2.get_pos_x();
-    const int pos_y = player2.get_pos_y();
+    const Point pos = player2.get_pos();
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      const unsigned int d = util::get_distance(pos_x, pos_y, enemies_[i].pos_x,
+      const unsigned int d = util::get_distance(pos.x, pos.y, enemies_[i].pos_x,
                                                 enemies_[i].pos_y);
       if (d < Hit_distance) {
         if (!Power_chara_mode[1]) {

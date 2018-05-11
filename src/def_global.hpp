@@ -70,6 +70,11 @@ enum class game_mode {
   battle,
 };
 
+typedef struct {
+  int x;
+  int y;
+} Point;
+
 #ifdef MAIN
 #define GLOBAL
 #else
