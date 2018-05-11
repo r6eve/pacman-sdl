@@ -17,7 +17,7 @@ void Player::init_pos() noexcept {
       dir_ = 1;
       anime_count_ = 0;
       anime_weight_ = 0;
-      break;
+      return;
     }
     case 1: {
       pos_x_ = block::size * 14;
@@ -29,11 +29,11 @@ void Player::init_pos() noexcept {
       dir_ = 3;
       anime_count_ = 0;
       anime_weight_ = 0;
-      break;
+      return;
     }
     default:
       // NOTREACHED
-      break;
+      return;
   }
 }
 
@@ -50,9 +50,12 @@ void Player::draw() const noexcept {
       dst.x = pos_x_;
       dst.y = pos_y_;
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      break;
+      return;
     }
     case 1: {
+      if (Game_mode != game_mode::battle) {
+        return;
+      }
       SDL_Surface *p_surface = Image_manager::get("player2");
       SDL_Rect src;
       src.x = block::size * dir_;
@@ -63,16 +66,20 @@ void Player::draw() const noexcept {
       dst.x = pos_x_;
       dst.y = pos_y_;
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
-      break;
+      return;
     }
     default:
       // NOTREACHED
-      break;
+      return;
   }
 }
 
 // TODO: reduce magic numbers
 void Player::move() noexcept {
+  if ((player_type_ == 1) && (Game_mode != game_mode::battle)) {
+    return;
+  }
+
   const int dst_pos_x = next_block_x_ * block::size;
   const int dst_pos_y = next_block_y_ * block::size;
   if ((pos_x_ != dst_pos_x) || (pos_y_ != dst_pos_y)) {
