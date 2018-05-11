@@ -9,7 +9,7 @@ class Map {
  public:
   static void init() noexcept;
   static unsigned int check_state(int x, int y) noexcept;
-  static void draw() noexcept;
+  static void draw(const unsigned int game_level) noexcept;
 };
 
 #endif

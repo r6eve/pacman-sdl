@@ -93,12 +93,12 @@ void Map::init() noexcept {
 unsigned int Map::check_state(int x, int y) noexcept { return block_[y][x]; }
 
 // TODO: reduce magic numbers
-void Map::draw() noexcept {
+void Map::draw(const unsigned int game_level) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0x00000000);
 
   SDL_Surface *p_surface = nullptr;
-  const unsigned int mod = Game_level % 4;
+  const unsigned int mod = game_level % 4;
   if (mod == 1) {
     p_surface = Image_manager::get("bg");
   } else if (mod == 2) {

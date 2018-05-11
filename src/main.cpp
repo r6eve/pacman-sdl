@@ -24,6 +24,7 @@ using namespace std;
 
 namespace {
 
+unsigned int Game_level;
 game_state Game_state;
 unsigned int Blink_count;
 unsigned int Game_count;
@@ -333,7 +334,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
 }
 
 void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
-  Map::draw();
+  Map::draw(Game_level);
   food.draw();
   enemy.draw();
   player1.draw();
@@ -384,7 +385,7 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
 }
 
 void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
-  Map::draw();
+  Map::draw(Game_level);
   food.draw();
   enemy.draw();
   player1.draw();
@@ -419,7 +420,7 @@ void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexc
 }
 
 void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
-  Map::draw();
+  Map::draw(Game_level);
   food.draw();
   enemy.draw();
   player1.draw();
@@ -451,7 +452,7 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
 }
 
 void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
-  Map::draw();
+  Map::draw(Game_level);
   food.draw();
   enemy.draw();
   player1.draw();
@@ -648,7 +649,7 @@ void game_over(Wipe &wipe, Player &player1, Player &player2) noexcept {
 }
 
 void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
-  Map::draw();
+  Map::draw(Game_level);
   food.draw();
   enemy.draw();
   player1.draw();
