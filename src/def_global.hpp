@@ -86,7 +86,7 @@ struct Point {
   }
 
  public:
-  unsigned int distance(const Point &rhs) noexcept {
+  unsigned int distance(const Point &rhs) const noexcept {
     return static_cast<unsigned int>(
         hypot(static_cast<double>(x - rhs.x), static_cast<double>(y - rhs.y)));
   }
