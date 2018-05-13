@@ -149,8 +149,7 @@ void Map::draw(const unsigned int game_level) noexcept {
 }
 
 // Don't modify parameter type as unsigned int
-// TODO:
-// Why is the parameter of x=-1 and y=12 OK?
+// TODO: Why is the parameter of x=-1 and y=12 OK?
 // Cf. https://ideone.com/u1QKTJ
 unsigned int Map::check_state(const Point &p) noexcept {
   return block_[p.y][p.x];
