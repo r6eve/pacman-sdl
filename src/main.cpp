@@ -242,8 +242,9 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
     }
     case 3: {
       draw_text(36, 0x00, 0x00, 0x00, 160, 160, "P  a  c  -  M  a  n");
-      if (!Press_key[0][input_device::x] && !Press_key[1][input_device::x] &&
-          !Press_key[0][input_device::space]) {
+      if (!Input_manager::press_key_p(0, input_device::x) &&
+          !Input_manager::press_key_p(1, input_device::x) &&
+          !Input_manager::press_key_p(0, input_device::space)) {
         ++Game_count;
       }
       break;
@@ -271,24 +272,25 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
           break;
       }
 
-      if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
-          Press_key[0][input_device::space]) {
+      if (Input_manager::press_key_p(0, input_device::x) ||
+          Input_manager::press_key_p(1, input_device::x) ||
+          Input_manager::press_key_p(0, input_device::space)) {
         wipe.set_wipe_out();
         wipe.draw(screen::width);
         ++Game_count;
       }
 
-      if (Press_key[0][input_device::button_2] ||
-          Press_key[1][input_device::button_2]) {
+      if (Input_manager::press_key_p(0, input_device::button_2) ||
+          Input_manager::press_key_p(1, input_device::button_2)) {
         Game_count -= 2;
         Game_mode = game_mode::single;
       }
 
-      if (Press_key[0][input_device::down] ||
-          Press_key[1][input_device::down]) {
+      if (Input_manager::press_key_p(0, input_device::down) ||
+          Input_manager::press_key_p(1, input_device::down)) {
         Game_mode = game_mode::battle;
-      } else if (Press_key[0][input_device::up] ||
-                 Press_key[1][input_device::up]) {
+      } else if (Input_manager::press_key_p(0, input_device::up) ||
+                 Input_manager::press_key_p(1, input_device::up)) {
         Game_mode = game_mode::single;
       }
       break;
@@ -565,8 +567,9 @@ void game_over(Wipe &wipe, const Player &player1,
             Blink_count = 0;
           }
 
-          if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
-              Press_key[0][input_device::space]) {
+          if (Input_manager::press_key_p(0, input_device::x) ||
+              Input_manager::press_key_p(1, input_device::x) ||
+              Input_manager::press_key_p(0, input_device::space)) {
             ++Game_count;
             wipe.set_wipe_out();
             wipe.draw(screen::width);
@@ -631,8 +634,9 @@ void game_over(Wipe &wipe, const Player &player1,
             Blink_count = 0;
           }
 
-          if (Press_key[0][input_device::x] || Press_key[1][input_device::x] ||
-              Press_key[0][input_device::space]) {
+          if (Input_manager::press_key_p(0, input_device::x) ||
+              Input_manager::press_key_p(1, input_device::x) ||
+              Input_manager::press_key_p(0, input_device::space)) {
             ++Game_count;
             wipe.set_wipe_out();
             wipe.draw(screen::width);

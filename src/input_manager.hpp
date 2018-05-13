@@ -9,6 +9,7 @@ class Input_manager {
   static unsigned int num_joysticks_;
   static std::vector<SDL_Joystick*> joystick_;
   static bool edge_key_[2][input_device::count];
+  static bool press_key_[2][input_device::count];
 
  public:
   static void init_joystick() noexcept;
@@ -16,6 +17,8 @@ class Input_manager {
   static void end_joystick() noexcept;
   static bool edge_key_p(const unsigned int user,
                          const unsigned int button) noexcept;
+  static bool press_key_p(const unsigned int user,
+                          const unsigned int button) noexcept;
 };
 
 #endif

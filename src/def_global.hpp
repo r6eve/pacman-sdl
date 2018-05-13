@@ -106,6 +106,5 @@ struct Point {
 
 GLOBAL SDL_Surface *Screen;
 GLOBAL game_mode Game_mode;
-GLOBAL bool Press_key[2][input_device::count];
 
 #endif

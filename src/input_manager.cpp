@@ -8,6 +8,7 @@ const unsigned int Input_manager::num_devices_ = 2;
 unsigned int Input_manager::num_joysticks_;
 std::vector<SDL_Joystick *> Input_manager::joystick_;
 bool Input_manager::edge_key_[2][input_device::count] = {false};
+bool Input_manager::press_key_[2][input_device::count] = {false};
 
 void Input_manager::init_joystick() noexcept {
   // SDL_NumJoysticks() definitely returns int type. However, as far as I read
@@ -89,8 +90,8 @@ void Input_manager::update(const bool debug_mode) noexcept {
 
   for (unsigned int i = 0; i < num_devices_; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
-      edge_key_[i][j] = !Press_key[i][j] && new_press_key[i][j];
-      Press_key[i][j] = new_press_key[i][j];
+      edge_key_[i][j] = !press_key_[i][j] && new_press_key[i][j];
+      press_key_[i][j] = new_press_key[i][j];
     }
   }
 }
@@ -104,4 +105,9 @@ void Input_manager::end_joystick() noexcept {
 bool Input_manager::edge_key_p(const unsigned int user,
                                const unsigned int button) noexcept {
   return edge_key_[user][button];
+}
+
+bool Input_manager::press_key_p(const unsigned int user,
+                                const unsigned int button) noexcept {
+  return press_key_[user][button];
 }

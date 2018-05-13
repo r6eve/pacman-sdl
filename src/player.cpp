@@ -1,6 +1,7 @@
 #include "player.hpp"
 #include "def_global.hpp"
 #include "image_manager.hpp"
+#include "input_manager.hpp"
 #include "map.hpp"
 
 // TODO: set player_type as enum class
@@ -102,16 +103,16 @@ void Player::move() noexcept {
 
   // 同時押しの場合，優先順位は Down > Left > Up > Right
   Point mut_dst_block = next_block_;
-  if (Press_key[player_type_][input_device::down]) {
+  if (Input_manager::press_key_p(player_type_, input_device::down)) {
     dir_ = 0;
     ++mut_dst_block.y;
-  } else if (Press_key[player_type_][input_device::left]) {
+  } else if (Input_manager::press_key_p(player_type_, input_device::left)) {
     dir_ = 1;
     --mut_dst_block.x;
-  } else if (Press_key[player_type_][input_device::up]) {
+  } else if (Input_manager::press_key_p(player_type_, input_device::up)) {
     dir_ = 2;
     --mut_dst_block.y;
-  } else if (Press_key[player_type_][input_device::right]) {
+  } else if (Input_manager::press_key_p(player_type_, input_device::right)) {
     dir_ = 3;
     ++mut_dst_block.x;
   }
