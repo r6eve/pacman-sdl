@@ -74,13 +74,19 @@ struct Point {
   int x;
   int y;
 
-  bool operator==(const Point &rhs) { return ((x == rhs.x) && (y == rhs.y)); }
+  bool operator==(const Point &rhs) const noexcept {
+    return ((x == rhs.x) && (y == rhs.y));
+  }
 
-  bool operator!=(const Point &rhs) { return ((x != rhs.x) || (y != rhs.y)); }
+  bool operator!=(const Point &rhs) const noexcept {
+    return ((x != rhs.x) || (y != rhs.y));
+  }
 
-  Point operator+(const Point &rhs) { return Point{x + rhs.x, y + rhs.y}; }
+  Point operator+(const Point &rhs) const noexcept {
+    return Point{x + rhs.x, y + rhs.y};
+  }
 
-  void operator+=(const Point &rhs) {
+  void operator+=(const Point &rhs) noexcept {
     x += rhs.x;
     y += rhs.y;
   }
