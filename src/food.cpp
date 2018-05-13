@@ -55,11 +55,11 @@ bool Food::check_state(Player &player1, Player &player2) noexcept {
     player1.set_score(player1.get_score() + 10);
   }
   if (food_[block.y][block.x] == 0) {
-    Power_chara_mode[0] = 400;
+    player1.set_power_mode(400);
     Mix_PlayMusic(Mixer_manager::get_music("siren"), -1);
     food_[block.y][block.x] += 2;
   }
-  if ((Power_chara_mode[0] == 0) && (Power_chara_mode[1] == 0)) {
+  if ((player1.get_power_mode() == 0) && (player2.get_power_mode() == 0)) {
     while (!Mix_FadeOutMusic(800) && Mix_PlayingMusic()) {
       ;
     }
@@ -73,11 +73,11 @@ bool Food::check_state(Player &player1, Player &player2) noexcept {
       player2.set_score(player2.get_score() + 10);
     }
     if (food_[block.y][block.x] == 0) {
-      Power_chara_mode[1] = 400;
+      player2.set_power_mode(400);
       Mix_PlayMusic(Mixer_manager::get_music("siren"), -1);
       food_[block.y][block.x] += 2;
     }
-    if ((Power_chara_mode[0] == 0) && (Power_chara_mode[1] == 0)) {
+    if ((player1.get_power_mode() == 0) && (player2.get_power_mode() == 0)) {
       while (!Mix_FadeOutMusic(800) && Mix_PlayingMusic()) {
         ;
       }

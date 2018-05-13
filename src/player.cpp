@@ -160,3 +160,7 @@ void Player::set_score(const unsigned int score) noexcept { score_ = score; }
 bool Player::get_damaged() const noexcept { return damaged_p_; }
 
 void Player::set_damaged(const bool damaged_p) noexcept { damaged_p_ = damaged_p; }
+
+unsigned int Player::get_power_mode() const noexcept { return power_mode_; }
+
+void Player::set_power_mode(const unsigned int power_mode) noexcept { power_mode_ = power_mode; }

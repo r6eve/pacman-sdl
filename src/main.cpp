@@ -320,6 +320,8 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
         player2.set_score(0);
         player1.set_damaged(false);
         player2.set_damaged(false);
+        player1.set_power_mode(0);
+        player2.set_power_mode(0);
 
         Game_count = 0;
         Game_state = game_state::start;
@@ -375,11 +377,8 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
   if (Game_count > 220) {
     Game_count = 0;
     Game_state = game_state::playing;
-    // TODO: set this as a member of Player class
-    // initialize player as normal mode
-    for (unsigned int i = 0; i < 2; ++i) {
-      Power_chara_mode[i] = 0;
-    }
+    player1.set_power_mode(0);
+    player2.set_power_mode(0);
   }
 }
 
@@ -390,7 +389,7 @@ void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexc
   player1.draw();
   player2.draw();
   draw_score(player1, player2);
-  enemy.move(Debug_lose_enemy);
+  enemy.move(Debug_lose_enemy, player1, player2);
   player1.move();
   player2.move();
 
@@ -708,19 +707,19 @@ void draw_score(Player &player1, Player &player2) noexcept {
     }
   }
   {
-    if (Power_chara_mode[0]) {
+    if (player1.get_power_mode()) {
       SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4,
-                      static_cast<Uint16>(Power_chara_mode[0] / 4),
+                      static_cast<Uint16>(player1.get_power_mode() / 4),
                       block::size};
       SDL_FillRect(Screen, &dst, 0xffff00);
-      --Power_chara_mode[0];
+      player1.set_power_mode(player1.get_power_mode() - 1);
     }
-    if (Power_chara_mode[1]) {
+    if (player2.get_power_mode()) {
       SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4 + 30,
-                      static_cast<Uint16>(Power_chara_mode[1] / 4),
+                      static_cast<Uint16>(player2.get_power_mode() / 4),
                       block::size};
       SDL_FillRect(Screen, &dst, 0x808080);
-      --Power_chara_mode[1];
+      player2.set_power_mode(player2.get_power_mode() - 1);
     }
   }
 }

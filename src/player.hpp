@@ -14,6 +14,7 @@ class Player {
   int life_;
   unsigned int score_;
   bool damaged_p_;
+  unsigned int power_mode_;  // 0: not power mode, not 0: power mode
 
  public:
   Player(const unsigned int player_type) : player_type_(player_type) {}
@@ -30,6 +31,8 @@ class Player {
   void set_score(const unsigned int score) noexcept;
   bool get_damaged() const noexcept;
   void set_damaged(const bool damaged_p) noexcept;
+  unsigned int get_power_mode() const noexcept;
+  void set_power_mode(const unsigned int power_mode) noexcept;
   ~Player() {}
 };
 

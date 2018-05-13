@@ -37,9 +37,11 @@ class Enemy {
 
   void update() noexcept;
 
-  void move_normal_enemy(const unsigned int enemy_type) noexcept;
+  void move_normal_enemy(const unsigned int enemy_type, const Player &player1,
+                         const Player &player2) noexcept;
 
-  void move_lose_enemy(const unsigned int enemy_type) noexcept;
+  void move_lose_enemy(const unsigned int enemy_type, const Player &player1,
+                       const Player &player2) noexcept;
 
  public:
   Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}
@@ -48,7 +50,8 @@ class Enemy {
 
   void draw() const noexcept;
 
-  void move(const bool debug_lose_enemy) noexcept;
+  void move(const bool debug_lose_enemy, const Player &player1,
+            const Player &player2) noexcept;
 
   /**
    * Return true if the player whose state is normal hits enemy, and false
