@@ -7,9 +7,11 @@
 #include "map.hpp"
 
 unsigned int Map::block_[block::count_y][block::count_x];
+unsigned int Map::home_way_[block::count_y][block::count_x];
 
 void Map::init() noexcept {
   // TODO: use enum class
+  // TODO: create other maps
   // 0: can move, 1: cannot move, 2: enemy's house
   // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
   unsigned int block_src[block::count_y][block::count_x] = {
@@ -51,7 +53,7 @@ void Map::init() noexcept {
   }
 
   // 1: enemy house, 0: cannot move
-  const unsigned int way_to_home[block::count_y][block::count_x] = {
+  const unsigned int home_way_src[block::count_y][block::count_x] = {
    // 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, //99
     {99, 22, 21, 20, 19, 20, 21, 22, 21, 20, 19, 99, 99, 20, 21, 22, 23, 22, 21, 20, 21, 22, 23, 99}, // 1
@@ -81,21 +83,9 @@ void Map::init() noexcept {
 
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      Home_way[y][x] = way_to_home[y][x];
+      home_way_[y][x] = home_way_src[y][x];
     }
   }
-}
-
-// Don't modify parameter type as unsigned int
-// TODO:
-// Why is the parameter of x=-1 and y=12 OK?
-// Cf. https://ideone.com/u1QKTJ
-unsigned int Map::check_state(const Point &p) noexcept {
-  return block_[p.y][p.x];
-}
-
-unsigned int Map::check_state(const Point &&p) noexcept {
-  return block_[p.y][p.x];
 }
 
 // TODO: reduce magic numbers
@@ -156,4 +146,24 @@ void Map::draw(const unsigned int game_level) noexcept {
       }
     }
   }
+}
+
+// Don't modify parameter type as unsigned int
+// TODO:
+// Why is the parameter of x=-1 and y=12 OK?
+// Cf. https://ideone.com/u1QKTJ
+unsigned int Map::check_state(const Point &p) noexcept {
+  return block_[p.y][p.x];
+}
+
+unsigned int Map::check_state(const Point &&p) noexcept {
+  return block_[p.y][p.x];
+}
+
+unsigned int Map::get_home_distance(const Point &p) noexcept {
+  return home_way_[p.y][p.x];
+}
+
+unsigned int Map::get_home_distance(const Point &&p) noexcept {
+  return home_way_[p.y][p.x];
 }

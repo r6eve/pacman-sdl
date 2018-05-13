@@ -296,27 +296,29 @@ void Enemy::move_lose_enemy(const unsigned int enemy_type,
 
   enemies_[enemy_type].block = enemies_[enemy_type].next_block;
   const unsigned int now_value =
-      Home_way[enemies_[enemy_type].block.y][enemies_[enemy_type].block.x];
-  if (now_value > Home_way[enemies_[enemy_type].block.y - 1]
-                          [enemies_[enemy_type].block.x]) {
+      Map::get_home_distance(enemies_[enemy_type].block);
+  if (now_value >
+      Map::get_home_distance(Point{enemies_[enemy_type].block.x,
+                                   enemies_[enemy_type].block.y - 1})) {
     --enemies_[enemy_type].next_block.y;
     return;
   }
 
-  if (now_value > Home_way[enemies_[enemy_type].block.y]
-                          [enemies_[enemy_type].block.x - 1]) {
+  if (now_value > Map::get_home_distance(Point{enemies_[enemy_type].block.x - 1,
+                                               enemies_[enemy_type].block.y})) {
     --enemies_[enemy_type].next_block.x;
     return;
   }
 
-  if (now_value > Home_way[enemies_[enemy_type].block.y]
-                          [enemies_[enemy_type].block.x + 1]) {
+  if (now_value > Map::get_home_distance(Point{enemies_[enemy_type].block.x + 1,
+                                               enemies_[enemy_type].block.y})) {
     ++enemies_[enemy_type].next_block.x;
     return;
   }
 
-  if (now_value > Home_way[enemies_[enemy_type].block.y + 1]
-                          [enemies_[enemy_type].block.x]) {
+  if (now_value >
+      Map::get_home_distance(Point{enemies_[enemy_type].block.x,
+                                   enemies_[enemy_type].block.y + 1})) {
     ++enemies_[enemy_type].next_block.y;
     return;
   }

@@ -108,6 +108,5 @@ GLOBAL SDL_Surface *Screen;
 GLOBAL game_mode Game_mode;
 GLOBAL bool Press_key[2][input_device::count];
 GLOBAL bool Edge_key[2][input_device::count];
-GLOBAL unsigned int Home_way[block::count_y][block::count_x];
 
 #endif
