@@ -232,8 +232,9 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
         Blink_count = 0;
       }
 
-      if (Edge_key[0][input_device::x] || Edge_key[1][input_device::x] ||
-          Edge_key[0][input_device::space]) {
+      if (Input_manager::edge_key_p(0, input_device::x) ||
+          Input_manager::edge_key_p(1, input_device::x) ||
+          Input_manager::edge_key_p(0, input_device::space)) {
         ++Game_count;
         Blink_count = 0;
       }
@@ -412,11 +413,11 @@ void play_game(Food &food, Enemy &enemy, Player &player1,
     Game_state = game_state::miss;
   }
 
-  if (Edge_key[0][input_device::space]) {
+  if (Input_manager::edge_key_p(0, input_device::space)) {
     Game_state = game_state::pause;
   }
 
-  if (Edge_key[0][input_device::b]) {
+  if (Input_manager::edge_key_p(0, input_device::b)) {
     Debug_lose_enemy = !Debug_lose_enemy;
   }
 }
@@ -668,7 +669,7 @@ void game_pause(Food &food, const Enemy &enemy, Player &player1,
   player2.draw();
   draw_score(player1, player2);
   draw_translucence();
-  if (Edge_key[0][input_device::space]) {
+  if (Input_manager::edge_key_p(0, input_device::space)) {
     Game_state = game_state::playing;
   }
 }
