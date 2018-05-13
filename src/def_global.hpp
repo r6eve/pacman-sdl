@@ -23,17 +23,8 @@ enum {
   count_x = 24,
   count_y = 24,
 };
-}
 
-enum class game_state {
-  title,
-  start,
-  clear,
-  miss,
-  playing,
-  gameover,
-  pause,
-};
+}  // namespace block
 
 enum class game_mode {
   single,

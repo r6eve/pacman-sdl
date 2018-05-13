@@ -23,8 +23,18 @@ using namespace std;
 
 namespace {
 
-unsigned int Game_level;
+enum class game_state {
+  title,
+  start,
+  clear,
+  miss,
+  playing,
+  gameover,
+  pause,
+};
+
 game_state Game_state;
+unsigned int Game_level;
 unsigned int Blink_count;
 unsigned int Game_count;
 bool Debug_lose_enemy;
