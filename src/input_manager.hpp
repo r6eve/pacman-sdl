@@ -4,6 +4,36 @@
 #include <vector>
 #include "def_global.hpp"
 
+// Keyboard and Joystick
+namespace input_device {
+
+enum {
+  up = 0,
+  down,
+  left,
+  right,
+  x,
+  c,
+  b,  // Debug key: Enemys back home.
+  space,
+
+  // used by only Joystick
+  button_2,
+  button_3,
+  button_4,
+  button_5,
+  button_6,
+  button_7,
+  button_8,
+  button_9,
+
+  start,
+  select,
+  count,
+};
+
+}  // namespace input_device
+
 class Input_manager {
   static const unsigned int num_devices_;
   static unsigned int num_joysticks_;
