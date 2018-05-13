@@ -35,13 +35,20 @@ bool parse_options(const int argc, char **argv) noexcept;
 void init(const bool debug_mode) noexcept;
 void init_sdl(const bool debug_mode);
 void main_loop(const bool debug_mode) noexcept;
-void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
-void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
-void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
-void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
-void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
-void game_over(Wipe &wipe, Player &player1, Player &player2) noexcept;
-void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept;
+void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
+                Player &player2) noexcept;
+void game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &player1,
+                Player &player2) noexcept;
+void play_game(Food &food, Enemy &enemy, Player &player1,
+               Player &player2) noexcept;
+void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
+                Player &player2) noexcept;
+void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
+               Player &player2) noexcept;
+void game_over(Wipe &wipe, const Player &player1,
+               const Player &player2) noexcept;
+void game_pause(Food &food, const Enemy &enemy, Player &player1,
+                Player &player2) noexcept;
 // TODO: make enum class `font_type` and `color`
 void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
                int y, const char *str) noexcept;
@@ -193,7 +200,8 @@ void main_loop(const bool debug_mode) noexcept {
   }
 }
 
-void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
+void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
+                Player &player2) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -337,7 +345,8 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
   }
 }
 
-void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
+void game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &player1,
+                Player &player2) noexcept {
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
@@ -382,7 +391,8 @@ void game_start(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
   }
 }
 
-void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
+void play_game(Food &food, Enemy &enemy, Player &player1,
+               Player &player2) noexcept {
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
@@ -411,7 +421,8 @@ void play_game(Food &food, Enemy &enemy, Player &player1, Player &player2) noexc
   }
 }
 
-void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
+void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
+                Player &player2) noexcept {
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
@@ -443,7 +454,8 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
   }
 }
 
-void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
+void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1,
+               Player &player2) noexcept {
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
@@ -513,7 +525,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
   }
 }
 
-void game_over(Wipe &wipe, Player &player1, Player &player2) noexcept {
+void game_over(Wipe &wipe, const Player &player1,
+               const Player &player2) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -646,7 +659,8 @@ void game_over(Wipe &wipe, Player &player1, Player &player2) noexcept {
   }
 }
 
-void game_pause(Food &food, Enemy &enemy, Player &player1, Player &player2) noexcept {
+void game_pause(Food &food, const Enemy &enemy, Player &player1,
+                Player &player2) noexcept {
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
@@ -679,7 +693,7 @@ void draw_score(Player &player1, Player &player2) noexcept {
   }
   {
     stringstream score;
-    score << "S c o r e  :  " << setw(6) << player1.get_score();;
+    score << "S c o r e  :  " << setw(6) << player1.get_score();
     draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 20,
               screen::height / 7 + 10, score.str().c_str());
     SDL_Surface *p_surface = Image_manager::get("player1");
@@ -692,7 +706,7 @@ void draw_score(Player &player1, Player &player2) noexcept {
               screen::height / 7 + 40, life.str().c_str());
     if (Game_mode == game_mode::battle) {
       stringstream score;
-      score << "S c o r e  :  " << setw(6) << player2.get_score();;
+      score << "S c o r e  :  " << setw(6) << player2.get_score();
       draw_text(16, 0xff, 0xff, 0xff, screen::offset_x + 20,
                 screen::height / 7 + 90, score.str().c_str());
       SDL_Surface *p_surface = Image_manager::get("player2");
