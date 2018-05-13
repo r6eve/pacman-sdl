@@ -167,8 +167,8 @@ void main_loop(const bool debug_mode) noexcept {
   Wipe wipe;
   Food food;
   Enemy enemy;
-  Player p1(0);
-  Player p2(1);
+  Player p1(player_type::p1);
+  Player p2(player_type::p2);
   for (;;) {
     Input_manager::update(debug_mode);
     switch (Game_state) {

@@ -102,12 +102,12 @@ void Input_manager::end_joystick() noexcept {
   }
 }
 
-bool Input_manager::edge_key_p(const unsigned int user,
+bool Input_manager::edge_key_p(const unsigned int player_type,
                                const unsigned int button) noexcept {
-  return edge_key_[user][button];
+  return edge_key_[player_type][button];
 }
 
-bool Input_manager::press_key_p(const unsigned int user,
+bool Input_manager::press_key_p(const unsigned int player_type,
                                 const unsigned int button) noexcept {
-  return press_key_[user][button];
+  return press_key_[player_type][button];
 }

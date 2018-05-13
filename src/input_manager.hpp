@@ -45,9 +45,9 @@ class Input_manager {
   static void init_joystick() noexcept;
   static void update(const bool debug_mode) noexcept;
   static void end_joystick() noexcept;
-  static bool edge_key_p(const unsigned int user,
+  static bool edge_key_p(const unsigned int player_type,
                          const unsigned int button) noexcept;
-  static bool press_key_p(const unsigned int user,
+  static bool press_key_p(const unsigned int player_type,
                           const unsigned int button) noexcept;
 };
 

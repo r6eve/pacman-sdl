@@ -4,8 +4,6 @@
 #include "input_manager.hpp"
 #include "map.hpp"
 
-// TODO: set player_type as enum class
-
 void Player::init_pos() noexcept {
   switch (player_type_) {
     case 0: {

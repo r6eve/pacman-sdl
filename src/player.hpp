@@ -3,6 +3,15 @@
 
 #include "def_global.hpp"
 
+namespace player_type {
+
+enum {
+  p1 = 0,
+  p2 = 1,
+};
+
+}  // namespace player_type
+
 class Player {
   const unsigned int player_type_;
   Point pos_;
