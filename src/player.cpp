@@ -35,7 +35,7 @@ void Player::init_pos() noexcept {
 void Player::draw() const noexcept {
   switch (player_type_) {
     case 0: {
-      SDL_Surface *p_surface = Image_manager::get("player1");
+      SDL_Surface *p_surface = Image_manager::get("p1");
       SDL_Rect src;
       src.x = block::size * dir_;
       src.y = block::size * anime_count_;
@@ -51,7 +51,7 @@ void Player::draw() const noexcept {
       if (Game_mode != game_mode::battle) {
         return;
       }
-      SDL_Surface *p_surface = Image_manager::get("player2");
+      SDL_Surface *p_surface = Image_manager::get("p2");
       SDL_Rect src;
       src.x = block::size * dir_;
       src.y = block::size * anime_count_;

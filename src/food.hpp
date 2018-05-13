@@ -19,7 +19,7 @@ class Food {
   /**
    * Return true if all of the food are eaten, and false otherwise.
    */
-  bool check_state(Player &player1, Player &player2) noexcept;
+  bool check_state(Player &p1, Player &p2) noexcept;
 
   ~Food() {}
 };

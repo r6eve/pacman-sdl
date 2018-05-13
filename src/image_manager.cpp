@@ -34,8 +34,8 @@ void Image_manager::init() {
   }
 
   try {
-    load("./data/player1.png", "player1");
-    load("./data/player2.png", "player2");
+    load("./data/player1.png", "p1");
+    load("./data/player2.png", "p2");
     load("./data/bg.png", "bg");
     load("./data/bg_red.png", "bg_red");
     load("./data/bg_green.png", "bg_green");
