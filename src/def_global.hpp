@@ -104,6 +104,5 @@ GLOBAL int Power_chara_mode[2];
 GLOBAL bool Press_key[2][input_device::count];
 GLOBAL bool Edge_key[2][input_device::count];
 GLOBAL unsigned int Home_way[block::count_y][block::count_x];
-GLOBAL bool Choice_hit;  // true: player 1, false: player 2
 
 #endif

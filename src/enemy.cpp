@@ -323,7 +323,7 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
     const unsigned int d = pos.distance(enemies_[i].pos);
     if (d < Hit_distance) {
       if (!Power_chara_mode[0]) {
-        Choice_hit = true;
+        player1.set_damaged(true);
         return true;
       }
       if (enemies_[i].state == enemy_state::normal) {
@@ -339,7 +339,7 @@ bool Enemy::check_hit_enemy(Player &player1, Player &player2) const noexcept {
       const unsigned int d = pos.distance(enemies_[i].pos);
       if (d < Hit_distance) {
         if (!Power_chara_mode[1]) {
-          Choice_hit = false;
+          player2.set_damaged(true);
           return true;
         }
         if (enemies_[i].state == enemy_state::normal) {

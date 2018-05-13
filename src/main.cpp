@@ -318,6 +318,8 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &p
         player2.set_life(2);
         player1.set_score(0);
         player2.set_score(0);
+        player1.set_damaged(false);
+        player2.set_damaged(false);
 
         Game_count = 0;
         Game_state = game_state::start;
@@ -469,7 +471,7 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
   }
 
   // TODO: use pointer to delete if-clauses
-  if (Choice_hit) {
+  if (player1.get_damaged()) {
     Point pos = player1.get_pos();
     player1.set_pos(Point{pos.x, pos.y - 1});
     if (wipe.update()) {
@@ -481,6 +483,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
         enemy.init();
         player1.init_pos();
         player2.init_pos();
+        player1.set_damaged(false);
+        player2.set_damaged(false);
       } else {
         Game_count = 0;
         Blink_count = 0;
@@ -499,6 +503,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &player1, Player &pl
         enemy.init();
         player1.init_pos();
         player2.init_pos();
+        player1.set_damaged(false);
+        player2.set_damaged(false);
       } else {
         Game_count = 0;
         Blink_count = 0;

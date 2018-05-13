@@ -156,3 +156,7 @@ void Player::set_life(const int life) noexcept { life_ = life; }
 unsigned int Player::get_score() const noexcept { return score_; }
 
 void Player::set_score(const unsigned int score) noexcept { score_ = score; }
+
+bool Player::get_damaged() const noexcept { return damaged_p_; }
+
+void Player::set_damaged(const bool damaged_p) noexcept { damaged_p_ = damaged_p; }
