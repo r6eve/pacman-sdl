@@ -574,9 +574,9 @@ void Pacman::game_pause() noexcept {
 
 void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
                        const Point &p, const char *str) const noexcept {
-  SDL_Color black = {r, g, b, 0};
+  SDL_Color color = {r, g, b, 0};
   SDL_Surface *font_surface =
-      TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, black);
+      TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, color);
   SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
                   static_cast<Uint16>(font_surface->h)};
   SDL_Rect dst = {static_cast<Sint16>(p.x), static_cast<Sint16>(p.y), 0, 0};
