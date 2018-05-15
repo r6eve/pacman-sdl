@@ -47,7 +47,7 @@ void Pacman::init() noexcept {
   debug_lose_enemy_ = false;
 }
 
-void Pacman::init_sdl() {
+void Pacman::init_sdl() const {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     throw SDL_GetError();
   }
@@ -591,7 +591,7 @@ void Pacman::game_pause(Food &food, const Enemy &enemy, Player &p1,
 }
 
 void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
-                       int x, int y, const char *str) noexcept {
+                       int x, int y, const char *str) const noexcept {
   SDL_Color black = {r, g, b, 0};
   SDL_Surface *font_surface =
       TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, black);
@@ -602,7 +602,7 @@ void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
 }
 
 // TODO: reduce magic numbers
-void Pacman::draw_score(Player &p1, Player &p2) noexcept {
+void Pacman::draw_score(Player &p1, Player &p2) const noexcept {
   {
     SDL_Surface *p_surface = Image_manager::get("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
@@ -655,7 +655,7 @@ void Pacman::draw_score(Player &p1, Player &p2) noexcept {
   }
 }
 
-bool Pacman::poll_event() noexcept {
+bool Pacman::poll_event() const noexcept {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
@@ -674,7 +674,7 @@ bool Pacman::poll_event() noexcept {
   return true;
 }
 
-void Pacman::wait_game() noexcept {
+void Pacman::wait_game() const noexcept {
   static Uint32 pre_count;
   const double wait_time = 1000.0 / screen::max_fps;
   Uint32 wait_count = (wait_time + 0.5);
@@ -689,7 +689,7 @@ void Pacman::wait_game() noexcept {
   pre_count = SDL_GetTicks();
 }
 
-void Pacman::draw_fps() noexcept {
+void Pacman::draw_fps() const noexcept {
   static Uint32 pre_count;
   Uint32 now_count = SDL_GetTicks();
   if (pre_count) {
@@ -710,14 +710,6 @@ void Pacman::draw_fps() noexcept {
               ss.str().c_str());
   }
   pre_count = now_count;
-}
-
-void Pacman::end() noexcept {
-  Font_manager::end();
-  Image_manager::end();
-  Input_manager::end_joystick();
-  Mixer_manager::end();
-  atexit(SDL_Quit);
 }
 
 void Pacman::draw_translucence() noexcept {
@@ -752,4 +744,12 @@ void Pacman::draw_translucence() noexcept {
   } else {
     blink_count_ = 0;
   }
+}
+
+void Pacman::end() const noexcept {
+  Font_manager::end();
+  Image_manager::end();
+  Input_manager::end_joystick();
+  Mixer_manager::end();
+  atexit(SDL_Quit);
 }

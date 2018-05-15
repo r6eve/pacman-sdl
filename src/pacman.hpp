@@ -28,7 +28,7 @@ class Pacman {
   bool debug_lose_enemy_;
 
   void init() noexcept;
-  void init_sdl();
+  void init_sdl() const;
   void main_loop() noexcept;
   void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
                   Player &p2) noexcept;
@@ -44,13 +44,13 @@ class Pacman {
                   Player &p2) noexcept;
   // TODO: make enum class `font_type` and `color`
   void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
-                 int x, int y, const char *str) noexcept;
-  void draw_score(Player &p1, Player &p2) noexcept;
-  bool poll_event() noexcept;
-  void wait_game() noexcept;
-  void draw_fps() noexcept;
-  void end() noexcept;
+                 int x, int y, const char *str) const noexcept;
+  void draw_score(Player &p1, Player &p2) const noexcept;
+  bool poll_event() const noexcept;
+  void wait_game() const noexcept;
+  void draw_fps() const noexcept;
   void draw_translucence() noexcept;
+  void end() const noexcept;
 
  public:
   Pacman(const bool debug_mode) : debug_mode_(debug_mode) {}
