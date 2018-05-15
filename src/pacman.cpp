@@ -113,7 +113,7 @@ void Pacman::main_loop() noexcept {
 }
 
 void Pacman::game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                Player &p2) noexcept {
+                        Player &p2) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -261,7 +261,7 @@ void Pacman::game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
 }
 
 void Pacman::game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
-                Player &p2) noexcept {
+                        Player &p2) noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
@@ -306,7 +306,8 @@ void Pacman::game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::play_game(Food &food, Enemy &enemy, Player &p1, Player &p2) noexcept {
+void Pacman::play_game(Food &food, Enemy &enemy, Player &p1,
+                       Player &p2) noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
@@ -336,7 +337,7 @@ void Pacman::play_game(Food &food, Enemy &enemy, Player &p1, Player &p2) noexcep
 }
 
 void Pacman::game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                Player &p2) noexcept {
+                        Player &p2) noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
@@ -369,7 +370,7 @@ void Pacman::game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
 }
 
 void Pacman::game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-               Player &p2) noexcept {
+                       Player &p2) noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
@@ -439,7 +440,8 @@ void Pacman::game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::game_over(Wipe &wipe, const Player &p1, const Player &p2) noexcept {
+void Pacman::game_over(Wipe &wipe, const Player &p1,
+                       const Player &p2) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -575,7 +577,7 @@ void Pacman::game_over(Wipe &wipe, const Player &p1, const Player &p2) noexcept 
 }
 
 void Pacman::game_pause(Food &food, const Enemy &enemy, Player &p1,
-                Player &p2) noexcept {
+                        Player &p2) noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
@@ -588,8 +590,8 @@ void Pacman::game_pause(Food &food, const Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b, int x,
-               int y, const char *str) noexcept {
+void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
+                       int x, int y, const char *str) noexcept {
   SDL_Color black = {r, g, b, 0};
   SDL_Surface *font_surface =
       TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, black);
