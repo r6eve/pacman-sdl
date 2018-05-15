@@ -89,9 +89,9 @@ void Map::init(game_mode mode) noexcept {
 }
 
 // TODO: reduce magic numbers
-void Map::draw(const unsigned int game_level) noexcept {
+void Map::draw(SDL_Surface *screen, const unsigned int game_level) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
-  SDL_FillRect(Screen, &dst, 0x00000000);
+  SDL_FillRect(screen, &dst, 0x00000000);
 
   SDL_Surface *p_surface = nullptr;
   const unsigned int mod = game_level % 4;
@@ -119,7 +119,7 @@ void Map::draw(const unsigned int game_level) noexcept {
           mut_block = 0;
         }
         const int block = mut_block;
-        SDL_BlitSurface(p_surface, &src[block], Screen, &dst);
+        SDL_BlitSurface(p_surface, &src[block], screen, &dst);
       }
     }
   }
@@ -141,7 +141,7 @@ void Map::draw(const unsigned int game_level) noexcept {
           SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                           static_cast<Sint16>(block::size * y + block::size / 2),
                           0, 0};
-          SDL_BlitSurface(p_surface, &src, Screen, &dst);
+          SDL_BlitSurface(p_surface, &src, screen, &dst);
         }
       }
     }

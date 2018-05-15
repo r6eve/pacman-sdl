@@ -32,7 +32,7 @@ void Enemy::init() noexcept {
   }
 }
 
-void Enemy::draw() const noexcept {
+void Enemy::draw(SDL_Surface *screen) const noexcept {
   SDL_Surface *p_surface[5];  // TODO: 5
   p_surface[0] = Image_manager::get("akabei");
   p_surface[1] = Image_manager::get("pinky");
@@ -48,14 +48,14 @@ void Enemy::draw() const noexcept {
             static_cast<Sint16>(block::size * enemies_[i].dir),
             static_cast<Sint16>(block::size * enemies_[i].anime_count),
             block::size, block::size};
-        SDL_BlitSurface(p_surface[i], &src, Screen, &dst);
+        SDL_BlitSurface(p_surface[i], &src, screen, &dst);
         break;
       }
       case enemy_state::lose: {
         SDL_Rect src = {
             0, static_cast<Sint16>(block::size * enemies_[i].anime_count),
             block::size, block::size};
-        SDL_BlitSurface(p_surface[4], &src, Screen, &dst);
+        SDL_BlitSurface(p_surface[4], &src, screen, &dst);
         break;
       }
       default:

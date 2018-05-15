@@ -59,12 +59,4 @@ struct Point {
   }
 };
 
-#ifdef PACMAN_CPP
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
-GLOBAL SDL_Surface *Screen;
-
 #endif

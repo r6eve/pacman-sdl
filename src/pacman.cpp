@@ -21,6 +21,7 @@ using namespace std;
 
 Pacman::Pacman(const bool debug_mode) noexcept
     : debug_mode_(debug_mode),
+      screen_(nullptr),
       game_state_(game_state::title),
       game_mode_(game_mode::single),
       blink_count_(0),
@@ -41,20 +42,20 @@ Pacman::Pacman(const bool debug_mode) noexcept
   Input_manager::init_joystick();
 }
 
-void Pacman::init_sdl() const {
+void Pacman::init_sdl() {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     throw SDL_GetError();
   }
 
   SDL_WM_SetCaption("pacman-sdl", nullptr);
   if (debug_mode_) {
-    Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
+    screen_ = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
                               SDL_HWSURFACE | SDL_DOUBLEBUF);
   } else {
-    Screen = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
+    screen_ = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
                               SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
   }
-  if (!Screen) {
+  if (!screen_) {
     throw SDL_GetError();
   }
 
@@ -96,26 +97,26 @@ void Pacman::run() noexcept {
     if (debug_mode_) {
       draw_fps();
     }
-    SDL_Flip(Screen);
+    SDL_Flip(screen_);
     wait_game();
   }
 }
 
 void Pacman::game_title() noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
-  SDL_FillRect(Screen, &dst, 0xffffffff);
+  SDL_FillRect(screen_, &dst, 0xffffffff);
 
   switch (game_count_) {
     case 0: {
       wipe.set_wipe_in();
-      wipe.draw(screen::width);
+      wipe.draw(screen_, screen::width);
       ++game_count_;
       break;
     }
     case 1: {
       draw_text(36, RGB{0x00, 0x00, 0x00}, Point{160, 160},
                 "P  a  c  -  M  a  n");
-      wipe.draw(screen::width);
+      wipe.draw(screen_, screen::width);
       if (wipe.update()) {
         ++game_count_;
       }
@@ -159,14 +160,14 @@ void Pacman::game_title() noexcept {
       switch (game_mode_) {
         case game_mode::single: {
           SDL_Rect dst = {250, 298, 112, 26};
-          SDL_FillRect(Screen, &dst, 0x00000000);
+          SDL_FillRect(screen_, &dst, 0x00000000);
           draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 300}, "1P MODE");
           draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 350}, "VS MODE");
           break;
         }
         case game_mode::battle: {
           SDL_Rect dst = {250, 348, 112, 26};
-          SDL_FillRect(Screen, &dst, 0x00000000);
+          SDL_FillRect(screen_, &dst, 0x00000000);
           draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 300}, "1P MODE");
           draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 350}, "VS MODE");
           break;
@@ -180,7 +181,7 @@ void Pacman::game_title() noexcept {
           Input_manager::press_key_p(1, input_device::x) ||
           Input_manager::press_key_p(0, input_device::space)) {
         wipe.set_wipe_out();
-        wipe.draw(screen::width);
+        wipe.draw(screen_, screen::width);
         ++game_count_;
       }
 
@@ -203,14 +204,14 @@ void Pacman::game_title() noexcept {
       switch (game_mode_) {
         case game_mode::single: {
           SDL_Rect dst = {250, 298, 112, 26};
-          SDL_FillRect(Screen, &dst, 0x00000000);
+          SDL_FillRect(screen_, &dst, 0x00000000);
           draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 300}, "1P MODE");
           draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 350}, "VS MODE");
           break;
         }
         case game_mode::battle: {
           SDL_Rect dst = {250, 348, 112, 26};
-          SDL_FillRect(Screen, &dst, 0x00000000);
+          SDL_FillRect(screen_, &dst, 0x00000000);
           draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 300}, "1P MODE");
           draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 350}, "VS MODE");
           break;
@@ -220,7 +221,7 @@ void Pacman::game_title() noexcept {
           break;
       }
 
-      wipe.draw(screen::width);
+      wipe.draw(screen_, screen::width);
 
       // initialize globals
       if (wipe.update()) {
@@ -253,11 +254,11 @@ void Pacman::game_title() noexcept {
 }
 
 void Pacman::game_start() noexcept {
-  Map::draw(game_level_);
-  food.draw();
-  enemy.draw();
-  p1.draw(game_mode_);
-  p2.draw(game_mode_);
+  Map::draw(screen_, game_level_);
+  food.draw(screen_);
+  enemy.draw(screen_);
+  p1.draw(screen_, game_mode_);
+  p2.draw(screen_, game_mode_);
   draw_score();
   switch (game_count_) {
     case 0: {
@@ -266,12 +267,12 @@ void Pacman::game_start() noexcept {
         Mix_PlayMusic(Mixer_manager::get_music("beginning"), 0);
       }
       wipe.set_wipe_in();
-      wipe.draw(screen::offset_x);
+      wipe.draw(screen_, screen::offset_x);
       ++game_count_;
       break;
     }
     case 1: {
-      wipe.draw(screen::offset_x);
+      wipe.draw(screen_, screen::offset_x);
       if (wipe.update()) {
         ++game_count_;
       }
@@ -298,11 +299,11 @@ void Pacman::game_start() noexcept {
 }
 
 void Pacman::play_game() noexcept {
-  Map::draw(game_level_);
-  food.draw();
-  enemy.draw();
-  p1.draw(game_mode_);
-  p2.draw(game_mode_);
+  Map::draw(screen_, game_level_);
+  food.draw(screen_);
+  enemy.draw(screen_);
+  p1.draw(screen_, game_mode_);
+  p2.draw(screen_, game_mode_);
   draw_score();
   enemy.move(debug_lose_enemy_, p1, p2);
   p1.move(game_mode_);
@@ -327,21 +328,21 @@ void Pacman::play_game() noexcept {
 }
 
 void Pacman::game_clear() noexcept {
-  Map::draw(game_level_);
-  food.draw();
-  enemy.draw();
-  p1.draw(game_mode_);
-  p2.draw(game_mode_);
+  Map::draw(screen_, game_level_);
+  food.draw(screen_);
+  enemy.draw(screen_);
+  p1.draw(screen_, game_mode_);
+  p2.draw(screen_, game_mode_);
   draw_score();
 
   if (game_count_ == 0) {
     wipe.set_wipe_out();
-    wipe.draw(screen::offset_x);
+    wipe.draw(screen_, screen::offset_x);
     ++game_count_;
     return;
   }
 
-  wipe.draw(screen::offset_x);
+  wipe.draw(screen_, screen::offset_x);
   if (wipe.update()) {
     if (game_level_ >= 256) {
       game_count_ = 0;
@@ -359,29 +360,29 @@ void Pacman::game_clear() noexcept {
 }
 
 void Pacman::game_miss() noexcept {
-  Map::draw(game_level_);
-  food.draw();
-  enemy.draw();
-  p1.draw(game_mode_);
-  p2.draw(game_mode_);
+  Map::draw(screen_, game_level_);
+  food.draw(screen_);
+  enemy.draw(screen_);
+  p1.draw(screen_, game_mode_);
+  p2.draw(screen_, game_mode_);
   draw_score();
 
   if (game_count_ == 0) {
     Mix_PlayMusic(Mixer_manager::get_music("death"), 0);
     wipe.set_wipe_out();
     if ((p1.get_life() == 0) || (p2.get_life() == 0)) {
-      wipe.draw(screen::width);
+      wipe.draw(screen_, screen::width);
     } else {
-      wipe.draw(screen::offset_x);
+      wipe.draw(screen_, screen::offset_x);
     }
     ++game_count_;
     return;
   }
 
   if ((p1.get_life() == 0) || (p2.get_life() == 0)) {
-    wipe.draw(screen::width);
+    wipe.draw(screen_, screen::width);
   } else {
-    wipe.draw(screen::offset_x);
+    wipe.draw(screen_, screen::offset_x);
   }
 
   // TODO: use pointer to delete if-clauses
@@ -430,7 +431,7 @@ void Pacman::game_miss() noexcept {
 
 void Pacman::game_over() noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
-  SDL_FillRect(Screen, &dst, 0xffffffff);
+  SDL_FillRect(screen_, &dst, 0xffffffff);
 
   switch (game_mode_) {
     case game_mode::single: {
@@ -439,14 +440,14 @@ void Pacman::game_over() noexcept {
           draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
                     "G a m e O v e r");
           wipe.set_wipe_in();
-          wipe.draw(screen::width);
+          wipe.draw(screen_, screen::width);
           ++game_count_;
           break;
         }
         case 1: {
           draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
                     "G a m e O v e r");
-          wipe.draw(screen::width);
+          wipe.draw(screen_, screen::width);
           if (wipe.update()) {
             ++game_count_;
           }
@@ -475,12 +476,12 @@ void Pacman::game_over() noexcept {
               Input_manager::press_key_p(0, input_device::space)) {
             ++game_count_;
             wipe.set_wipe_out();
-            wipe.draw(screen::width);
+            wipe.draw(screen_, screen::width);
           }
           break;
         }
         case 3: {
-          wipe.draw(screen::width);
+          wipe.draw(screen_, screen::width);
           if (wipe.update()) {
             blink_count_ = 0;
             game_count_ = 0;
@@ -500,14 +501,14 @@ void Pacman::game_over() noexcept {
           draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
                     "G a m e O v e r");
           wipe.set_wipe_in();
-          wipe.draw(screen::width);
+          wipe.draw(screen_, screen::width);
           ++game_count_;
           break;
         }
         case 1: {
           draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
                     "G a m e O v e r");
-          wipe.draw(screen::width);
+          wipe.draw(screen_, screen::width);
           if (wipe.update()) {
             ++game_count_;
           }
@@ -548,12 +549,12 @@ void Pacman::game_over() noexcept {
               Input_manager::press_key_p(0, input_device::space)) {
             ++game_count_;
             wipe.set_wipe_out();
-            wipe.draw(screen::width);
+            wipe.draw(screen_, screen::width);
           }
           break;
         }
         case 3: {
-          wipe.draw(screen::width);
+          wipe.draw(screen_, screen::width);
           if (wipe.update()) {
             blink_count_ = 0;
             game_count_ = 0;
@@ -574,11 +575,11 @@ void Pacman::game_over() noexcept {
 }
 
 void Pacman::game_pause() noexcept {
-  Map::draw(game_level_);
-  food.draw();
-  enemy.draw();
-  p1.draw(game_mode_);
-  p2.draw(game_mode_);
+  Map::draw(screen_, game_level_);
+  food.draw(screen_);
+  enemy.draw(screen_);
+  p1.draw(screen_, game_mode_);
+  p2.draw(screen_, game_mode_);
   draw_score();
   draw_translucence();
   if (Input_manager::edge_key_p(0, input_device::space)) {
@@ -594,7 +595,7 @@ void Pacman::draw_text(const unsigned char font_size, const RGB &rgb,
   SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
                   static_cast<Uint16>(font_surface->h)};
   SDL_Rect dst = {static_cast<Sint16>(p.x), static_cast<Sint16>(p.y), 0, 0};
-  SDL_BlitSurface(font_surface, &src, Screen, &dst);
+  SDL_BlitSurface(font_surface, &src, screen_, &dst);
 }
 
 void Pacman::draw_text(const unsigned char font_size, const RGB &&rgb,
@@ -617,7 +618,7 @@ void Pacman::draw_score() noexcept {
   {
     SDL_Surface *p_surface = Image_manager::get("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
-    SDL_BlitSurface(p_surface, nullptr, Screen, &dst);
+    SDL_BlitSurface(p_surface, nullptr, screen_, &dst);
   }
   {
     stringstream score;
@@ -628,7 +629,7 @@ void Pacman::draw_score() noexcept {
     SDL_Surface *p_surface = Image_manager::get("p1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
-    SDL_BlitSurface(p_surface, &src, Screen, &dst);
+    SDL_BlitSurface(p_surface, &src, screen_, &dst);
     stringstream life;
     life << "x  " << p1.get_life();
     draw_text(16, RGB{0xff, 0xff, 0xff},
@@ -644,7 +645,7 @@ void Pacman::draw_score() noexcept {
       SDL_Rect src = {block::size, 0, block::size, block::size};
       SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
                       0};
-      SDL_BlitSurface(p_surface, &src, Screen, &dst);
+      SDL_BlitSurface(p_surface, &src, screen_, &dst);
       stringstream life;
       life << "x  " << p2.get_life();
       draw_text(16, RGB{0xff, 0xff, 0xff},
@@ -657,14 +658,14 @@ void Pacman::draw_score() noexcept {
       SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4,
                       static_cast<Uint16>(p1.get_power_mode() / 4),
                       block::size};
-      SDL_FillRect(Screen, &dst, 0xffff00);
+      SDL_FillRect(screen_, &dst, 0xffff00);
       p1.set_power_mode(p1.get_power_mode() - 1);
     }
     if (p2.get_power_mode()) {
       SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4 + 30,
                       static_cast<Uint16>(p2.get_power_mode() / 4),
                       block::size};
-      SDL_FillRect(Screen, &dst, 0x808080);
+      SDL_FillRect(screen_, &dst, 0x808080);
       p2.set_power_mode(p2.get_power_mode() - 1);
     }
   }
@@ -751,7 +752,7 @@ void Pacman::draw_translucence() noexcept {
     exit(EXIT_FAILURE);
   }
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
-  SDL_BlitSurface(trans_surface, nullptr, Screen, &dst);
+  SDL_BlitSurface(trans_surface, nullptr, screen_, &dst);
   if (blink_count_ < 30) {
     draw_text(36, RGB{0xff, 0xff, 0xff}, Point{165, 170}, "P a u s e");
     ++blink_count_;

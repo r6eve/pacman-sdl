@@ -48,7 +48,7 @@ class Enemy {
 
   void init() noexcept;
 
-  void draw() const noexcept;
+  void draw(SDL_Surface *screen) const noexcept;
 
   void move(const bool debug_lose_enemy, const Player &p1,
             const Player &p2) noexcept;

@@ -14,7 +14,7 @@ class Food {
 
   void init() noexcept;
 
-  void draw() noexcept;
+  void draw(SDL_Surface *screen) noexcept;
 
   /**
    * Return true if all of the food are eaten, and false otherwise.

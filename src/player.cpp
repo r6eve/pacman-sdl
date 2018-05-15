@@ -30,7 +30,7 @@ void Player::init_pos() noexcept {
   }
 }
 
-void Player::draw(game_mode mode) const noexcept {
+void Player::draw(SDL_Surface *screen, game_mode mode) const noexcept {
   switch (player_type_) {
     case 0: {
       SDL_Surface *p_surface = Image_manager::get("p1");
@@ -42,7 +42,7 @@ void Player::draw(game_mode mode) const noexcept {
       SDL_Rect dst;
       dst.x = pos_.x;
       dst.y = pos_.y;
-      SDL_BlitSurface(p_surface, &src, Screen, &dst);
+      SDL_BlitSurface(p_surface, &src, screen, &dst);
       return;
     }
     case 1: {
@@ -58,7 +58,7 @@ void Player::draw(game_mode mode) const noexcept {
       SDL_Rect dst;
       dst.x = pos_.x;
       dst.y = pos_.y;
-      SDL_BlitSurface(p_surface, &src, Screen, &dst);
+      SDL_BlitSurface(p_surface, &src, screen, &dst);
       return;
     }
     default:

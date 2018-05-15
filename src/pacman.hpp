@@ -1,6 +1,7 @@
 #ifndef PACMAN_H
 #define PACMAN_H
 
+#include <memory>
 #include "enemy.hpp"
 #include "food.hpp"
 #include "player.hpp"
@@ -25,6 +26,7 @@ class Pacman {
 
   const bool debug_mode_;
 
+  SDL_Surface *screen_;
   game_state game_state_;
   unsigned int game_level_;
   game_mode game_mode_;
@@ -38,7 +40,7 @@ class Pacman {
   Player p1;
   Player p2;
 
-  void init_sdl() const;
+  void init_sdl();
   void game_title() noexcept;
   void game_start() noexcept;
   void play_game() noexcept;
