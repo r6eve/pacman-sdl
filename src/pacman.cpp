@@ -436,14 +436,16 @@ void Pacman::game_over() noexcept {
     case game_mode::single: {
       switch (game_count_) {
         case 0: {
-          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
+                    "G a m e O v e r");
           wipe.set_wipe_in();
           wipe.draw(screen::width);
           ++game_count_;
           break;
         }
         case 1: {
-          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
+                    "G a m e O v e r");
           wipe.draw(screen::width);
           if (wipe.update()) {
             ++game_count_;
@@ -451,10 +453,12 @@ void Pacman::game_over() noexcept {
           break;
         }
         case 2: {
-          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
+                    "G a m e O v e r");
           stringstream ss;
           ss << "Y o u r  S c o r e   " << p1.get_score();
-          draw_text(36, RGB{0x00, 0x00, 0x00}, Point{120, 220}, ss.str().c_str());
+          draw_text(36, RGB{0x00, 0x00, 0x00}, Point{120, 220},
+                    ss.str().c_str());
 
           if (blink_count_ < 30) {
             draw_text(16, RGB{0x00, 0x00, 0x00}, Point{210, 350},
@@ -493,14 +497,16 @@ void Pacman::game_over() noexcept {
     case game_mode::battle: {
       switch (game_count_) {
         case 0: {
-          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
+                    "G a m e O v e r");
           wipe.set_wipe_in();
           wipe.draw(screen::width);
           ++game_count_;
           break;
         }
         case 1: {
-          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
+                    "G a m e O v e r");
           wipe.draw(screen::width);
           if (wipe.update()) {
             ++game_count_;
@@ -508,19 +514,23 @@ void Pacman::game_over() noexcept {
           break;
         }
         case 2: {
-          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100},
+                    "G a m e O v e r");
           stringstream ss;
           const unsigned int p1_score = p1.get_score();
           const unsigned int p2_score = p2.get_score();
           if (p1_score > p2_score) {
             ss << "1 P  W I N  " << p1_score;
-            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240}, ss.str().c_str());
+            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240},
+                      ss.str().c_str());
           } else if (p1_score < p2_score) {
             ss << "2 P  W I N  " << p2_score;
-            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240}, ss.str().c_str());
+            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240},
+                      ss.str().c_str());
           } else {
             ss << "D R A W  " << p1_score;
-            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240}, ss.str().c_str());
+            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240},
+                      ss.str().c_str());
           }
 
           if (blink_count_ < 30) {
@@ -576,9 +586,9 @@ void Pacman::game_pause() noexcept {
   }
 }
 
-void Pacman::draw_text(const unsigned char font_size, RGB &rgb, const Point &p,
-                       const char *str) const noexcept {
-  SDL_Color color = {rgb.r, rgb.g, rgb.b, 0};
+void Pacman::draw_text(const unsigned char font_size, const RGB &rgb,
+                       const Point &p, const char *str) const noexcept {
+  const SDL_Color color = {rgb.r, rgb.g, rgb.b, 0};
   SDL_Surface *font_surface =
       TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, color);
   SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
@@ -587,17 +597,17 @@ void Pacman::draw_text(const unsigned char font_size, RGB &rgb, const Point &p,
   SDL_BlitSurface(font_surface, &src, Screen, &dst);
 }
 
-void Pacman::draw_text(const unsigned char font_size, RGB &&rgb,
+void Pacman::draw_text(const unsigned char font_size, const RGB &&rgb,
                        const Point &p, const char *str) const noexcept {
   draw_text(font_size, rgb, p, str);
 }
 
-void Pacman::draw_text(const unsigned char font_size, RGB &rgb,
+void Pacman::draw_text(const unsigned char font_size, const RGB &rgb,
                        const Point &&p, const char *str) const noexcept {
   draw_text(font_size, rgb, p, str);
 }
 
-void Pacman::draw_text(const unsigned char font_size, RGB &&rgb,
+void Pacman::draw_text(const unsigned char font_size, const RGB &&rgb,
                        const Point &&p, const char *str) const noexcept {
   draw_text(font_size, rgb, p, str);
 }
@@ -682,12 +692,12 @@ bool Pacman::poll_event() const noexcept {
 void Pacman::wait_game() const noexcept {
   static Uint32 pre_count;
   const double wait_time = 1000.0 / screen::max_fps;
-  Uint32 wait_count = (wait_time + 0.5);
+  const Uint32 wait_count = (wait_time + 0.5);
   if (pre_count) {
-    Uint32 now_count = SDL_GetTicks();
-    Uint32 interval = now_count - pre_count;
+    const Uint32 now_count = SDL_GetTicks();
+    const Uint32 interval = now_count - pre_count;
     if (interval < wait_count) {
-      Uint32 delay_time = wait_count - interval;
+      const Uint32 delay_time = wait_count - interval;
       SDL_Delay(delay_time);
     }
   }
@@ -696,13 +706,14 @@ void Pacman::wait_game() const noexcept {
 
 void Pacman::draw_fps() const noexcept {
   static Uint32 pre_count;
-  Uint32 now_count = SDL_GetTicks();
+  const Uint32 now_count = SDL_GetTicks();
   if (pre_count) {
     static double frame_rate;
-    Uint32 interval = now_count - pre_count;
-    if (interval < 1) {
-      interval = 1;
+    Uint32 mut_interval = now_count - pre_count;
+    if (mut_interval < 1) {
+      mut_interval = 1;
     }
+    const Uint32 interval = mut_interval;
 
     if (!(pre_count % 30)) {
       frame_rate = 1000.0 / interval;
