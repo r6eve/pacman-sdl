@@ -59,7 +59,7 @@ struct Point {
   }
 };
 
-#ifdef MAIN
+#ifdef PACMAN_CPP
 #define GLOBAL
 #else
 #define GLOBAL extern
