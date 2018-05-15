@@ -164,5 +164,5 @@ unsigned int Map::get_home_distance(const Point &p) noexcept {
 }
 
 unsigned int Map::get_home_distance(const Point &&p) noexcept {
-  return home_way_[p.y][p.x];
+  return get_home_distance(p);
 }
