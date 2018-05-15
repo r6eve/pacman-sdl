@@ -53,6 +53,7 @@ Options:
 
 int main(int argc, char **argv) {
   const bool debug_mode = parse_options(argc, argv);
-  run(debug_mode);
+  Pacman pacman(debug_mode);
+  pacman.run();
   // NOTREACHED
 }
