@@ -17,6 +17,12 @@ class Pacman {
     pause,
   };
 
+  struct RGB {
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+  };
+
   const bool debug_mode_;
 
   game_state game_state_;
@@ -40,9 +46,13 @@ class Pacman {
   void game_miss() noexcept;
   void game_over() noexcept;
   void game_pause() noexcept;
-  void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
+  void draw_text(const unsigned char font_size, RGB &rgb,
                  const Point &p, const char *str) const noexcept;
-  void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
+  void draw_text(const unsigned char font_size, RGB &&rgb,
+                 const Point &p, const char *str) const noexcept;
+  void draw_text(const unsigned char font_size, RGB &rgb,
+                 const Point &&p, const char *str) const noexcept;
+  void draw_text(const unsigned char font_size, RGB &&rgb,
                  const Point &&p, const char *str) const noexcept;
   void draw_score() noexcept;
   bool poll_event() const noexcept;

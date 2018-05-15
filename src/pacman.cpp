@@ -113,7 +113,8 @@ void Pacman::game_title() noexcept {
       break;
     }
     case 1: {
-      draw_text(36, 0x00, 0x00, 0x00, Point{160, 160}, "P  a  c  -  M  a  n");
+      draw_text(36, RGB{0x00, 0x00, 0x00}, Point{160, 160},
+                "P  a  c  -  M  a  n");
       wipe.draw(screen::width);
       if (wipe.update()) {
         ++game_count_;
@@ -121,9 +122,10 @@ void Pacman::game_title() noexcept {
       break;
     }
     case 2: {
-      draw_text(36, 0x00, 0x00, 0x00, Point{160, 160}, "P  a  c  -  M  a  n");
+      draw_text(36, RGB{0x00, 0x00, 0x00}, Point{160, 160},
+                "P  a  c  -  M  a  n");
       if (blink_count_ < 30) {
-        draw_text(16, 0x00, 0x00, 0x00, Point{205, 300},
+        draw_text(16, RGB{0x00, 0x00, 0x00}, Point{205, 300},
                   "P r e s s   S p a c e   K e y");
         ++blink_count_;
       } else if (blink_count_ < 60) {
@@ -141,7 +143,8 @@ void Pacman::game_title() noexcept {
       break;
     }
     case 3: {
-      draw_text(36, 0x00, 0x00, 0x00, Point{160, 160}, "P  a  c  -  M  a  n");
+      draw_text(36, RGB{0x00, 0x00, 0x00}, Point{160, 160},
+                "P  a  c  -  M  a  n");
       if (!Input_manager::press_key_p(0, input_device::x) &&
           !Input_manager::press_key_p(1, input_device::x) &&
           !Input_manager::press_key_p(0, input_device::space)) {
@@ -150,21 +153,22 @@ void Pacman::game_title() noexcept {
       break;
     }
     case 4: {
-      draw_text(36, 0x00, 0x00, 0x00, Point{160, 160}, "P  a  c  -  M  a  n");
+      draw_text(36, RGB{0x00, 0x00, 0x00}, Point{160, 160},
+                "P  a  c  -  M  a  n");
 
       switch (game_mode_) {
         case game_mode::single: {
           SDL_Rect dst = {250, 298, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(16, 0xff, 0xff, 0xff, Point{270, 300}, "1P MODE");
-          draw_text(16, 0x00, 0x00, 0x00, Point{270, 350}, "VS MODE");
+          draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 300}, "1P MODE");
+          draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 350}, "VS MODE");
           break;
         }
         case game_mode::battle: {
           SDL_Rect dst = {250, 348, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(16, 0x00, 0x00, 0x00, Point{270, 300}, "1P MODE");
-          draw_text(16, 0xff, 0xff, 0xff, Point{270, 350}, "VS MODE");
+          draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 300}, "1P MODE");
+          draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 350}, "VS MODE");
           break;
         }
         default:
@@ -200,15 +204,15 @@ void Pacman::game_title() noexcept {
         case game_mode::single: {
           SDL_Rect dst = {250, 298, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(16, 0xff, 0xff, 0xff, Point{270, 300}, "1P MODE");
-          draw_text(16, 0x00, 0x00, 0x00, Point{270, 350}, "VS MODE");
+          draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 300}, "1P MODE");
+          draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 350}, "VS MODE");
           break;
         }
         case game_mode::battle: {
           SDL_Rect dst = {250, 348, 112, 26};
           SDL_FillRect(Screen, &dst, 0x00000000);
-          draw_text(16, 0x00, 0x00, 0x00, Point{270, 300}, "1P MODE");
-          draw_text(16, 0xff, 0xff, 0xff, Point{270, 350}, "VS MODE");
+          draw_text(16, RGB{0x00, 0x00, 0x00}, Point{270, 300}, "1P MODE");
+          draw_text(16, RGB{0xff, 0xff, 0xff}, Point{270, 350}, "VS MODE");
           break;
         }
         default:
@@ -280,9 +284,9 @@ void Pacman::game_start() noexcept {
   if (game_count_ < 130) {
     stringstream ss;
     ss << "S t a g e " << game_level_;
-    draw_text(36, 0xff, 0x00, 0x00, Point{153, 170}, ss.str().c_str());
+    draw_text(36, RGB{0xff, 0x00, 0x00}, Point{153, 170}, ss.str().c_str());
   } else if (game_count_ < 200) {
-    draw_text(36, 0xff, 0x00, 0x00, Point{165, 170}, "S t a r t");
+    draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 170}, "S t a r t");
   }
 
   if (game_count_ > 220) {
@@ -432,14 +436,14 @@ void Pacman::game_over() noexcept {
     case game_mode::single: {
       switch (game_count_) {
         case 0: {
-          draw_text(36, 0xff, 0x00, 0x00, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
           wipe.set_wipe_in();
           wipe.draw(screen::width);
           ++game_count_;
           break;
         }
         case 1: {
-          draw_text(36, 0xff, 0x00, 0x00, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
           wipe.draw(screen::width);
           if (wipe.update()) {
             ++game_count_;
@@ -447,13 +451,13 @@ void Pacman::game_over() noexcept {
           break;
         }
         case 2: {
-          draw_text(36, 0xff, 0x00, 0x00, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
           stringstream ss;
           ss << "Y o u r  S c o r e   " << p1.get_score();
-          draw_text(36, 0x00, 0x00, 0x00, Point{120, 220}, ss.str().c_str());
+          draw_text(36, RGB{0x00, 0x00, 0x00}, Point{120, 220}, ss.str().c_str());
 
           if (blink_count_ < 30) {
-            draw_text(16, 0x00, 0x00, 0x00, Point{210, 350},
+            draw_text(16, RGB{0x00, 0x00, 0x00}, Point{210, 350},
                       "P r e s s  S p a c e  K e y");
             ++blink_count_;
           } else if (blink_count_ < 60) {
@@ -489,14 +493,14 @@ void Pacman::game_over() noexcept {
     case game_mode::battle: {
       switch (game_count_) {
         case 0: {
-          draw_text(36, 0xff, 0x00, 0x00, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
           wipe.set_wipe_in();
           wipe.draw(screen::width);
           ++game_count_;
           break;
         }
         case 1: {
-          draw_text(36, 0xff, 0x00, 0x00, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
           wipe.draw(screen::width);
           if (wipe.update()) {
             ++game_count_;
@@ -504,23 +508,23 @@ void Pacman::game_over() noexcept {
           break;
         }
         case 2: {
-          draw_text(36, 0xff, 0x00, 0x00, Point{165, 100}, "G a m e O v e r");
+          draw_text(36, RGB{0xff, 0x00, 0x00}, Point{165, 100}, "G a m e O v e r");
           stringstream ss;
           const unsigned int p1_score = p1.get_score();
           const unsigned int p2_score = p2.get_score();
           if (p1_score > p2_score) {
             ss << "1 P  W I N  " << p1_score;
-            draw_text(36, 0x00, 0x00, 0x00, Point{170, 240}, ss.str().c_str());
+            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240}, ss.str().c_str());
           } else if (p1_score < p2_score) {
             ss << "2 P  W I N  " << p2_score;
-            draw_text(36, 0x00, 0x00, 0x00, Point{170, 240}, ss.str().c_str());
+            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240}, ss.str().c_str());
           } else {
             ss << "D R A W  " << p1_score;
-            draw_text(36, 0x00, 0x00, 0x00, Point{170, 240}, ss.str().c_str());
+            draw_text(36, RGB{0x00, 0x00, 0x00}, Point{170, 240}, ss.str().c_str());
           }
 
           if (blink_count_ < 30) {
-            draw_text(16, 0x00, 0x00, 0x00, Point{210, 380},
+            draw_text(16, RGB{0x00, 0x00, 0x00}, Point{210, 380},
                       "P r e s s  S p a c e  K e y");
             ++blink_count_;
           } else if (blink_count_ < 60) {
@@ -572,9 +576,9 @@ void Pacman::game_pause() noexcept {
   }
 }
 
-void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
-                       const Point &p, const char *str) const noexcept {
-  SDL_Color color = {r, g, b, 0};
+void Pacman::draw_text(const unsigned char font_size, RGB &rgb, const Point &p,
+                       const char *str) const noexcept {
+  SDL_Color color = {rgb.r, rgb.g, rgb.b, 0};
   SDL_Surface *font_surface =
       TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, color);
   SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
@@ -583,9 +587,19 @@ void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
   SDL_BlitSurface(font_surface, &src, Screen, &dst);
 }
 
-void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
+void Pacman::draw_text(const unsigned char font_size, RGB &&rgb,
+                       const Point &p, const char *str) const noexcept {
+  draw_text(font_size, rgb, p, str);
+}
+
+void Pacman::draw_text(const unsigned char font_size, RGB &rgb,
                        const Point &&p, const char *str) const noexcept {
-  draw_text(font_size, r, g, b, p, str);
+  draw_text(font_size, rgb, p, str);
+}
+
+void Pacman::draw_text(const unsigned char font_size, RGB &&rgb,
+                       const Point &&p, const char *str) const noexcept {
+  draw_text(font_size, rgb, p, str);
 }
 
 // TODO: reduce magic numbers
@@ -598,7 +612,7 @@ void Pacman::draw_score() noexcept {
   {
     stringstream score;
     score << "S c o r e  :  " << setw(6) << p1.get_score();
-    draw_text(16, 0xff, 0xff, 0xff,
+    draw_text(16, RGB{0xff, 0xff, 0xff},
               Point{screen::offset_x + 20, screen::height / 7 + 10},
               score.str().c_str());
     SDL_Surface *p_surface = Image_manager::get("p1");
@@ -607,13 +621,13 @@ void Pacman::draw_score() noexcept {
     SDL_BlitSurface(p_surface, &src, Screen, &dst);
     stringstream life;
     life << "x  " << p1.get_life();
-    draw_text(16, 0xff, 0xff, 0xff,
+    draw_text(16, RGB{0xff, 0xff, 0xff},
               Point{screen::offset_x + 90, screen::height / 7 + 40},
               life.str().c_str());
     if (game_mode_ == game_mode::battle) {
       stringstream score;
       score << "S c o r e  :  " << setw(6) << p2.get_score();
-      draw_text(16, 0xff, 0xff, 0xff,
+      draw_text(16, RGB{0xff, 0xff, 0xff},
                 Point{screen::offset_x + 20, screen::height / 7 + 90},
                 score.str().c_str());
       SDL_Surface *p_surface = Image_manager::get("p2");
@@ -623,7 +637,7 @@ void Pacman::draw_score() noexcept {
       SDL_BlitSurface(p_surface, &src, Screen, &dst);
       stringstream life;
       life << "x  " << p2.get_life();
-      draw_text(16, 0xff, 0xff, 0xff,
+      draw_text(16, RGB{0xff, 0xff, 0xff},
                 Point{screen::offset_x + 90, screen::height / 7 + 122},
                 life.str().c_str());
     }
@@ -697,7 +711,7 @@ void Pacman::draw_fps() const noexcept {
     stringstream ss;
     ss << "FrameRate[" << setprecision(2) << setiosflags(ios::fixed)
        << frame_rate << "]";
-    draw_text(16, 0xff, 0xff, 0xff, Point{screen::offset_x + 15, 16},
+    draw_text(16, RGB{0xff, 0xff, 0xff}, Point{screen::offset_x + 15, 16},
               ss.str().c_str());
   }
   pre_count = now_count;
@@ -728,7 +742,7 @@ void Pacman::draw_translucence() noexcept {
   SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
   SDL_BlitSurface(trans_surface, nullptr, Screen, &dst);
   if (blink_count_ < 30) {
-    draw_text(36, 0xff, 0xff, 0xff, Point{165, 170}, "P a u s e");
+    draw_text(36, RGB{0xff, 0xff, 0xff}, Point{165, 170}, "P a u s e");
     ++blink_count_;
   } else if (blink_count_ < 60) {
     ++blink_count_;
