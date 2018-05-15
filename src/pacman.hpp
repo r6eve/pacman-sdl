@@ -27,9 +27,7 @@ class Pacman {
   unsigned int game_count_;
   bool debug_lose_enemy_;
 
-  void init() noexcept;
   void init_sdl() const;
-  void main_loop() noexcept;
   void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
                   Player &p2) noexcept;
   void game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
@@ -50,12 +48,11 @@ class Pacman {
   void wait_game() const noexcept;
   void draw_fps() const noexcept;
   void draw_translucence() noexcept;
-  void end() const noexcept;
 
  public:
-  Pacman(const bool debug_mode) : debug_mode_(debug_mode) { init(); }
-  void run() noexcept { main_loop(); }
-  ~Pacman() { end(); }
+  Pacman(const bool debug_mode) noexcept;
+  void run() noexcept;
+  ~Pacman() noexcept;
 };
 
 #endif

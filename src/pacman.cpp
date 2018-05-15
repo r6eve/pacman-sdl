@@ -19,7 +19,13 @@
 
 using namespace std;
 
-void Pacman::init() noexcept {
+Pacman::Pacman(const bool debug_mode) noexcept
+    : debug_mode_(debug_mode),
+      game_state_(game_state::title),
+      game_mode_(game_mode::single),
+      blink_count_(0),
+      game_count_(0),
+      debug_lose_enemy_(false) {
   try {
     init_sdl();
     Font_manager::init();
@@ -31,13 +37,6 @@ void Pacman::init() noexcept {
   }
 
   Input_manager::init_joystick();
-
-  // initialize private members
-  game_state_ = game_state::title;
-  game_mode_ = game_mode::single;
-  blink_count_ = 0;
-  game_count_ = 0;
-  debug_lose_enemy_ = false;
 }
 
 void Pacman::init_sdl() const {
@@ -60,7 +59,7 @@ void Pacman::init_sdl() const {
   SDL_ShowCursor(SDL_DISABLE);
 }
 
-void Pacman::main_loop() noexcept {
+void Pacman::run() noexcept {
   Wipe wipe;
   Food food;
   Enemy enemy;
@@ -739,7 +738,7 @@ void Pacman::draw_translucence() noexcept {
   }
 }
 
-void Pacman::end() const noexcept {
+Pacman::~Pacman() noexcept {
   Font_manager::end();
   Image_manager::end();
   Input_manager::end_joystick();
