@@ -27,23 +27,24 @@ class Pacman {
   unsigned int game_count_;
   bool debug_lose_enemy_;
 
+  Wipe wipe;
+  Food food;
+  Enemy enemy;
+  Player p1;
+  Player p2;
+
   void init_sdl() const;
-  void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                  Player &p2) noexcept;
-  void game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
-                  Player &p2) noexcept;
-  void play_game(Food &food, Enemy &enemy, Player &p1, Player &p2) noexcept;
-  void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                  Player &p2) noexcept;
-  void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                 Player &p2) noexcept;
-  void game_over(Wipe &wipe, const Player &p1, const Player &p2) noexcept;
-  void game_pause(Food &food, const Enemy &enemy, Player &p1,
-                  Player &p2) noexcept;
+  void game_title() noexcept;
+  void game_start() noexcept;
+  void play_game() noexcept;
+  void game_clear() noexcept;
+  void game_miss() noexcept;
+  void game_over() noexcept;
+  void game_pause() noexcept;
   // TODO: make enum class `font_type` and `color`
   void draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
                  int x, int y, const char *str) const noexcept;
-  void draw_score(Player &p1, Player &p2) const noexcept;
+  void draw_score() noexcept;
   bool poll_event() const noexcept;
   void wait_game() const noexcept;
   void draw_fps() const noexcept;

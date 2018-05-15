@@ -25,7 +25,9 @@ Pacman::Pacman(const bool debug_mode) noexcept
       game_mode_(game_mode::single),
       blink_count_(0),
       game_count_(0),
-      debug_lose_enemy_(false) {
+      debug_lose_enemy_(false),
+      p1(player_type::p1),
+      p2(player_type::p2) {
   try {
     init_sdl();
     Font_manager::init();
@@ -60,34 +62,29 @@ void Pacman::init_sdl() const {
 }
 
 void Pacman::run() noexcept {
-  Wipe wipe;
-  Food food;
-  Enemy enemy;
-  Player p1(player_type::p1);
-  Player p2(player_type::p2);
   for (;;) {
     Input_manager::update(debug_mode_);
     switch (game_state_) {
       case game_state::title:
-        game_title(wipe, food, enemy, p1, p2);
+        game_title();
         break;
       case game_state::start:
-        game_start(wipe, food, enemy, p1, p2);
+        game_start();
         break;
       case game_state::playing:
-        play_game(food, enemy, p1, p2);
+        play_game();
         break;
       case game_state::clear:
-        game_clear(wipe, food, enemy, p1, p2);
+        game_clear();
         break;
       case game_state::miss:
-        game_miss(wipe, food, enemy, p1, p2);
+        game_miss();
         break;
       case game_state::gameover:
-        game_over(wipe, p1, p2);
+        game_over();
         break;
       case game_state::pause:
-        game_pause(food, enemy, p1, p2);
+        game_pause();
         break;
       default:
         // NOTREACHED
@@ -104,8 +101,7 @@ void Pacman::run() noexcept {
   }
 }
 
-void Pacman::game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                        Player &p2) noexcept {
+void Pacman::game_title() noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -252,14 +248,13 @@ void Pacman::game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
-                        Player &p2) noexcept {
+void Pacman::game_start() noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
   p1.draw(game_mode_);
   p2.draw(game_mode_);
-  draw_score(p1, p2);
+  draw_score();
   switch (game_count_) {
     case 0: {
       // TODO: Is it correct?
@@ -298,14 +293,13 @@ void Pacman::game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::play_game(Food &food, Enemy &enemy, Player &p1,
-                       Player &p2) noexcept {
+void Pacman::play_game() noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
   p1.draw(game_mode_);
   p2.draw(game_mode_);
-  draw_score(p1, p2);
+  draw_score();
   enemy.move(debug_lose_enemy_, p1, p2);
   p1.move(game_mode_);
   p2.move(game_mode_);
@@ -328,14 +322,13 @@ void Pacman::play_game(Food &food, Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                        Player &p2) noexcept {
+void Pacman::game_clear() noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
   p1.draw(game_mode_);
   p2.draw(game_mode_);
-  draw_score(p1, p2);
+  draw_score();
 
   if (game_count_ == 0) {
     wipe.set_wipe_out();
@@ -361,14 +354,13 @@ void Pacman::game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
-                       Player &p2) noexcept {
+void Pacman::game_miss() noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
   p1.draw(game_mode_);
   p2.draw(game_mode_);
-  draw_score(p1, p2);
+  draw_score();
 
   if (game_count_ == 0) {
     Mix_PlayMusic(Mixer_manager::get_music("death"), 0);
@@ -432,8 +424,7 @@ void Pacman::game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
   }
 }
 
-void Pacman::game_over(Wipe &wipe, const Player &p1,
-                       const Player &p2) noexcept {
+void Pacman::game_over() noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(Screen, &dst, 0xffffffff);
 
@@ -568,14 +559,13 @@ void Pacman::game_over(Wipe &wipe, const Player &p1,
   }
 }
 
-void Pacman::game_pause(Food &food, const Enemy &enemy, Player &p1,
-                        Player &p2) noexcept {
+void Pacman::game_pause() noexcept {
   Map::draw(game_level_);
   food.draw();
   enemy.draw();
   p1.draw(game_mode_);
   p2.draw(game_mode_);
-  draw_score(p1, p2);
+  draw_score();
   draw_translucence();
   if (Input_manager::edge_key_p(0, input_device::space)) {
     game_state_ = game_state::playing;
@@ -594,7 +584,7 @@ void Pacman::draw_text(const unsigned char font_size, Uint8 r, Uint8 g, Uint8 b,
 }
 
 // TODO: reduce magic numbers
-void Pacman::draw_score(Player &p1, Player &p2) const noexcept {
+void Pacman::draw_score() noexcept {
   {
     SDL_Surface *p_surface = Image_manager::get("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
