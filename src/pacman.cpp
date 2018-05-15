@@ -19,13 +19,6 @@
 
 using namespace std;
 
-void Pacman::run() noexcept {
-  init();
-  main_loop();
-  end();
-  exit(EXIT_SUCCESS);
-}
-
 void Pacman::init() noexcept {
   try {
     init_sdl();

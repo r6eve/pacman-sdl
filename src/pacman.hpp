@@ -53,9 +53,9 @@ class Pacman {
   void end() const noexcept;
 
  public:
-  Pacman(const bool debug_mode) : debug_mode_(debug_mode) {}
-  void run() noexcept;
-  ~Pacman() {}
+  Pacman(const bool debug_mode) : debug_mode_(debug_mode) { init(); }
+  void run() noexcept { main_loop(); }
+  ~Pacman() { end(); }
 };
 
 #endif

@@ -55,5 +55,5 @@ int main(int argc, char **argv) {
   const bool debug_mode = parse_options(argc, argv);
   Pacman pacman(debug_mode);
   pacman.run();
-  // NOTREACHED
+  exit(EXIT_SUCCESS);
 }
