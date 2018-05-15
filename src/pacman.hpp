@@ -27,9 +27,6 @@ class Pacman {
   unsigned int game_count_;
   bool debug_lose_enemy_;
 
- public:
-  Pacman(const bool debug_mode) : debug_mode_(debug_mode) {}
-  void run() noexcept;
   void init() noexcept;
   void init_sdl();
   void main_loop() noexcept;
@@ -54,6 +51,10 @@ class Pacman {
   void draw_fps() noexcept;
   void end() noexcept;
   void draw_translucence() noexcept;
+
+ public:
+  Pacman(const bool debug_mode) : debug_mode_(debug_mode) {}
+  void run() noexcept;
   ~Pacman() {}
 };
 
