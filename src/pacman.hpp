@@ -3,7 +3,6 @@
 
 #include "enemy.hpp"
 #include "food.hpp"
-#include "map.hpp"
 #include "player.hpp"
 #include "wipe.hpp"
 
