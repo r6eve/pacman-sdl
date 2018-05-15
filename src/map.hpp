@@ -8,7 +8,7 @@ class Map {
   static unsigned int home_way_[block::count_y][block::count_x];
 
  public:
-  static void init() noexcept;
+  static void init(game_mode mode) noexcept;
   static void draw(const unsigned int game_level) noexcept;
   static unsigned int check_state(const Point &p) noexcept;
   static unsigned int check_state(const Point &&p) noexcept;

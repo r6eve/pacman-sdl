@@ -322,7 +322,7 @@ void Enemy::move_lose_enemy(const unsigned int enemy_type, const Player &p1,
   // enemy is in enemy's home
 }
 
-bool Enemy::check_hit_enemy(Player &p1, Player &p2) const noexcept {
+bool Enemy::check_hit_enemy(game_mode mode, Player &p1, Player &p2) const noexcept {
   const Point pos = p1.get_pos();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     const unsigned int d = pos.distance(enemies_[i].pos);
@@ -338,7 +338,7 @@ bool Enemy::check_hit_enemy(Player &p1, Player &p2) const noexcept {
     }
   }
 
-  if (Game_mode == game_mode::battle) {
+  if (mode == game_mode::battle) {
     const Point pos = p2.get_pos();
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
       const unsigned int d = pos.distance(enemies_[i].pos);

@@ -57,7 +57,7 @@ class Enemy {
    * Return true if the player whose state is normal hits enemy, and false
    * otherwise.
    */
-  bool check_hit_enemy(Player &p1, Player &p2) const noexcept;
+  bool check_hit_enemy(game_mode mode, Player &p1, Player &p2) const noexcept;
 
   ~Enemy() {}
 };

@@ -9,7 +9,7 @@
 unsigned int Map::block_[block::count_y][block::count_x];
 unsigned int Map::home_way_[block::count_y][block::count_x];
 
-void Map::init() noexcept {
+void Map::init(game_mode mode) noexcept {
   // TODO: use enum class
   // TODO: create other maps
   // 0: can move, 1: cannot move, 2: enemy's house
@@ -48,7 +48,7 @@ void Map::init() noexcept {
     }
   }
 
-  if (Game_mode == game_mode::battle) {
+  if (mode == game_mode::battle) {
     block_[18][14] = 8;
   }
 

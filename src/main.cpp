@@ -35,6 +35,7 @@ enum class game_state {
 
 game_state Game_state;
 unsigned int Game_level;
+game_mode Game_mode;
 unsigned int Blink_count;
 unsigned int Game_count;
 bool Debug_lose_enemy;
@@ -328,7 +329,7 @@ void game_title(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
 
       // initialize globals
       if (wipe.update()) {
-        Map::init();
+        Map::init(Game_mode);
         food.init();
         enemy.init();
         p1.init_pos();
@@ -361,8 +362,8 @@ void game_start(Wipe &wipe, Food &food, const Enemy &enemy, Player &p1,
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
-  p1.draw();
-  p2.draw();
+  p1.draw(Game_mode);
+  p2.draw(Game_mode);
   draw_score(p1, p2);
   switch (Game_count) {
     case 0: {
@@ -406,16 +407,16 @@ void play_game(Food &food, Enemy &enemy, Player &p1, Player &p2) noexcept {
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
-  p1.draw();
-  p2.draw();
+  p1.draw(Game_mode);
+  p2.draw(Game_mode);
   draw_score(p1, p2);
   enemy.move(Debug_lose_enemy, p1, p2);
-  p1.move();
-  p2.move();
+  p1.move(Game_mode);
+  p2.move(Game_mode);
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
-  const bool food_state = food.check_state(p1, p2);
-  const bool hit_enemy = enemy.check_hit_enemy(p1, p2);
+  const bool food_state = food.check_state(Game_mode, p1, p2);
+  const bool hit_enemy = enemy.check_hit_enemy(Game_mode, p1, p2);
   if (food_state) {
     Game_state = game_state::clear;
   } else if (hit_enemy) {
@@ -436,8 +437,8 @@ void game_clear(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
-  p1.draw();
-  p2.draw();
+  p1.draw(Game_mode);
+  p2.draw(Game_mode);
   draw_score(p1, p2);
 
   if (Game_count == 0) {
@@ -469,8 +470,8 @@ void game_miss(Wipe &wipe, Food &food, Enemy &enemy, Player &p1,
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
-  p1.draw();
-  p2.draw();
+  p1.draw(Game_mode);
+  p2.draw(Game_mode);
   draw_score(p1, p2);
 
   if (Game_count == 0) {
@@ -675,8 +676,8 @@ void game_pause(Food &food, const Enemy &enemy, Player &p1,
   Map::draw(Game_level);
   food.draw();
   enemy.draw();
-  p1.draw();
-  p2.draw();
+  p1.draw(Game_mode);
+  p2.draw(Game_mode);
   draw_score(p1, p2);
   draw_translucence();
   if (Input_manager::edge_key_p(0, input_device::space)) {

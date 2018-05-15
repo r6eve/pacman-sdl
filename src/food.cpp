@@ -47,7 +47,7 @@ void Food::draw() noexcept {
   }
 }
 
-bool Food::check_state(Player &p1, Player &p2) noexcept {
+bool Food::check_state(game_mode mode, Player &p1, Player &p2) noexcept {
   const Point block = p1.get_block();
   if (food_[block.y][block.x] == 1) {
     Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
@@ -65,7 +65,7 @@ bool Food::check_state(Player &p1, Player &p2) noexcept {
     }
   }
 
-  if (Game_mode == game_mode::battle) {
+  if (mode == game_mode::battle) {
     const Point block = p2.get_block();
     if (food_[block.y][block.x] == 1) {
       Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);

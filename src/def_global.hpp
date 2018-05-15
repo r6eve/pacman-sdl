@@ -66,6 +66,5 @@ struct Point {
 #endif
 
 GLOBAL SDL_Surface *Screen;
-GLOBAL game_mode Game_mode;
 
 #endif

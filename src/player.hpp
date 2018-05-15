@@ -28,8 +28,8 @@ class Player {
  public:
   Player(const unsigned int player_type) : player_type_(player_type) {}
   void init_pos() noexcept;
-  void draw() const noexcept;
-  void move() noexcept;
+  void draw(game_mode mode) const noexcept;
+  void move(game_mode mode) noexcept;
   Point get_pos() const noexcept;
   void set_pos(const Point &p) noexcept;
   void set_pos(const Point &&p) noexcept;

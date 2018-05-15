@@ -30,7 +30,7 @@ void Player::init_pos() noexcept {
   }
 }
 
-void Player::draw() const noexcept {
+void Player::draw(game_mode mode) const noexcept {
   switch (player_type_) {
     case 0: {
       SDL_Surface *p_surface = Image_manager::get("p1");
@@ -46,7 +46,7 @@ void Player::draw() const noexcept {
       return;
     }
     case 1: {
-      if (Game_mode != game_mode::battle) {
+      if (mode != game_mode::battle) {
         return;
       }
       SDL_Surface *p_surface = Image_manager::get("p2");
@@ -68,8 +68,8 @@ void Player::draw() const noexcept {
 }
 
 // TODO: reduce magic numbers
-void Player::move() noexcept {
-  if ((player_type_ == 1) && (Game_mode != game_mode::battle)) {
+void Player::move(game_mode mode) noexcept {
+  if ((player_type_ == 1) && (mode != game_mode::battle)) {
     return;
   }
 
