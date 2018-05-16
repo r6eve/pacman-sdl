@@ -1,5 +1,4 @@
 #include <SDL/SDL_image.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "image_manager.hpp"
