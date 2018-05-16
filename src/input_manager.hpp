@@ -34,21 +34,24 @@ enum {
 
 }  // namespace input_device
 
-class Input_manager {
-  static const unsigned int num_devices_;
-  static unsigned int num_joysticks_;
-  static std::vector<SDL_Joystick*> joystick_;
-  static bool edge_key_[2][input_device::count];
-  static bool press_key_[2][input_device::count];
+class InputManager {
+  unsigned int num_joysticks_;
+  std::vector<SDL_Joystick*> joystick_;
+  bool edge_key_[2][input_device::count];
+  bool press_key_[2][input_device::count];
 
  public:
-  static void init_joystick() noexcept;
-  static void update(const bool debug_mode) noexcept;
-  static void end_joystick() noexcept;
-  static bool edge_key_p(const unsigned int player_type,
-                         const unsigned int button) noexcept;
-  static bool press_key_p(const unsigned int player_type,
-                          const unsigned int button) noexcept;
+  InputManager() noexcept;
+
+  void update(const bool debug_mode) noexcept;
+
+  bool edge_key_p(const unsigned int player_type,
+                  const unsigned int button) noexcept;
+
+  bool press_key_p(const unsigned int player_type,
+                   const unsigned int button) noexcept;
+
+  ~InputManager() noexcept;
 };
 
 #endif

@@ -1,15 +1,8 @@
 #include <vector>
-
 #include "def_global.hpp"
 #include "input_manager.hpp"
 
-const unsigned int Input_manager::num_devices_ = 2;
-unsigned int Input_manager::num_joysticks_;
-std::vector<SDL_Joystick *> Input_manager::joystick_;
-bool Input_manager::edge_key_[2][input_device::count] = {false};
-bool Input_manager::press_key_[2][input_device::count] = {false};
-
-void Input_manager::init_joystick() noexcept {
+InputManager::InputManager() noexcept {
   // SDL_NumJoysticks() definitely returns int type. However, as far as I read
   // source code, it always returns unsigned int type.
   num_joysticks_ = static_cast<unsigned int>(SDL_NumJoysticks());
@@ -18,7 +11,8 @@ void Input_manager::init_joystick() noexcept {
   }
 }
 
-void Input_manager::update(const bool debug_mode) noexcept {
+void InputManager::update(const bool debug_mode) noexcept {
+  constexpr unsigned int num_devices_ = 2;
   bool new_press_key[num_devices_][input_device::count];
   for (unsigned int i = 0; i < num_devices_; ++i) {
     for (unsigned int j = 0; j < input_device::count; ++j) {
@@ -95,18 +89,18 @@ void Input_manager::update(const bool debug_mode) noexcept {
   }
 }
 
-void Input_manager::end_joystick() noexcept {
-  for (unsigned int i = 0; i < num_joysticks_; ++i) {
-    SDL_JoystickClose(joystick_[i]);
-  }
-}
-
-bool Input_manager::edge_key_p(const unsigned int player_type,
+bool InputManager::edge_key_p(const unsigned int player_type,
                                const unsigned int button) noexcept {
   return edge_key_[player_type][button];
 }
 
-bool Input_manager::press_key_p(const unsigned int player_type,
+bool InputManager::press_key_p(const unsigned int player_type,
                                 const unsigned int button) noexcept {
   return press_key_[player_type][button];
+}
+
+InputManager::~InputManager() noexcept {
+  for (unsigned int i = 0; i < num_joysticks_; ++i) {
+    SDL_JoystickClose(joystick_[i]);
+  }
 }
