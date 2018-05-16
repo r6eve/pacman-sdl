@@ -1,10 +1,9 @@
 #include <SDL/SDL_ttf.h>
-
 #include "font_manager.hpp"
 
-TTF_Font *Font_manager::ttf_fonts_[2];
-
-void Font_manager::init() {
+// TODO: pacman.cpp cannot catch exception (i.e., iinitialize this class in
+// private member). Print exit message and exit here.
+FontManager::FontManager() {
   if (TTF_Init() != 0) {
     throw TTF_GetError();
   }
@@ -16,7 +15,7 @@ void Font_manager::init() {
   }
 }
 
-TTF_Font *Font_manager::get(const unsigned char size) noexcept {
+TTF_Font *FontManager::get(const unsigned char size) const noexcept {
   if (size == 36) {
     return ttf_fonts_[0];
   }
@@ -27,7 +26,7 @@ TTF_Font *Font_manager::get(const unsigned char size) noexcept {
   return nullptr;
 }
 
-void Font_manager::end() noexcept {
+FontManager::~FontManager() noexcept {
   for (unsigned int i = 0; i < 2; ++i) {
     TTF_CloseFont(ttf_fonts_[i]);
   }

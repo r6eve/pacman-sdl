@@ -3,21 +3,15 @@
 
 #include <SDL/SDL_ttf.h>
 
-class Font_manager {
-  static TTF_Font *ttf_fonts_[2];
+class FontManager {
+  TTF_Font *ttf_fonts_[2];
 
  public:
-  /**
-   * Call this function before using get() .
-   */
-  static void init();
+  FontManager();
 
-  static TTF_Font *get(const unsigned char size) noexcept;
+  TTF_Font *get(const unsigned char size) const noexcept;
 
-  /**
-   * Call this function when program exits.
-   */
-  static void end() noexcept;
+  ~FontManager() noexcept;
 };
 
 #endif

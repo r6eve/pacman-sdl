@@ -31,7 +31,6 @@ Pacman::Pacman(const bool debug_mode) noexcept
       p2(player_type::p2) {
   try {
     init_sdl();
-    Font_manager::init();
     Image_manager::init();
     Mixer_manager::init();
   } catch (const char &e) {
@@ -591,7 +590,7 @@ void Pacman::draw_text(const unsigned char font_size, const RGB &rgb,
                        const Point &p, const char *str) const noexcept {
   const SDL_Color color = {rgb.r, rgb.g, rgb.b, 0};
   SDL_Surface *font_surface =
-      TTF_RenderUTF8_Blended(Font_manager::get(font_size), str, color);
+      TTF_RenderUTF8_Blended(font.get(font_size), str, color);
   SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
                   static_cast<Uint16>(font_surface->h)};
   SDL_Rect dst = {static_cast<Sint16>(p.x), static_cast<Sint16>(p.y), 0, 0};
@@ -764,7 +763,6 @@ void Pacman::draw_translucence() noexcept {
 }
 
 Pacman::~Pacman() noexcept {
-  Font_manager::end();
   Image_manager::end();
   Input_manager::end_joystick();
   Mixer_manager::end();

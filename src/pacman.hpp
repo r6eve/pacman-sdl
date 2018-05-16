@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "enemy.hpp"
+#include "font_manager.hpp"
 #include "food.hpp"
 #include "player.hpp"
 #include "wipe.hpp"
@@ -39,6 +40,7 @@ class Pacman {
   Enemy enemy;
   Player p1;
   Player p2;
+  FontManager font;
 
   void init_sdl();
   void game_title() noexcept;
