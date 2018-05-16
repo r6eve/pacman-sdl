@@ -33,7 +33,8 @@ class Player {
   void init_pos() noexcept;
   void draw(SDL_Surface *screen, ImageManager &image,
             game_mode mode) const noexcept;
-  void move(InputManager &input_manager, const Map &map, game_mode mode) noexcept;
+  void move(const InputManager &input_manager, const Map &map,
+            game_mode mode) noexcept;
   Point get_pos() const noexcept;
   void set_pos(const Point &p) noexcept;
   void set_pos(const Point &&p) noexcept;

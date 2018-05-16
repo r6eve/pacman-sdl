@@ -69,7 +69,7 @@ void Player::draw(SDL_Surface *screen, ImageManager &image,
 }
 
 // TODO: reduce magic numbers
-void Player::move(InputManager &input_manager, const Map &map,
+void Player::move(const InputManager &input_manager, const Map &map,
                   game_mode mode) noexcept {
   if ((player_type_ == 1) && (mode != game_mode::battle)) {
     return;

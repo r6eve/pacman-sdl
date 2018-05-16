@@ -1,6 +1,6 @@
+#include "input_manager.hpp"
 #include <vector>
 #include "def_global.hpp"
-#include "input_manager.hpp"
 
 InputManager::InputManager() noexcept {
   // SDL_NumJoysticks() definitely returns int type. However, as far as I read
@@ -90,12 +90,12 @@ void InputManager::update(const bool debug_mode) noexcept {
 }
 
 bool InputManager::edge_key_p(const unsigned int player_type,
-                               const unsigned int button) noexcept {
+                              const unsigned int button) const noexcept {
   return edge_key_[player_type][button];
 }
 
 bool InputManager::press_key_p(const unsigned int player_type,
-                                const unsigned int button) noexcept {
+                               const unsigned int button) const noexcept {
   return press_key_[player_type][button];
 }
 
