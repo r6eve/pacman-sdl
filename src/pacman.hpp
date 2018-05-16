@@ -36,14 +36,14 @@ class Pacman {
   unsigned int game_count_;
   bool debug_lose_enemy_;
 
-  Wipe wipe;
-  Food food;
-  Enemy enemy;
-  Player p1;
-  Player p2;
-  FontManager font;
-  ImageManager image;
-  InputManager input_manager;
+  Wipe wipe_;
+  Food food_;
+  Enemy enemy_;
+  Player p1_;
+  Player p2_;
+  FontManager font_manager_;
+  ImageManager image_manager_;
+  InputManager input_manager_;
 
   void init_sdl();
   void game_title() noexcept;
