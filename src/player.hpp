@@ -4,6 +4,7 @@
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "input_manager.hpp"
+#include "map.hpp"
 
 namespace player_type {
 
@@ -32,7 +33,7 @@ class Player {
   void init_pos() noexcept;
   void draw(SDL_Surface *screen, ImageManager &image,
             game_mode mode) const noexcept;
-  void move(InputManager &input_manager, game_mode mode) noexcept;
+  void move(InputManager &input_manager, const Map &map, game_mode mode) noexcept;
   Point get_pos() const noexcept;
   void set_pos(const Point &p) noexcept;
   void set_pos(const Point &&p) noexcept;

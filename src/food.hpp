@@ -3,6 +3,7 @@
 
 #include "def_global.hpp"
 #include "image_manager.hpp"
+#include "map.hpp"
 #include "player.hpp"
 
 class Food {
@@ -13,7 +14,7 @@ class Food {
  public:
   Food() {}
 
-  void init() noexcept;
+  void init(const Map &map) noexcept;
 
   void draw(SDL_Surface *screen, ImageManager &image) noexcept;
 

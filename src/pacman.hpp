@@ -6,6 +6,7 @@
 #include "font_manager.hpp"
 #include "food.hpp"
 #include "input_manager.hpp"
+#include "map.hpp"
 #include "player.hpp"
 #include "wipe.hpp"
 
@@ -37,6 +38,7 @@ class Pacman {
   bool debug_lose_enemy_;
 
   Wipe wipe_;
+  Map map_;
   Food food_;
   Enemy enemy_;
   Player p1_;

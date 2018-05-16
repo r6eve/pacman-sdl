@@ -65,19 +65,19 @@ void Enemy::draw(SDL_Surface *screen, ImageManager &image) const noexcept {
   }
 }
 
-void Enemy::move(const bool debug_lose_enemy, const Player &p1,
+void Enemy::move(const bool debug_lose_enemy, const Map &map, const Player &p1,
                  const Player &p2) noexcept {
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     if (debug_lose_enemy || (enemies_[i].state == enemy_state::lose)) {
-      move_lose_enemy(i, p1, p2);
+      move_lose_enemy(i, map, p1, p2);
     } else {
-      move_normal_enemy(i, p1, p2);
+      move_normal_enemy(i, map, p1, p2);
     }
   }
 }
 
-void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
-                              const Player &p2) noexcept {
+void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
+                              const Player &p1, const Player &p2) noexcept {
   switch (enemy_type) {
     // TODO: change moving algorithm for each enemies.
     case enemy_character::akabei:
@@ -105,7 +105,7 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
       }
 
       enemies_[enemy_type].block = enemies_[enemy_type].next_block;
-      if (Map::check_state(enemies_[enemy_type].block) == 2) {
+      if (map.check_state(enemies_[enemy_type].block) == 2) {
         enemies_[enemy_type].dir = 2;
         --enemies_[enemy_type].next_block.y;
         return;
@@ -119,7 +119,7 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
 
       const Point front_block =
           enemies_[enemy_type].block + front_pos[enemies_[enemy_type].dir];
-      unsigned int mut_front_block_state = Map::check_state(front_block);
+      unsigned int mut_front_block_state = map.check_state(front_block);
       if ((mut_front_block_state == 3) || (mut_front_block_state == 4) ||
           (mut_front_block_state == 5) || (mut_front_block_state == 6) ||
           (mut_front_block_state == 7) || (mut_front_block_state == 8)) {
@@ -129,7 +129,7 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
 
       const Point left_block =
           enemies_[enemy_type].block + left_pos[enemies_[enemy_type].dir];
-      unsigned int mut_left_block_state = Map::check_state(left_block);
+      unsigned int mut_left_block_state = map.check_state(left_block);
       if ((mut_left_block_state == 3) || (mut_left_block_state == 4) ||
           (mut_left_block_state == 5) || (front_block_state == 8)) {
         mut_left_block_state = 0;
@@ -138,7 +138,7 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
 
       const Point right_block =
           enemies_[enemy_type].block + right_pos[enemies_[enemy_type].dir];
-      unsigned int mut_right_block_state = Map::check_state(right_block);
+      unsigned int mut_right_block_state = map.check_state(right_block);
       if ((mut_right_block_state == 3) || (mut_right_block_state == 4) ||
           (mut_right_block_state == 5) || (front_block_state == 8)) {
         mut_right_block_state = 0;
@@ -149,8 +149,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
       if (((rand() % 100) == 0) ||
           ((390 <= p1.get_power_mode()) && (p1.get_power_mode() <= 400)) ||
           ((390 <= p2.get_power_mode()) && (p2.get_power_mode() <= 400))) {
-        if (Map::check_state(enemies_[enemy_type].block +
-                             back_pos[enemies_[enemy_type].dir]) == 2) {
+        if (map.check_state(enemies_[enemy_type].block +
+                            back_pos[enemies_[enemy_type].dir]) == 2) {
           enemies_[enemy_type].next_block = left_block;
           enemies_[enemy_type].dir += 3;
           enemies_[enemy_type].dir %= 4;
@@ -264,8 +264,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Player &p1,
   }
 }
 
-void Enemy::move_lose_enemy(const unsigned int enemy_type, const Player &p1,
-                            const Player &p2) noexcept {
+void Enemy::move_lose_enemy(const unsigned int enemy_type, const Map &map,
+                            const Player &p1, const Player &p2) noexcept {
   if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {
     enemies_[enemy_type].state = enemy_state::normal;
   }
@@ -292,29 +292,29 @@ void Enemy::move_lose_enemy(const unsigned int enemy_type, const Player &p1,
 
   enemies_[enemy_type].block = enemies_[enemy_type].next_block;
   const unsigned int now_value =
-      Map::get_home_distance(enemies_[enemy_type].block);
+      map.get_home_distance(enemies_[enemy_type].block);
   if (now_value >
-      Map::get_home_distance(Point{enemies_[enemy_type].block.x,
-                                   enemies_[enemy_type].block.y - 1})) {
+      map.get_home_distance(Point{enemies_[enemy_type].block.x,
+                                  enemies_[enemy_type].block.y - 1})) {
     --enemies_[enemy_type].next_block.y;
     return;
   }
 
-  if (now_value > Map::get_home_distance(Point{enemies_[enemy_type].block.x - 1,
-                                               enemies_[enemy_type].block.y})) {
+  if (now_value > map.get_home_distance(Point{enemies_[enemy_type].block.x - 1,
+                                              enemies_[enemy_type].block.y})) {
     --enemies_[enemy_type].next_block.x;
     return;
   }
 
-  if (now_value > Map::get_home_distance(Point{enemies_[enemy_type].block.x + 1,
-                                               enemies_[enemy_type].block.y})) {
+  if (now_value > map.get_home_distance(Point{enemies_[enemy_type].block.x + 1,
+                                              enemies_[enemy_type].block.y})) {
     ++enemies_[enemy_type].next_block.x;
     return;
   }
 
   if (now_value >
-      Map::get_home_distance(Point{enemies_[enemy_type].block.x,
-                                   enemies_[enemy_type].block.y + 1})) {
+      map.get_home_distance(Point{enemies_[enemy_type].block.x,
+                                  enemies_[enemy_type].block.y + 1})) {
     ++enemies_[enemy_type].next_block.y;
     return;
   }
@@ -322,7 +322,8 @@ void Enemy::move_lose_enemy(const unsigned int enemy_type, const Player &p1,
   // enemy is in enemy's home
 }
 
-bool Enemy::check_hit_enemy(game_mode mode, Player &p1, Player &p2) const noexcept {
+bool Enemy::check_hit_enemy(game_mode mode, Player &p1, Player &p2) const
+    noexcept {
   const Point pos = p1.get_pos();
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     const unsigned int d = pos.distance(enemies_[i].pos);

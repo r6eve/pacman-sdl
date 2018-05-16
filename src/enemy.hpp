@@ -4,6 +4,7 @@
 #include <memory>
 #include "def_global.hpp"
 #include "image_manager.hpp"
+#include "map.hpp"
 #include "player.hpp"
 
 namespace enemy_character {
@@ -38,11 +39,11 @@ class Enemy {
 
   void update() noexcept;
 
-  void move_normal_enemy(const unsigned int enemy_type, const Player &p1,
-                         const Player &p2) noexcept;
+  void move_normal_enemy(const unsigned int enemy_type, const Map &map,
+                         const Player &p1, const Player &p2) noexcept;
 
-  void move_lose_enemy(const unsigned int enemy_type, const Player &p1,
-                       const Player &p2) noexcept;
+  void move_lose_enemy(const unsigned int enemy_type, const Map &map,
+                       const Player &p1, const Player &p2) noexcept;
 
  public:
   Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}
@@ -51,7 +52,7 @@ class Enemy {
 
   void draw(SDL_Surface *screen, ImageManager &image) const noexcept;
 
-  void move(const bool debug_lose_enemy, const Player &p1,
+  void move(const bool debug_lose_enemy, const Map &map, const Player &p1,
             const Player &p2) noexcept;
 
   /**

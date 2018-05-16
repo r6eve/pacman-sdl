@@ -1,13 +1,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
-
-unsigned int Map::block_[block::count_y][block::count_x];
-unsigned int Map::home_way_[block::count_y][block::count_x];
 
 void Map::init(game_mode mode) noexcept {
   // TODO: use enum class
@@ -53,7 +49,7 @@ void Map::init(game_mode mode) noexcept {
   }
 
   // 1: enemy house, 0: cannot move
-  const unsigned int home_way_src[block::count_y][block::count_x] = {
+  const unsigned int home_distance_src[block::count_y][block::count_x] = {
    // 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23
     {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}, //99
     {99, 22, 21, 20, 19, 20, 21, 22, 21, 20, 19, 99, 99, 20, 21, 22, 23, 22, 21, 20, 21, 22, 23, 99}, // 1
@@ -83,14 +79,14 @@ void Map::init(game_mode mode) noexcept {
 
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      home_way_[y][x] = home_way_src[y][x];
+      home_distance_[y][x] = home_distance_src[y][x];
     }
   }
 }
 
 // TODO: reduce magic numbers
 void Map::draw(SDL_Surface *screen, ImageManager &image,
-               const unsigned int game_level) noexcept {
+               const unsigned int game_level) const noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(screen, &dst, 0x00000000);
 
@@ -152,18 +148,18 @@ void Map::draw(SDL_Surface *screen, ImageManager &image,
 // Don't modify parameter type as unsigned int
 // TODO: Why is the parameter of x=-1 and y=12 OK?
 // Cf. https://ideone.com/u1QKTJ
-unsigned int Map::check_state(const Point &p) noexcept {
+unsigned int Map::check_state(const Point &p) const noexcept {
   return block_[p.y][p.x];
 }
 
-unsigned int Map::check_state(const Point &&p) noexcept {
-  return block_[p.y][p.x];
+unsigned int Map::check_state(const Point &&p) const noexcept {
+  return check_state(p);
 }
 
-unsigned int Map::get_home_distance(const Point &p) noexcept {
-  return home_way_[p.y][p.x];
+unsigned int Map::get_home_distance(const Point &p) const noexcept {
+  return home_distance_[p.y][p.x];
 }
 
-unsigned int Map::get_home_distance(const Point &&p) noexcept {
+unsigned int Map::get_home_distance(const Point &&p) const noexcept {
   return get_home_distance(p);
 }

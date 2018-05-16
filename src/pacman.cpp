@@ -223,8 +223,8 @@ void Pacman::game_title() noexcept {
 
       // initialize globals
       if (wipe_.update()) {
-        Map::init(game_mode_);
-        food_.init();
+        map_.init(game_mode_);
+        food_.init(map_);
         enemy_.init();
         p1_.init_pos();
         p2_.init_pos();
@@ -252,7 +252,7 @@ void Pacman::game_title() noexcept {
 }
 
 void Pacman::game_start() noexcept {
-  Map::draw(screen_, image_manager_, game_level_);
+  map_.draw(screen_, image_manager_, game_level_);
   food_.draw(screen_, image_manager_);
   enemy_.draw(screen_, image_manager_);
   p1_.draw(screen_, image_manager_, game_mode_);
@@ -297,15 +297,15 @@ void Pacman::game_start() noexcept {
 }
 
 void Pacman::play_game() noexcept {
-  Map::draw(screen_, image_manager_, game_level_);
+  map_.draw(screen_, image_manager_, game_level_);
   food_.draw(screen_, image_manager_);
   enemy_.draw(screen_, image_manager_);
   p1_.draw(screen_, image_manager_, game_mode_);
   p2_.draw(screen_, image_manager_, game_mode_);
   draw_score();
-  enemy_.move(debug_lose_enemy_, p1_, p2_);
-  p1_.move(input_manager_, game_mode_);
-  p2_.move(input_manager_, game_mode_);
+  enemy_.move(debug_lose_enemy_, map_, p1_, p2_);
+  p1_.move(input_manager_, map_, game_mode_);
+  p2_.move(input_manager_, map_, game_mode_);
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
   const bool food_state = food_.check_state(game_mode_, p1_, p2_);
@@ -326,7 +326,7 @@ void Pacman::play_game() noexcept {
 }
 
 void Pacman::game_clear() noexcept {
-  Map::draw(screen_, image_manager_, game_level_);
+  map_.draw(screen_, image_manager_, game_level_);
   food_.draw(screen_, image_manager_);
   enemy_.draw(screen_, image_manager_);
   p1_.draw(screen_, image_manager_, game_mode_);
@@ -349,7 +349,7 @@ void Pacman::game_clear() noexcept {
       game_count_ = 0;
       game_state_ = game_state::start;
       ++game_level_;
-      food_.init();
+      food_.init(map_);
       enemy_.init();
       p1_.init_pos();
       p2_.init_pos();
@@ -358,7 +358,7 @@ void Pacman::game_clear() noexcept {
 }
 
 void Pacman::game_miss() noexcept {
-  Map::draw(screen_, image_manager_, game_level_);
+  map_.draw(screen_, image_manager_, game_level_);
   food_.draw(screen_, image_manager_);
   enemy_.draw(screen_, image_manager_);
   p1_.draw(screen_, image_manager_, game_mode_);
@@ -575,7 +575,7 @@ void Pacman::game_over() noexcept {
 }
 
 void Pacman::game_pause() noexcept {
-  Map::draw(screen_, image_manager_, game_level_);
+  map_.draw(screen_, image_manager_, game_level_);
   food_.draw(screen_, image_manager_);
   enemy_.draw(screen_, image_manager_);
   p1_.draw(screen_, image_manager_, game_mode_);

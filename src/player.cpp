@@ -69,7 +69,8 @@ void Player::draw(SDL_Surface *screen, ImageManager &image,
 }
 
 // TODO: reduce magic numbers
-void Player::move(InputManager &input_manager, game_mode mode) noexcept {
+void Player::move(InputManager &input_manager, const Map &map,
+                  game_mode mode) noexcept {
   if ((player_type_ == 1) && (mode != game_mode::battle)) {
     return;
   }
@@ -117,11 +118,11 @@ void Player::move(InputManager &input_manager, game_mode mode) noexcept {
   }
   const Point dst_block = mut_dst_block;
 
-  const unsigned int dst_block_state = Map::check_state(dst_block);
+  const unsigned int dst_block_state = map.check_state(dst_block);
   const unsigned int dst_right_block_state =
-      Map::check_state(Point{dst_block.x + 1, dst_block.y});
+      map.check_state(Point{dst_block.x + 1, dst_block.y});
   const unsigned int dst_left_block_state =
-      Map::check_state(Point{dst_block.x - 1, dst_block.y});
+      map.check_state(Point{dst_block.x - 1, dst_block.y});
   if ((dst_block_state == 0) || (dst_block_state == 3) ||
       (dst_block_state == 4) || (dst_block_state == 5) ||
       (dst_block_state == 6) || (dst_right_block_state == 6) ||
@@ -131,11 +132,11 @@ void Player::move(InputManager &input_manager, game_mode mode) noexcept {
   }
 
   // Circle corner
-  if (Map::check_state(Point{dst_block.x + 2, dst_block.y}) == 6) {
+  if (map.check_state(Point{dst_block.x + 2, dst_block.y}) == 6) {
     next_block_.x = block::count_x;
     pos_.x = block::size * next_block_.x;
   }
-  if (Map::check_state(Point{dst_block.x - 2, dst_block.y}) == 7) {
+  if (map.check_state(Point{dst_block.x - 2, dst_block.y}) == 7) {
     next_block_.x = -1;
     pos_.x = block::size * next_block_.x;
   }
