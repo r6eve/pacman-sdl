@@ -50,13 +50,13 @@ bool Food::check_state(const game_mode mode, const MixerManager &mixer_manager,
                        Player &p1, Player &p2) noexcept {
   const Point block = p1.get_block();
   if (food_[block.y][block.x] == 1) {
-    Mix_PlayChannel(-1, mixer_manager.get_se("chomp"), 0);
+    Mix_PlayChannel(-1, mixer_manager.get_se(), 0);
     ++food_[block.y][block.x];
     p1.set_score(p1.get_score() + 10);
   }
   if (food_[block.y][block.x] == 0) {
     p1.set_power_mode(400);
-    Mix_PlayMusic(mixer_manager.get_music("siren"), -1);
+    Mix_PlayMusic(mixer_manager.get_music(music_type::siren), -1);
     food_[block.y][block.x] += 2;
   }
   if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {
@@ -68,13 +68,13 @@ bool Food::check_state(const game_mode mode, const MixerManager &mixer_manager,
   if (mode == game_mode::battle) {
     const Point block = p2.get_block();
     if (food_[block.y][block.x] == 1) {
-      Mix_PlayChannel(-1, mixer_manager.get_se("chomp"), 0);
+      Mix_PlayChannel(-1, mixer_manager.get_se(), 0);
       ++food_[block.y][block.x];
       p2.set_score(p2.get_score() + 10);
     }
     if (food_[block.y][block.x] == 0) {
       p2.set_power_mode(400);
-      Mix_PlayMusic(mixer_manager.get_music("siren"), -1);
+      Mix_PlayMusic(mixer_manager.get_music(music_type::siren), -1);
       food_[block.y][block.x] += 2;
     }
     if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {

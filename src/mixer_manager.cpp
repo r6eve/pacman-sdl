@@ -1,9 +1,24 @@
 #include <SDL/SDL_mixer.h>
 #include <iostream>
-#include <string.h>
+#include <memory>
 #include "mixer_manager.hpp"
 
 using namespace std;
+
+void MixerManager::load_music(const char *path, const unsigned char music_type) {
+  music_[music_type] = Mix_LoadMUS(path);
+  if (!music_[music_type]) {
+    throw Mix_GetError();
+  }
+}
+
+void MixerManager::load_se(const char *path) {
+  const Mix_Chunk *se = Mix_LoadWAV(path);
+  if (!se) {
+    throw Mix_GetError();
+  }
+  se_ = make_unique<Mix_Chunk>(*se);
+}
 
 MixerManager::MixerManager() noexcept {
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
@@ -11,43 +26,32 @@ MixerManager::MixerManager() noexcept {
     exit(EXIT_FAILURE);
   }
 
-  music_[0] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
-  music_[1] = Mix_LoadMUS("./data/pacman_beginning.wav");
-  music_[2] = Mix_LoadMUS("./data/pacman_death.wav");
-  se_ = Mix_LoadWAV("./data/pacman_chomp.wav");
-  if (!music_[0] || !music_[1] || !music_[2] || !se_) {
-    cerr << Mix_GetError() << '\n';
+  try {
+    load_music("./data/66376e_Pacman_Siren_Sound_Effect.mp3", music_type::siren);
+    load_music("./data/pacman_beginning.wav", music_type::beginning);
+    load_music("./data/pacman_death.wav", music_type::death);
+    load_se("./data/pacman_chomp.wav");
+  } catch (const char &e) {
+    cerr << "error: " << e << '\n';
     exit(EXIT_FAILURE);
   }
 }
 
-Mix_Music *MixerManager::get_music(const char *str) const noexcept {
-  if (!strcmp(str, "siren")) {
-    return music_[0];
-  }
-  if (!strcmp(str, "beginning")) {
-    return music_[1];
-  }
-  if (!strcmp(str, "death")) {
-    return music_[2];
-  }
-  return nullptr;
+Mix_Music *MixerManager::get_music(const unsigned char music_type) const noexcept {
+  return music_[music_type];
 }
 
-Mix_Chunk *MixerManager::get_se(const char *str) const noexcept {
-  if (!strcmp(str, "chomp")) {
-    return se_;
-  }
-  return nullptr;
+Mix_Chunk *MixerManager::get_se() const noexcept {
+  return se_.get();
 }
 
 MixerManager::~MixerManager() noexcept {
   Mix_HaltMusic();
   Mix_HaltChannel(-1);
-  for (unsigned int i = 0; i < 3; ++i) {
+  for (unsigned int i = 0; i < music_type::count; ++i) {
     Mix_FreeMusic(music_[i]);
   }
-  Mix_FreeChunk(se_);
+  Mix_FreeChunk(se_.get());
   Mix_CloseAudio();
   atexit(Mix_Quit);
 }
