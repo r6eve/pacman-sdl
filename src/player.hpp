@@ -33,7 +33,7 @@ class Player {
 
   void init_pos() noexcept;
 
-  void draw(SDL_Surface *screen, const ImageManager &image,
+  void draw(SDL_Surface *screen, const ImageManager &image_manager,
             const game_mode mode) const noexcept;
 
   void move(const InputManager &input_manager, const Map &map,

@@ -13,7 +13,7 @@ class Map {
 
   void init(const game_mode mode) noexcept;
 
-  void draw(SDL_Surface *screen, const ImageManager &image,
+  void draw(SDL_Surface *screen, const ImageManager &image_manager,
             const unsigned int game_level) const noexcept;
 
   unsigned int check_state(const Point &p) const noexcept;

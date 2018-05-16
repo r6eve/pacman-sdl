@@ -615,7 +615,7 @@ void Pacman::draw_text(const unsigned char font_size, const RGB &&rgb,
 // TODO: reduce magic numbers
 void Pacman::draw_score() noexcept {
   {
-    SDL_Surface *p_surface = image_manager_.get("plate");
+    SDL_Surface *p_surface = image_manager_.get(image::plate);
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, screen_, &dst);
   }
@@ -625,7 +625,7 @@ void Pacman::draw_score() noexcept {
     draw_text(16, RGB{0xff, 0xff, 0xff},
               Point{screen::offset_x + 20, screen::height / 7 + 10},
               score.str().c_str());
-    SDL_Surface *p_surface = image_manager_.get("p1");
+    SDL_Surface *p_surface = image_manager_.get(image::p1);
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, screen_, &dst);
@@ -640,7 +640,7 @@ void Pacman::draw_score() noexcept {
       draw_text(16, RGB{0xff, 0xff, 0xff},
                 Point{screen::offset_x + 20, screen::height / 7 + 90},
                 score.str().c_str());
-      SDL_Surface *p_surface = image_manager_.get("p2");
+      SDL_Surface *p_surface = image_manager_.get(image::p2);
       SDL_Rect src = {block::size, 0, block::size, block::size};
       SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
                       0};

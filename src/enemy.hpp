@@ -51,7 +51,8 @@ class Enemy {
 
   void init() noexcept;
 
-  void draw(SDL_Surface *screen, const ImageManager &image) const noexcept;
+  void draw(SDL_Surface *screen, const ImageManager &image_manager) const
+      noexcept;
 
   void move(const bool debug_lose_enemy, const Map &map, const Player &p1,
             const Player &p2) noexcept;
@@ -60,7 +61,8 @@ class Enemy {
    * Return true if the player whose state is normal hits enemy, and false
    * otherwise.
    */
-  bool check_hit_enemy(const game_mode mode, Player &p1, Player &p2) const noexcept;
+  bool check_hit_enemy(const game_mode mode, Player &p1, Player &p2) const
+      noexcept;
 
   ~Enemy() {}
 };

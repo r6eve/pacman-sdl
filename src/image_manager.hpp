@@ -3,17 +3,36 @@
 
 #include <SDL/SDL_image.h>
 #include <memory>
-#include <unordered_map>
+
+namespace image {
+  enum {
+    p1 = 0,
+    p2,
+    bg,
+    bg_red,
+    bg_green,
+    bg_blue,
+    food,
+    food_counter,
+    akabei,
+    pinky,
+    aosuke,
+    guzuta,
+    mon_run,
+    plate,
+    count,
+  };
+}  // namespace image
 
 class ImageManager {
-  std::unordered_map<std::string, std::unique_ptr<SDL_Surface>> image_map_;
+  std::unique_ptr<SDL_Surface> image_array_[image::count];
 
-  void load(const char *path, const char *name);
+  void load(const char *path, const unsigned int image_type);
 
  public:
   ImageManager() noexcept;
 
-  SDL_Surface *get(const char *name) const noexcept;
+  SDL_Surface *get(const unsigned int image_type) const noexcept;
 
   ~ImageManager() noexcept;
 };
