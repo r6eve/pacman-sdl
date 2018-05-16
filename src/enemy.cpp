@@ -32,7 +32,7 @@ void Enemy::init() noexcept {
   }
 }
 
-void Enemy::draw(SDL_Surface *screen, ImageManager &image) const noexcept {
+void Enemy::draw(SDL_Surface *screen, const ImageManager &image) const noexcept {
   SDL_Surface *p_surface[5];  // TODO: 5
   p_surface[0] = image.get("akabei");
   p_surface[1] = image.get("pinky");

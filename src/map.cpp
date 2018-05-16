@@ -85,7 +85,7 @@ void Map::init(game_mode mode) noexcept {
 }
 
 // TODO: reduce magic numbers
-void Map::draw(SDL_Surface *screen, ImageManager &image,
+void Map::draw(SDL_Surface *screen, const ImageManager &image,
                const unsigned int game_level) const noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(screen, &dst, 0x00000000);

@@ -31,7 +31,7 @@ class Player {
  public:
   Player(const unsigned int player_type) : player_type_(player_type) {}
   void init_pos() noexcept;
-  void draw(SDL_Surface *screen, ImageManager &image,
+  void draw(SDL_Surface *screen, const ImageManager &image,
             game_mode mode) const noexcept;
   void move(const InputManager &input_manager, const Map &map,
             game_mode mode) noexcept;

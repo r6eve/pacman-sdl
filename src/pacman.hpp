@@ -55,6 +55,7 @@ class Pacman {
   void game_miss() noexcept;
   void game_over() noexcept;
   void game_pause() noexcept;
+
   void draw_text(const unsigned char font_size, const RGB &rgb,
                  const Point &p, const char *str) const noexcept;
   void draw_text(const unsigned char font_size, const RGB &&rgb,
@@ -63,6 +64,7 @@ class Pacman {
                  const Point &&p, const char *str) const noexcept;
   void draw_text(const unsigned char font_size, const RGB &&rgb,
                  const Point &&p, const char *str) const noexcept;
+
   void draw_score() noexcept;
   bool poll_event() const noexcept;
   void wait_game() const noexcept;

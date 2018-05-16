@@ -16,7 +16,7 @@ class Food {
 
   void init(const Map &map) noexcept;
 
-  void draw(SDL_Surface *screen, ImageManager &image) noexcept;
+  void draw(SDL_Surface *screen, const ImageManager &image) noexcept;
 
   /**
    * Return true if all of the food are eaten, and false otherwise.

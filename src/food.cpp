@@ -21,7 +21,7 @@ void Food::init(const Map &map) noexcept {
   }
 }
 
-void Food::draw(SDL_Surface *screen, ImageManager &image) noexcept {
+void Food::draw(SDL_Surface *screen, const ImageManager &image) noexcept {
   // update
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {

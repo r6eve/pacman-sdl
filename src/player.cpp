@@ -30,7 +30,7 @@ void Player::init_pos() noexcept {
   }
 }
 
-void Player::draw(SDL_Surface *screen, ImageManager &image,
+void Player::draw(SDL_Surface *screen, const ImageManager &image,
                   game_mode mode) const noexcept {
   switch (player_type_) {
     case 0: {
