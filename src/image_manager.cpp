@@ -1,8 +1,9 @@
-#include "image_manager.hpp"
 #include <SDL/SDL_image.h>
 #include <string.h>
 #include <iostream>
+#include <memory>
 #include <unordered_map>
+#include "image_manager.hpp"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ void ImageManager::load(const char *path, const char *name) {
   if (!image) {
     throw IMG_GetError();
   }
-  image_map_[name] = image;
+  image_map_[name] = make_unique<SDL_Surface>(*image);
 }
 
 ImageManager::ImageManager() noexcept {
@@ -43,12 +44,12 @@ ImageManager::ImageManager() noexcept {
 }
 
 SDL_Surface *ImageManager::get(const char *name) const noexcept {
-  unordered_map<string, SDL_Surface *>::const_iterator got =
+  unordered_map<string, unique_ptr<SDL_Surface>>::const_iterator got =
       image_map_.find(name);
   if (got == image_map_.end()) {
     return nullptr;
   } else {
-    return got->second;
+    return got->second.get();
   }
 }
 
