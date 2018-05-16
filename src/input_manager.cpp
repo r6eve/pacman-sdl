@@ -1,4 +1,3 @@
-#include <SDL/SDL_image.h>
 #include <vector>
 
 #include "def_global.hpp"
