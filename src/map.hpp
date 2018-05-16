@@ -11,7 +11,7 @@ class Map {
  public:
   Map() {}
 
-  void init(game_mode mode) noexcept;
+  void init(const game_mode mode) noexcept;
 
   void draw(SDL_Surface *screen, const ImageManager &image,
             const unsigned int game_level) const noexcept;

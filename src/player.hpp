@@ -30,23 +30,33 @@ class Player {
 
  public:
   Player(const unsigned int player_type) : player_type_(player_type) {}
+
   void init_pos() noexcept;
+
   void draw(SDL_Surface *screen, const ImageManager &image,
-            game_mode mode) const noexcept;
+            const game_mode mode) const noexcept;
+
   void move(const InputManager &input_manager, const Map &map,
-            game_mode mode) noexcept;
+            const game_mode mode) noexcept;
+
   Point get_pos() const noexcept;
   void set_pos(const Point &p) noexcept;
   void set_pos(const Point &&p) noexcept;
+
   Point get_block() const noexcept;
+
   int get_life() const noexcept;
   void set_life(const int life) noexcept;
+
   unsigned int get_score() const noexcept;
   void set_score(const unsigned int score) noexcept;
+
   bool get_damaged() const noexcept;
   void set_damaged(const bool damaged_p) noexcept;
+
   unsigned int get_power_mode() const noexcept;
   void set_power_mode(const unsigned int power_mode) noexcept;
+
   ~Player() {}
 };
 

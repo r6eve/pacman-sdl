@@ -5,7 +5,7 @@
 #include "image_manager.hpp"
 #include "map.hpp"
 
-void Map::init(game_mode mode) noexcept {
+void Map::init(const game_mode mode) noexcept {
   // TODO: use enum class
   // TODO: create other maps
   // 0: can move, 1: cannot move, 2: enemy's house

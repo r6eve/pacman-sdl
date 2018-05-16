@@ -13,7 +13,7 @@ void Wipe::set_wipe_out() noexcept {
   wipe_count_reach_ = screen::height / 10;
 }
 
-void Wipe::draw(SDL_Surface *screen, unsigned int limit_x) const noexcept {
+void Wipe::draw(SDL_Surface *screen, const unsigned int limit_x) const noexcept {
   SDL_Rect dst = {0, 0, static_cast<Uint16>(limit_x),
                   static_cast<Uint16>(wipe_count_)};
   const unsigned int dy = screen::height / 10;

@@ -30,7 +30,7 @@ class Wipe {
    * `limit_x` is the limit for the x-axis to draw. It's bounded on closed
    * interval [0-screen::width] .
    */
-  void draw(SDL_Surface *screen, unsigned int limit_x) const noexcept;
+  void draw(SDL_Surface *screen, const unsigned int limit_x) const noexcept;
 
   /**
    * Return true if wipe finishes.

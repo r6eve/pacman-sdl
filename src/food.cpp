@@ -47,7 +47,7 @@ void Food::draw(SDL_Surface *screen, const ImageManager &image) noexcept {
   }
 }
 
-bool Food::check_state(game_mode mode, Player &p1, Player &p2) noexcept {
+bool Food::check_state(const game_mode mode, Player &p1, Player &p2) noexcept {
   const Point block = p1.get_block();
   if (food_[block.y][block.x] == 1) {
     Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
