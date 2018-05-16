@@ -2,16 +2,10 @@
 #define IMAGE_MANAGER_H
 
 #include <SDL/SDL_image.h>
+#include <unordered_map>
 
 class ImageManager {
-  typedef struct Img_list_rec {
-    char name[64];
-    SDL_Surface *img;
-    struct Img_list_rec *prev;
-    struct Img_list_rec *next;
-  } Img_list;
-
-  Img_list *img_list_top_;
+  std::unordered_map<std::string, SDL_Surface *> image_map_;
 
   void load(const char *path, const char *name);
 
