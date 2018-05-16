@@ -21,7 +21,7 @@ void Food::init() noexcept {
   }
 }
 
-void Food::draw(SDL_Surface *screen) noexcept {
+void Food::draw(SDL_Surface *screen, ImageManager &image) noexcept {
   // update
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
@@ -37,10 +37,10 @@ void Food::draw(SDL_Surface *screen) noexcept {
       SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                       static_cast<Sint16>(block::size * y), 0, 0};
       if (food_[y][x] == 1) {  // food
-        SDL_Surface *p_surface = Image_manager::get("food");
+        SDL_Surface *p_surface = image.get("food");
         SDL_BlitSurface(p_surface, &src, screen, &dst);
       } else if (food_[y][x] == 0) {  // counter food
-        SDL_Surface *p_surface = Image_manager::get("food_counter");
+        SDL_Surface *p_surface = image.get("food_counter");
         SDL_BlitSurface(p_surface, &src, screen, &dst);
       }
     }

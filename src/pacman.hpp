@@ -41,6 +41,7 @@ class Pacman {
   Player p1;
   Player p2;
   FontManager font;
+  ImageManager image;
 
   void init_sdl();
   void game_title() noexcept;

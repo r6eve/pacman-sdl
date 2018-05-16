@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "def_global.hpp"
+#include "image_manager.hpp"
 #include "player.hpp"
 
 namespace enemy_character {
@@ -48,7 +49,7 @@ class Enemy {
 
   void init() noexcept;
 
-  void draw(SDL_Surface *screen) const noexcept;
+  void draw(SDL_Surface *screen, ImageManager &image) const noexcept;
 
   void move(const bool debug_lose_enemy, const Player &p1,
             const Player &p2) noexcept;

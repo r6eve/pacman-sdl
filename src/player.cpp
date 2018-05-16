@@ -30,10 +30,11 @@ void Player::init_pos() noexcept {
   }
 }
 
-void Player::draw(SDL_Surface *screen, game_mode mode) const noexcept {
+void Player::draw(SDL_Surface *screen, ImageManager &image,
+                  game_mode mode) const noexcept {
   switch (player_type_) {
     case 0: {
-      SDL_Surface *p_surface = Image_manager::get("p1");
+      SDL_Surface *p_surface = image.get("p1");
       SDL_Rect src;
       src.x = block::size * dir_;
       src.y = block::size * anime_count_;
@@ -49,7 +50,7 @@ void Player::draw(SDL_Surface *screen, game_mode mode) const noexcept {
       if (mode != game_mode::battle) {
         return;
       }
-      SDL_Surface *p_surface = Image_manager::get("p2");
+      SDL_Surface *p_surface = image.get("p2");
       SDL_Rect src;
       src.x = block::size * dir_;
       src.y = block::size * anime_count_;
@@ -158,8 +159,12 @@ void Player::set_score(const unsigned int score) noexcept { score_ = score; }
 
 bool Player::get_damaged() const noexcept { return damaged_p_; }
 
-void Player::set_damaged(const bool damaged_p) noexcept { damaged_p_ = damaged_p; }
+void Player::set_damaged(const bool damaged_p) noexcept {
+  damaged_p_ = damaged_p;
+}
 
 unsigned int Player::get_power_mode() const noexcept { return power_mode_; }
 
-void Player::set_power_mode(const unsigned int power_mode) noexcept { power_mode_ = power_mode; }
+void Player::set_power_mode(const unsigned int power_mode) noexcept {
+  power_mode_ = power_mode;
+}

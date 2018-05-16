@@ -31,7 +31,6 @@ Pacman::Pacman(const bool debug_mode) noexcept
       p2(player_type::p2) {
   try {
     init_sdl();
-    Image_manager::init();
     Mixer_manager::init();
   } catch (const char &e) {
     cerr << "error: " << e << '\n';
@@ -253,11 +252,11 @@ void Pacman::game_title() noexcept {
 }
 
 void Pacman::game_start() noexcept {
-  Map::draw(screen_, game_level_);
-  food.draw(screen_);
-  enemy.draw(screen_);
-  p1.draw(screen_, game_mode_);
-  p2.draw(screen_, game_mode_);
+  Map::draw(screen_, image, game_level_);
+  food.draw(screen_, image);
+  enemy.draw(screen_, image);
+  p1.draw(screen_, image, game_mode_);
+  p2.draw(screen_, image, game_mode_);
   draw_score();
   switch (game_count_) {
     case 0: {
@@ -298,11 +297,11 @@ void Pacman::game_start() noexcept {
 }
 
 void Pacman::play_game() noexcept {
-  Map::draw(screen_, game_level_);
-  food.draw(screen_);
-  enemy.draw(screen_);
-  p1.draw(screen_, game_mode_);
-  p2.draw(screen_, game_mode_);
+  Map::draw(screen_, image, game_level_);
+  food.draw(screen_, image);
+  enemy.draw(screen_, image);
+  p1.draw(screen_, image, game_mode_);
+  p2.draw(screen_, image, game_mode_);
   draw_score();
   enemy.move(debug_lose_enemy_, p1, p2);
   p1.move(game_mode_);
@@ -327,11 +326,11 @@ void Pacman::play_game() noexcept {
 }
 
 void Pacman::game_clear() noexcept {
-  Map::draw(screen_, game_level_);
-  food.draw(screen_);
-  enemy.draw(screen_);
-  p1.draw(screen_, game_mode_);
-  p2.draw(screen_, game_mode_);
+  Map::draw(screen_, image, game_level_);
+  food.draw(screen_, image);
+  enemy.draw(screen_, image);
+  p1.draw(screen_, image, game_mode_);
+  p2.draw(screen_, image, game_mode_);
   draw_score();
 
   if (game_count_ == 0) {
@@ -359,11 +358,11 @@ void Pacman::game_clear() noexcept {
 }
 
 void Pacman::game_miss() noexcept {
-  Map::draw(screen_, game_level_);
-  food.draw(screen_);
-  enemy.draw(screen_);
-  p1.draw(screen_, game_mode_);
-  p2.draw(screen_, game_mode_);
+  Map::draw(screen_, image, game_level_);
+  food.draw(screen_, image);
+  enemy.draw(screen_, image);
+  p1.draw(screen_, image, game_mode_);
+  p2.draw(screen_, image, game_mode_);
   draw_score();
 
   if (game_count_ == 0) {
@@ -574,11 +573,11 @@ void Pacman::game_over() noexcept {
 }
 
 void Pacman::game_pause() noexcept {
-  Map::draw(screen_, game_level_);
-  food.draw(screen_);
-  enemy.draw(screen_);
-  p1.draw(screen_, game_mode_);
-  p2.draw(screen_, game_mode_);
+  Map::draw(screen_, image, game_level_);
+  food.draw(screen_, image);
+  enemy.draw(screen_, image);
+  p1.draw(screen_, image, game_mode_);
+  p2.draw(screen_, image, game_mode_);
   draw_score();
   draw_translucence();
   if (Input_manager::edge_key_p(0, input_device::space)) {
@@ -615,7 +614,7 @@ void Pacman::draw_text(const unsigned char font_size, const RGB &&rgb,
 // TODO: reduce magic numbers
 void Pacman::draw_score() noexcept {
   {
-    SDL_Surface *p_surface = Image_manager::get("plate");
+    SDL_Surface *p_surface = image.get("plate");
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, screen_, &dst);
   }
@@ -625,7 +624,7 @@ void Pacman::draw_score() noexcept {
     draw_text(16, RGB{0xff, 0xff, 0xff},
               Point{screen::offset_x + 20, screen::height / 7 + 10},
               score.str().c_str());
-    SDL_Surface *p_surface = Image_manager::get("p1");
+    SDL_Surface *p_surface = image.get("p1");
     SDL_Rect src = {block::size, 0, block::size, block::size};
     SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
     SDL_BlitSurface(p_surface, &src, screen_, &dst);
@@ -640,7 +639,7 @@ void Pacman::draw_score() noexcept {
       draw_text(16, RGB{0xff, 0xff, 0xff},
                 Point{screen::offset_x + 20, screen::height / 7 + 90},
                 score.str().c_str());
-      SDL_Surface *p_surface = Image_manager::get("p2");
+      SDL_Surface *p_surface = image.get("p2");
       SDL_Rect src = {block::size, 0, block::size, block::size};
       SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
                       0};
@@ -763,7 +762,6 @@ void Pacman::draw_translucence() noexcept {
 }
 
 Pacman::~Pacman() noexcept {
-  Image_manager::end();
   Input_manager::end_joystick();
   Mixer_manager::end();
   atexit(SDL_Quit);

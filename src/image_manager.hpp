@@ -3,7 +3,7 @@
 
 #include <SDL/SDL_image.h>
 
-class Image_manager {
+class ImageManager {
   typedef struct Img_list_rec {
     char name[64];
     SDL_Surface *img;
@@ -11,22 +11,16 @@ class Image_manager {
     struct Img_list_rec *next;
   } Img_list;
 
-  static Img_list *img_list_top_;
+  Img_list *img_list_top_;
 
-  static void load(const char *path, const char *name);
+  void load(const char *path, const char *name);
 
  public:
-  /**
-   * Call this function before using get() .
-   */
-  static void init();
+  ImageManager() noexcept;
 
-  static SDL_Surface *get(const char *name) noexcept;
+  SDL_Surface *get(const char *name) const noexcept;
 
-  /**
-   * Call this function when program exits.
-   */
-  static void end() noexcept;
+  ~ImageManager() noexcept;
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "def_global.hpp"
+#include "image_manager.hpp"
 
 namespace player_type {
 
@@ -28,7 +29,8 @@ class Player {
  public:
   Player(const unsigned int player_type) : player_type_(player_type) {}
   void init_pos() noexcept;
-  void draw(SDL_Surface *screen, game_mode mode) const noexcept;
+  void draw(SDL_Surface *screen, ImageManager &image,
+            game_mode mode) const noexcept;
   void move(game_mode mode) noexcept;
   Point get_pos() const noexcept;
   void set_pos(const Point &p) noexcept;

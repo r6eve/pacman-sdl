@@ -2,6 +2,7 @@
 #define FOOD_H
 
 #include "def_global.hpp"
+#include "image_manager.hpp"
 #include "player.hpp"
 
 class Food {
@@ -14,7 +15,7 @@ class Food {
 
   void init() noexcept;
 
-  void draw(SDL_Surface *screen) noexcept;
+  void draw(SDL_Surface *screen, ImageManager &image) noexcept;
 
   /**
    * Return true if all of the food are eaten, and false otherwise.

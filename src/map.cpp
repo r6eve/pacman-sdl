@@ -89,20 +89,21 @@ void Map::init(game_mode mode) noexcept {
 }
 
 // TODO: reduce magic numbers
-void Map::draw(SDL_Surface *screen, const unsigned int game_level) noexcept {
+void Map::draw(SDL_Surface *screen, ImageManager &image,
+               const unsigned int game_level) noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(screen, &dst, 0x00000000);
 
   SDL_Surface *p_surface = nullptr;
   const unsigned int mod = game_level % 4;
   if (mod == 1) {
-    p_surface = Image_manager::get("bg");
+    p_surface = image.get("bg");
   } else if (mod == 2) {
-    p_surface = Image_manager::get("bg_red");
+    p_surface = image.get("bg_red");
   } else if (mod == 3) {
-    p_surface = Image_manager::get("bg_green");
+    p_surface = image.get("bg_green");
   } else {
-    p_surface = Image_manager::get("bg_blue");
+    p_surface = image.get("bg_blue");
   }
 
   {

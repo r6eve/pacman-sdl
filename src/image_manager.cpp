@@ -1,11 +1,11 @@
 #include <SDL/SDL_image.h>
+#include <iostream>
 #include <string.h>
-
 #include "image_manager.hpp"
 
-Image_manager::Img_list *Image_manager::img_list_top_ = nullptr;
+using namespace std;
 
-void Image_manager::load(const char *path, const char *name) {
+void ImageManager::load(const char *path, const char *name) {
   SDL_Surface *img = IMG_Load(path);
   if (!img) {
     throw IMG_GetError();
@@ -26,10 +26,11 @@ void Image_manager::load(const char *path, const char *name) {
   img_list_top_ = list;
 }
 
-void Image_manager::init() {
+ImageManager::ImageManager() noexcept {
   const int flag = IMG_INIT_PNG;
   if (IMG_Init(flag) != flag) {
-    throw IMG_GetError();
+    cerr << "error: " << IMG_GetError() << '\n';
+    exit(EXIT_FAILURE);
   }
 
   try {
@@ -48,11 +49,12 @@ void Image_manager::init() {
     load("./data/mon_run.png", "mon_run");
     load("./data/plate.png", "plate");
   } catch (const char &e) {
-    throw e;
+    cerr << "error: " << e << '\n';
+    exit(EXIT_FAILURE);
   }
 }
 
-SDL_Surface *Image_manager::get(const char *name) noexcept {
+SDL_Surface *ImageManager::get(const char *name) const noexcept {
   Img_list *p = img_list_top_;
   while (p) {
     if (!strcmp(p->name, name)) {
@@ -64,7 +66,7 @@ SDL_Surface *Image_manager::get(const char *name) noexcept {
   return nullptr;
 }
 
-void Image_manager::end() noexcept {
+ImageManager::~ImageManager() noexcept {
   while (img_list_top_) {
     Img_list *p = img_list_top_->next;
     SDL_FreeSurface(img_list_top_->img);
