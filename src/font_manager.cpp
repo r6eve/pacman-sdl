@@ -6,11 +6,10 @@ using namespace std;
 
 void FontManager::load(const char *path, unsigned int size,
                        const unsigned char font_size) {
-  TTF_Font *font = TTF_OpenFont(path, size);
-  if (!font) {
+  font_array_[font_size] = TTF_OpenFont(path, size);
+  if (!font_array_[font_size]) {
     throw TTF_GetError();
   }
-  font_array_[font_size] = font;
 }
 
 FontManager::FontManager() noexcept {
