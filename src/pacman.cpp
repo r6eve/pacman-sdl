@@ -48,10 +48,10 @@ void Pacman::init_sdl() {
   SDL_WM_SetCaption("pacman-sdl", nullptr);
   if (debug_mode_) {
     screen_ = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
-                              SDL_HWSURFACE | SDL_DOUBLEBUF);
+                               SDL_HWSURFACE | SDL_DOUBLEBUF);
   } else {
     screen_ = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
-                              SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+                               SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
   }
   if (!screen_) {
     throw SDL_GetError();
@@ -133,9 +133,9 @@ void Pacman::game_title() noexcept {
         blink_count_ = 0;
       }
 
-      if (Input_manager::edge_key_p(0, input_device::x) ||
-          Input_manager::edge_key_p(1, input_device::x) ||
-          Input_manager::edge_key_p(0, input_device::space)) {
+      if (Input_manager::edge_key_p(player_type::p1, input_device::x) ||
+          Input_manager::edge_key_p(player_type::p2, input_device::x) ||
+          Input_manager::edge_key_p(player_type::p1, input_device::space)) {
         ++game_count_;
         blink_count_ = 0;
       }
@@ -144,9 +144,9 @@ void Pacman::game_title() noexcept {
     case 3: {
       draw_text(36, RGB{0x00, 0x00, 0x00}, Point{160, 160},
                 "P  a  c  -  M  a  n");
-      if (!Input_manager::press_key_p(0, input_device::x) &&
-          !Input_manager::press_key_p(1, input_device::x) &&
-          !Input_manager::press_key_p(0, input_device::space)) {
+      if (!Input_manager::press_key_p(player_type::p1, input_device::x) &&
+          !Input_manager::press_key_p(player_type::p2, input_device::x) &&
+          !Input_manager::press_key_p(player_type::p1, input_device::space)) {
         ++game_count_;
       }
       break;
@@ -175,25 +175,27 @@ void Pacman::game_title() noexcept {
           break;
       }
 
-      if (Input_manager::press_key_p(0, input_device::x) ||
-          Input_manager::press_key_p(1, input_device::x) ||
-          Input_manager::press_key_p(0, input_device::space)) {
+      if (Input_manager::press_key_p(player_type::p1, input_device::x) ||
+          Input_manager::press_key_p(player_type::p2, input_device::x) ||
+          Input_manager::press_key_p(player_type::p1, input_device::space)) {
         wipe.set_wipe_out();
         wipe.draw(screen_, screen::width);
         ++game_count_;
       }
 
-      if (Input_manager::press_key_p(0, input_device::button_2) ||
-          Input_manager::press_key_p(1, input_device::button_2)) {
+      if (Input_manager::press_key_p(player_type::p1, input_device::button_2) ||
+          Input_manager::press_key_p(player_type::p2, input_device::button_2)) {
         game_count_ -= 2;
         game_mode_ = game_mode::single;
       }
 
-      if (Input_manager::press_key_p(0, input_device::down) ||
-          Input_manager::press_key_p(1, input_device::down)) {
+      if (Input_manager::press_key_p(player_type::p1, input_device::down) ||
+          Input_manager::press_key_p(player_type::p2, input_device::down)) {
         game_mode_ = game_mode::battle;
-      } else if (Input_manager::press_key_p(0, input_device::up) ||
-                 Input_manager::press_key_p(1, input_device::up)) {
+      } else if (Input_manager::press_key_p(player_type::p1,
+                                            input_device::up) ||
+                 Input_manager::press_key_p(player_type::p2,
+                                            input_device::up)) {
         game_mode_ = game_mode::single;
       }
       break;
@@ -316,11 +318,11 @@ void Pacman::play_game() noexcept {
     game_state_ = game_state::miss;
   }
 
-  if (Input_manager::edge_key_p(0, input_device::space)) {
+  if (Input_manager::edge_key_p(player_type::p1, input_device::space)) {
     game_state_ = game_state::pause;
   }
 
-  if (Input_manager::edge_key_p(0, input_device::b)) {
+  if (Input_manager::edge_key_p(player_type::p1, input_device::b)) {
     debug_lose_enemy_ = !debug_lose_enemy_;
   }
 }
@@ -469,9 +471,10 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
           }
 
-          if (Input_manager::press_key_p(0, input_device::x) ||
-              Input_manager::press_key_p(1, input_device::x) ||
-              Input_manager::press_key_p(0, input_device::space)) {
+          if (Input_manager::press_key_p(player_type::p1, input_device::x) ||
+              Input_manager::press_key_p(player_type::p2, input_device::x) ||
+              Input_manager::press_key_p(player_type::p1,
+                                         input_device::space)) {
             ++game_count_;
             wipe.set_wipe_out();
             wipe.draw(screen_, screen::width);
@@ -542,9 +545,10 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
           }
 
-          if (Input_manager::press_key_p(0, input_device::x) ||
-              Input_manager::press_key_p(1, input_device::x) ||
-              Input_manager::press_key_p(0, input_device::space)) {
+          if (Input_manager::press_key_p(player_type::p1, input_device::x) ||
+              Input_manager::press_key_p(player_type::p2, input_device::x) ||
+              Input_manager::press_key_p(player_type::p1,
+                                         input_device::space)) {
             ++game_count_;
             wipe.set_wipe_out();
             wipe.draw(screen_, screen::width);
@@ -580,7 +584,7 @@ void Pacman::game_pause() noexcept {
   p2.draw(screen_, image, game_mode_);
   draw_score();
   draw_translucence();
-  if (Input_manager::edge_key_p(0, input_device::space)) {
+  if (Input_manager::edge_key_p(player_type::p1, input_device::space)) {
     game_state_ = game_state::playing;
   }
 }
