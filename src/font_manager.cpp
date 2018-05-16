@@ -1,17 +1,20 @@
 #include <SDL/SDL_ttf.h>
+#include <iostream>
 #include "font_manager.hpp"
 
-// TODO: pacman.cpp cannot catch exception (i.e., iinitialize this class in
-// private member). Print exit message and exit here.
-FontManager::FontManager() {
+using namespace std;
+
+FontManager::FontManager() noexcept {
   if (TTF_Init() != 0) {
-    throw TTF_GetError();
+    cerr << "error: " << TTF_GetError() << '\n';
+    exit(EXIT_FAILURE);
   }
 
   ttf_fonts_[0] = TTF_OpenFont("./data/GenEiGothicP-Heavy.otf", 36);
   ttf_fonts_[1] = TTF_OpenFont("./data/GenEiGothicP-Regular.otf", 16);
   if (!ttf_fonts_[0] || !ttf_fonts_[1]) {
-    throw TTF_GetError();
+    cerr << "error: " << TTF_GetError() << '\n';
+    exit(EXIT_FAILURE);
   }
 }
 

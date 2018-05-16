@@ -7,7 +7,7 @@ class FontManager {
   TTF_Font *ttf_fonts_[2];
 
  public:
-  FontManager();
+  FontManager() noexcept;
 
   TTF_Font *get(const unsigned char size) const noexcept;
 
