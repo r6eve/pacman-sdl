@@ -35,6 +35,7 @@ class Enemy {
     enemy_state state;
   } Enemy_data;
 
+  // TODO: Why create those in heap?
   std::unique_ptr<Enemy_data[]> enemies_;
 
   void update() noexcept;
