@@ -1,5 +1,4 @@
 #include <SDL/SDL_mixer.h>
-
 #include "def_global.hpp"
 #include "enemy.hpp"
 #include "food.hpp"
@@ -47,16 +46,17 @@ void Food::draw(SDL_Surface *screen, const ImageManager &image) noexcept {
   }
 }
 
-bool Food::check_state(const game_mode mode, Player &p1, Player &p2) noexcept {
+bool Food::check_state(const game_mode mode, const MixerManager &mixer_manager,
+                       Player &p1, Player &p2) noexcept {
   const Point block = p1.get_block();
   if (food_[block.y][block.x] == 1) {
-    Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
+    Mix_PlayChannel(-1, mixer_manager.get_se("chomp"), 0);
     ++food_[block.y][block.x];
     p1.set_score(p1.get_score() + 10);
   }
   if (food_[block.y][block.x] == 0) {
     p1.set_power_mode(400);
-    Mix_PlayMusic(Mixer_manager::get_music("siren"), -1);
+    Mix_PlayMusic(mixer_manager.get_music("siren"), -1);
     food_[block.y][block.x] += 2;
   }
   if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {
@@ -68,13 +68,13 @@ bool Food::check_state(const game_mode mode, Player &p1, Player &p2) noexcept {
   if (mode == game_mode::battle) {
     const Point block = p2.get_block();
     if (food_[block.y][block.x] == 1) {
-      Mix_PlayChannel(-1, Mixer_manager::get_se("chomp"), 0);
+      Mix_PlayChannel(-1, mixer_manager.get_se("chomp"), 0);
       ++food_[block.y][block.x];
       p2.set_score(p2.get_score() + 10);
     }
     if (food_[block.y][block.x] == 0) {
       p2.set_power_mode(400);
-      Mix_PlayMusic(Mixer_manager::get_music("siren"), -1);
+      Mix_PlayMusic(mixer_manager.get_music("siren"), -1);
       food_[block.y][block.x] += 2;
     }
     if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {

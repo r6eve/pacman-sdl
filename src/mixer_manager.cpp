@@ -1,14 +1,14 @@
 #include <SDL/SDL_mixer.h>
+#include <iostream>
 #include <string.h>
-
 #include "mixer_manager.hpp"
 
-Mix_Music *Mixer_manager::music_[3] = {nullptr};
-Mix_Chunk *Mixer_manager::se_ = nullptr;
+using namespace std;
 
-void Mixer_manager::init() {
+MixerManager::MixerManager() noexcept {
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
-    throw Mix_GetError();
+    cerr << Mix_GetError() << '\n';
+    exit(EXIT_FAILURE);
   }
 
   music_[0] = Mix_LoadMUS("./data/66376e_Pacman_Siren_Sound_Effect.mp3");
@@ -16,11 +16,12 @@ void Mixer_manager::init() {
   music_[2] = Mix_LoadMUS("./data/pacman_death.wav");
   se_ = Mix_LoadWAV("./data/pacman_chomp.wav");
   if (!music_[0] || !music_[1] || !music_[2] || !se_) {
-    throw Mix_GetError();
+    cerr << Mix_GetError() << '\n';
+    exit(EXIT_FAILURE);
   }
 }
 
-Mix_Music *Mixer_manager::get_music(const char *str) noexcept {
+Mix_Music *MixerManager::get_music(const char *str) const noexcept {
   if (!strcmp(str, "siren")) {
     return music_[0];
   }
@@ -33,14 +34,14 @@ Mix_Music *Mixer_manager::get_music(const char *str) noexcept {
   return nullptr;
 }
 
-Mix_Chunk *Mixer_manager::get_se(const char *str) noexcept {
+Mix_Chunk *MixerManager::get_se(const char *str) const noexcept {
   if (!strcmp(str, "chomp")) {
     return se_;
   }
   return nullptr;
 }
 
-void Mixer_manager::end() noexcept {
+MixerManager::~MixerManager() noexcept {
   Mix_HaltMusic();
   Mix_HaltChannel(-1);
   for (unsigned int i = 0; i < 3; ++i) {

@@ -7,6 +7,7 @@
 #include "food.hpp"
 #include "input_manager.hpp"
 #include "map.hpp"
+#include "mixer_manager.hpp"
 #include "player.hpp"
 #include "wipe.hpp"
 
@@ -46,6 +47,7 @@ class Pacman {
   FontManager font_manager_;
   ImageManager image_manager_;
   InputManager input_manager_;
+  MixerManager mixer_manager_;
 
   void init_sdl();
   void game_title() noexcept;

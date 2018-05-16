@@ -31,7 +31,6 @@ Pacman::Pacman(const bool debug_mode) noexcept
       p2_(player_type::p2) {
   try {
     init_sdl();
-    Mixer_manager::init();
   } catch (const char &e) {
     cerr << "error: " << e << '\n';
     exit(EXIT_FAILURE);
@@ -262,7 +261,7 @@ void Pacman::game_start() noexcept {
     case 0: {
       // TODO: Is it correct?
       if ((p1_.get_life() == 2) && (p2_.get_life() == 2)) {
-        Mix_PlayMusic(Mixer_manager::get_music("beginning"), 0);
+        Mix_PlayMusic(mixer_manager_.get_music("beginning"), 0);
       }
       wipe_.set_wipe_in();
       wipe_.draw(screen_, screen::offset_x);
@@ -308,7 +307,7 @@ void Pacman::play_game() noexcept {
   p2_.move(input_manager_, map_, game_mode_);
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
-  const bool food_state = food_.check_state(game_mode_, p1_, p2_);
+  const bool food_state = food_.check_state(game_mode_, mixer_manager_, p1_, p2_);
   const bool hit_enemy = enemy_.check_hit_enemy(game_mode_, p1_, p2_);
   if (food_state) {
     game_state_ = game_state::clear;
@@ -366,7 +365,7 @@ void Pacman::game_miss() noexcept {
   draw_score();
 
   if (game_count_ == 0) {
-    Mix_PlayMusic(Mixer_manager::get_music("death"), 0);
+    Mix_PlayMusic(mixer_manager_.get_music("death"), 0);
     wipe_.set_wipe_out();
     if ((p1_.get_life() == 0) || (p2_.get_life() == 0)) {
       wipe_.draw(screen_, screen::width);
@@ -764,6 +763,5 @@ void Pacman::draw_translucence() noexcept {
 }
 
 Pacman::~Pacman() noexcept {
-  Mixer_manager::end();
   atexit(SDL_Quit);
 }

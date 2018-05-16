@@ -4,6 +4,7 @@
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
+#include "mixer_manager.hpp"
 #include "player.hpp"
 
 class Food {
@@ -21,7 +22,8 @@ class Food {
   /**
    * Return true if all of the food are eaten, and false otherwise.
    */
-  bool check_state(const game_mode mode, Player &p1, Player &p2) noexcept;
+  bool check_state(const game_mode mode, const MixerManager &mixer_manager,
+                   Player &p1, Player &p2) noexcept;
 
   ~Food() {}
 };
