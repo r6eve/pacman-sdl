@@ -10,37 +10,39 @@
 void Food::init(const Map &map) noexcept {
   for (int y = 0; y < block::count_y; ++y) {
     for (int x = 0; x < block::count_x; ++x) {
-      food_[y][x] = -1;
-      if (map.check_state(Point{x, y}) == 0) {  // field where player can move
-        food_[y][x] = 1;
-      } else if (map.check_state(Point{x, y}) == 4) {  // counter food
-        food_[y][x] = 0;
+      const unsigned int state = map.check_state(Point{x, y});
+      if (state == 0) {
+        food_[y][x] = food_state::food;
+      } else if (state == 4) {
+        food_[y][x] = food_state::counter_food;
+      } else {
+        food_[y][x] = food_state::nothing;
       }
     }
   }
 }
 
-void Food::draw(SDL_Surface *screen, const ImageManager &image_manager) noexcept {
-  // update
-  for (unsigned int y = 0; y < block::count_y; ++y) {
-    for (unsigned int x = 0; x < block::count_x; ++x) {
-      if (food_[y][x] == 2) {
-        food_[y][x] = -1;
-      }
-    }
-  }
-
+void Food::draw(SDL_Surface *screen,
+                const ImageManager &image_manager) noexcept {
   SDL_Rect src = {0, 0, block::size, block::size};
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
       SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                       static_cast<Sint16>(block::size * y), 0, 0};
-      if (food_[y][x] == 1) {  // food
-        SDL_Surface *p_surface = image_manager.get(image::food);
-        SDL_BlitSurface(p_surface, &src, screen, &dst);
-      } else if (food_[y][x] == 0) {  // counter food
-        SDL_Surface *p_surface = image_manager.get(image::food_counter);
-        SDL_BlitSurface(p_surface, &src, screen, &dst);
+      switch (food_[y][x]) {
+        case food_state::food: {
+          SDL_Surface *p_surface = image_manager.get(image::food);
+          SDL_BlitSurface(p_surface, &src, screen, &dst);
+          break;
+        }
+        case food_state::counter_food: {
+          SDL_Surface *p_surface = image_manager.get(image::food_counter);
+          SDL_BlitSurface(p_surface, &src, screen, &dst);
+          break;
+        }
+        default:
+          // do nothing
+          break;
       }
     }
   }
@@ -49,15 +51,22 @@ void Food::draw(SDL_Surface *screen, const ImageManager &image_manager) noexcept
 bool Food::check_state(const game_mode mode, const MixerManager &mixer_manager,
                        Player &p1, Player &p2) noexcept {
   const Point block = p1.get_block();
-  if (food_[block.y][block.x] == 1) {
-    Mix_PlayChannel(-1, mixer_manager.get_se(), 0);
-    ++food_[block.y][block.x];
-    p1.set_score(p1.get_score() + 10);
-  }
-  if (food_[block.y][block.x] == 0) {
-    p1.set_power_mode(400);
-    Mix_PlayMusic(mixer_manager.get_music(music_type::siren), -1);
-    food_[block.y][block.x] += 2;
+  switch (food_[block.y][block.x]) {
+    case food_state::food: {
+      Mix_PlayChannel(-1, mixer_manager.get_se(), 0);
+      food_[block.y][block.x] = food_state::nothing;
+      p1.set_score(p1.get_score() + 10);
+      break;
+    }
+    case food_state::counter_food: {
+      p1.set_power_mode(400);
+      Mix_PlayMusic(mixer_manager.get_music(music_type::siren), -1);
+      food_[block.y][block.x] = food_state::nothing;
+      break;
+    }
+    default:
+      // do nothing
+      break;
   }
   if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {
     while (!Mix_FadeOutMusic(800) && Mix_PlayingMusic()) {
@@ -67,15 +76,22 @@ bool Food::check_state(const game_mode mode, const MixerManager &mixer_manager,
 
   if (mode == game_mode::battle) {
     const Point block = p2.get_block();
-    if (food_[block.y][block.x] == 1) {
-      Mix_PlayChannel(-1, mixer_manager.get_se(), 0);
-      ++food_[block.y][block.x];
-      p2.set_score(p2.get_score() + 10);
-    }
-    if (food_[block.y][block.x] == 0) {
-      p2.set_power_mode(400);
-      Mix_PlayMusic(mixer_manager.get_music(music_type::siren), -1);
-      food_[block.y][block.x] += 2;
+    switch (food_[block.y][block.x]) {
+      case food_state::food: {
+        Mix_PlayChannel(-1, mixer_manager.get_se(), 0);
+        food_[block.y][block.x] = food_state::nothing;
+        p2.set_score(p2.get_score() + 10);
+        break;
+      }
+      case food_state::counter_food: {
+        p2.set_power_mode(400);
+        Mix_PlayMusic(mixer_manager.get_music(music_type::siren), -1);
+        food_[block.y][block.x] = food_state::nothing;
+        break;
+      }
+      default:
+        // do nothing
+        break;
     }
     if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {
       while (!Mix_FadeOutMusic(800) && Mix_PlayingMusic()) {
@@ -87,7 +103,8 @@ bool Food::check_state(const game_mode mode, const MixerManager &mixer_manager,
   int rest_food = 0;
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      if ((food_[y][x] == 0) || (food_[y][x] == 1)) {
+      if ((food_[y][x] == food_state::food) ||
+          (food_[y][x] == food_state::counter_food)) {
         ++rest_food;
       }
     }

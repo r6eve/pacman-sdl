@@ -8,9 +8,13 @@
 #include "player.hpp"
 
 class Food {
-  // TODO: enum class
-  // -1: no food, 0: counter food, 1: food, 2: get food
-  char food_[block::count_y][block::count_x];
+  enum class food_state {
+    nothing,
+    food,
+    counter_food,
+  };
+
+  food_state food_[block::count_y][block::count_x];
 
  public:
   Food() {}
