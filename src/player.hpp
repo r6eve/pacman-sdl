@@ -62,14 +62,11 @@ class Player {
     switch (player_type_) {
       case player_type::p1: {
         SDL_Surface *p_surface = image_manager.get(image::p1);
-        SDL_Rect src;
-        src.x = block::size * dir_;
-        src.y = block::size * anime_count_;
-        src.w = block::size;
-        src.h = block::size;
-        SDL_Rect dst;
-        dst.x = pos_.x;
-        dst.y = pos_.y;
+        SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
+                        static_cast<Sint16>(block::size * anime_count_),
+                        block::size, block::size};
+        SDL_Rect dst = {static_cast<Sint16>(pos_.x),
+                        static_cast<Sint16>(pos_.y), 0, 0};
         SDL_BlitSurface(p_surface, &src, screen, &dst);
         return;
       }
@@ -78,14 +75,11 @@ class Player {
           return;
         }
         SDL_Surface *p_surface = image_manager.get(image::p2);
-        SDL_Rect src;
-        src.x = block::size * dir_;
-        src.y = block::size * anime_count_;
-        src.w = block::size;
-        src.h = block::size;
-        SDL_Rect dst;
-        dst.x = pos_.x;
-        dst.y = pos_.y;
+        SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
+                        static_cast<Sint16>(block::size * anime_count_),
+                        block::size, block::size};
+        SDL_Rect dst = {static_cast<Sint16>(pos_.x),
+                        static_cast<Sint16>(pos_.y), 0, 0};
         SDL_BlitSurface(p_surface, &src, screen, &dst);
         return;
       }
