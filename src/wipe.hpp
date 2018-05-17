@@ -1,7 +1,6 @@
 #ifndef WIPE_H
 #define WIPE_H
 
-#include <SDL/SDL.h>
 #include "def_global.hpp"
 
 class Wipe {
