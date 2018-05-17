@@ -9,7 +9,7 @@
 // to manage images.
 //
 // `std::unordered_map<std::string, std::unique_ptr<SDL_Surface>> image_map_`
-void ImageManager::load(const char *path, const unsigned int image_type) {
+void ImageManager::load(const char *path, const unsigned char image_type) {
   SDL_Surface *image = IMG_Load(path);
   if (!image) {
     throw IMG_GetError();
@@ -45,7 +45,7 @@ ImageManager::ImageManager() noexcept {
   }
 }
 
-SDL_Surface *ImageManager::get(const unsigned int image_type) const noexcept {
+SDL_Surface *ImageManager::get(const unsigned char image_type) const noexcept {
   return image_array_[image_type].get();
 }
 

@@ -27,12 +27,12 @@ namespace image {
 class ImageManager {
   std::unique_ptr<SDL_Surface> image_array_[image::count];
 
-  void load(const char *path, const unsigned int image_type);
+  void load(const char *path, const unsigned char image_type);
 
  public:
   ImageManager() noexcept;
 
-  SDL_Surface *get(const unsigned int image_type) const noexcept;
+  SDL_Surface *get(const unsigned char image_type) const noexcept;
 
   ~ImageManager() noexcept;
 };
