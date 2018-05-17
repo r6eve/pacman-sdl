@@ -437,7 +437,7 @@ void Pacman::game_over() noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
   SDL_FillRect(screen_, &dst, 0xffffffff);
 
-  const Point gameover_pos = gameover_pos;
+  const Point gameover_pos = Point{165, 100};
   const char *gameover_str = "G a m e O v e r";
   switch (game_mode_) {
     case game_mode::single: {
