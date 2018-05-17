@@ -6,7 +6,7 @@
 
 void Player::init_pos() noexcept {
   switch (player_type_) {
-    case 0: {
+    case player_type::p1: {
       pos_ = {block::size * 9, block::size * 18};
       block_ = {9, 18};
       next_block_ = {9, 18};
@@ -15,7 +15,7 @@ void Player::init_pos() noexcept {
       anime_weight_ = 0;
       return;
     }
-    case 1: {
+    case player_type::p2: {
       pos_ = {block::size * 14, block::size * 18};
       block_ = {14, 18};
       next_block_ = {14, 18};
@@ -33,7 +33,7 @@ void Player::init_pos() noexcept {
 void Player::draw(SDL_Surface *screen, const ImageManager &image_manager,
                   const game_mode mode) const noexcept {
   switch (player_type_) {
-    case 0: {
+    case player_type::p1: {
       SDL_Surface *p_surface = image_manager.get(image::p1);
       SDL_Rect src;
       src.x = block::size * dir_;
@@ -46,7 +46,7 @@ void Player::draw(SDL_Surface *screen, const ImageManager &image_manager,
       SDL_BlitSurface(p_surface, &src, screen, &dst);
       return;
     }
-    case 1: {
+    case player_type::p2: {
       if (mode != game_mode::battle) {
         return;
       }
@@ -71,7 +71,7 @@ void Player::draw(SDL_Surface *screen, const ImageManager &image_manager,
 // TODO: reduce magic numbers
 void Player::move(const InputManager &input_manager, const Map &map,
                   const game_mode mode) noexcept {
-  if ((player_type_ == 1) && (mode != game_mode::battle)) {
+  if ((player_type_ == player_type::p2) && (mode != game_mode::battle)) {
     return;
   }
 
