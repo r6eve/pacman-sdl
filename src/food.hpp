@@ -19,9 +19,49 @@ class Food {
  public:
   Food() {}
 
-  void init(const Map &map) noexcept;
+  inline void init(const Map &map) noexcept {
+    for (int y = 0; y < block::count_y; ++y) {
+      for (int x = 0; x < block::count_x; ++x) {
+        switch (map.check_state(Point{x, y})) {
+          case map_state::food:
+            food_[y][x] = food_state::food;
+            break;
+          case map_state::counter_food:
+            food_[y][x] = food_state::counter_food;
+            break;
+          default:
+            food_[y][x] = food_state::nothing;
+            break;
+        }
+      }
+    }
+  }
 
-  void draw(SDL_Surface *screen, const ImageManager &image_manager) noexcept;
+  inline void draw(SDL_Surface *screen,
+                   const ImageManager &image_manager) noexcept {
+    SDL_Rect src = {0, 0, block::size, block::size};
+    for (unsigned int y = 0; y < block::count_y; ++y) {
+      for (unsigned int x = 0; x < block::count_x; ++x) {
+        SDL_Rect dst = {static_cast<Sint16>(block::size * x),
+                        static_cast<Sint16>(block::size * y), 0, 0};
+        switch (food_[y][x]) {
+          case food_state::food: {
+            SDL_Surface *p_surface = image_manager.get(image::food);
+            SDL_BlitSurface(p_surface, &src, screen, &dst);
+            break;
+          }
+          case food_state::counter_food: {
+            SDL_Surface *p_surface = image_manager.get(image::food_counter);
+            SDL_BlitSurface(p_surface, &src, screen, &dst);
+            break;
+          }
+          default:
+            // do nothing
+            break;
+        }
+      }
+    }
+  }
 
   /**
    * Return true if all of the food are eaten, and false otherwise.
