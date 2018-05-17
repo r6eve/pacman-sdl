@@ -389,46 +389,24 @@ void Pacman::game_miss() noexcept {
     wipe_.draw(screen_, screen::offset_x);
   }
 
-  // TODO: use pointer to delete if-clauses
-  if (p1_.get_damaged()) {
-    Point pos = p1_.get_pos();
-    p1_.set_pos(Point{pos.x, pos.y - 1});
-    if (wipe_.update()) {
-      const int life = p1_.get_life() - 1;
-      p1_.set_life(life);
-      if (life >= 0) {
-        game_count_ = 0;
-        game_state_ = game_state::start;
-        enemy_.init();
-        p1_.init_pos();
-        p2_.init_pos();
-        p1_.set_damaged(false);
-        p2_.set_damaged(false);
-      } else {
-        game_count_ = 0;
-        blink_count_ = 0;
-        game_state_ = game_state::gameover;
-      }
-    }
-  } else {
-    Point pos = p2_.get_pos();
-    p2_.set_pos(Point{pos.x, pos.y - 1});
-    if (wipe_.update()) {
-      const int life = p2_.get_life() - 1;
-      p2_.set_life(life);
-      if (life >= 0) {
-        game_count_ = 0;
-        game_state_ = game_state::start;
-        enemy_.init();
-        p1_.init_pos();
-        p2_.init_pos();
-        p1_.set_damaged(false);
-        p2_.set_damaged(false);
-      } else {
-        game_count_ = 0;
-        blink_count_ = 0;
-        game_state_ = game_state::gameover;
-      }
+  Player &p = p1_.get_damaged() ? p1_ : p2_;
+  Point pos = p.get_pos();
+  p.set_pos(Point{pos.x, pos.y - 1});
+  if (wipe_.update()) {
+    const int life = p.get_life() - 1;
+    p.set_life(life);
+    if (life >= 0) {
+      game_count_ = 0;
+      game_state_ = game_state::start;
+      enemy_.init();
+      p1_.init_pos();
+      p2_.init_pos();
+      p1_.set_damaged(false);
+      p2_.set_damaged(false);
+    } else {
+      game_count_ = 0;
+      blink_count_ = 0;
+      game_state_ = game_state::gameover;
     }
   }
 }
