@@ -46,10 +46,10 @@ class InputManager {
   void update(const bool debug_mode) noexcept;
 
   bool edge_key_p(const unsigned int player_type,
-                  const unsigned int button) const noexcept;
+                  const unsigned char button) const noexcept;
 
   bool press_key_p(const unsigned int player_type,
-                   const unsigned int button) const noexcept;
+                   const unsigned char button) const noexcept;
 
   ~InputManager() noexcept;
 };
