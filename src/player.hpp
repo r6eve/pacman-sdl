@@ -16,7 +16,7 @@ enum {
 }  // namespace player_type
 
 class Player {
-  const unsigned int player_type_;
+  const unsigned char player_type_;
   Point pos_;
   Point block_;
   Point next_block_;
@@ -29,7 +29,7 @@ class Player {
   unsigned int power_mode_;  // 0: not power mode, not 0: power mode
 
  public:
-  Player(const unsigned int player_type) : player_type_(player_type) {}
+  Player(const unsigned char player_type) : player_type_(player_type) {}
 
   void init_pos() noexcept;
 

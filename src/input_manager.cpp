@@ -99,12 +99,12 @@ void InputManager::update(const bool debug_mode) noexcept {
   }
 }
 
-bool InputManager::edge_key_p(const unsigned int player_type,
+bool InputManager::edge_key_p(const unsigned char player_type,
                               const unsigned char button) const noexcept {
   return edge_key_[player_type][button];
 }
 
-bool InputManager::press_key_p(const unsigned int player_type,
+bool InputManager::press_key_p(const unsigned char player_type,
                                const unsigned char button) const noexcept {
   return press_key_[player_type][button];
 }
