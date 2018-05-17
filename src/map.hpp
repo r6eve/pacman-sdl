@@ -28,11 +28,24 @@ class Map {
   void draw(SDL_Surface *screen, const ImageManager &image_manager,
             const unsigned int game_level) const noexcept;
 
-  map_state check_state(const Point &p) const noexcept;
-  map_state check_state(const Point &&p) const noexcept;
+  // Don't modify parameter type as unsigned int
+  // TODO: Why is the parameter of x=-1 and y=12 OK?
+  // Cf. https://ideone.com/u1QKTJ
+  inline map_state check_state(const Point &p) const noexcept {
+    return block_[p.y][p.x];
+  }
 
-  unsigned int get_home_distance(const Point &p) const noexcept;
-  unsigned int get_home_distance(const Point &&p) const noexcept;
+  inline map_state check_state(const Point &&p) const noexcept {
+    return check_state(p);
+  }
+
+  inline unsigned int get_home_distance(const Point &p) const noexcept {
+    return home_distance_[p.y][p.x];
+  }
+
+  inline unsigned int get_home_distance(const Point &&p) const noexcept {
+    return get_home_distance(p);
+  }
 
   ~Map() {}
 };

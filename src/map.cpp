@@ -157,22 +157,3 @@ void Map::draw(SDL_Surface *screen, const ImageManager &image_manager,
     }
   }
 }
-
-// Don't modify parameter type as unsigned int
-// TODO: Why is the parameter of x=-1 and y=12 OK?
-// Cf. https://ideone.com/u1QKTJ
-map_state Map::check_state(const Point &p) const noexcept {
-  return block_[p.y][p.x];
-}
-
-map_state Map::check_state(const Point &&p) const noexcept {
-  return check_state(p);
-}
-
-unsigned int Map::get_home_distance(const Point &p) const noexcept {
-  return home_distance_[p.y][p.x];
-}
-
-unsigned int Map::get_home_distance(const Point &&p) const noexcept {
-  return get_home_distance(p);
-}

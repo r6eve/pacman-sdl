@@ -3,15 +3,6 @@
 #include "def_global.hpp"
 #include "player.hpp"
 
-InputManager::InputManager() noexcept {
-  // SDL_NumJoysticks() definitely returns int type. However, as far as I read
-  // source code, it always returns unsigned int type.
-  num_joysticks_ = static_cast<unsigned int>(SDL_NumJoysticks());
-  for (unsigned int i = 0; i < num_joysticks_; ++i) {
-    joystick_[i] = SDL_JoystickOpen(i);
-  }
-}
-
 void InputManager::update(const bool debug_mode) noexcept {
   constexpr unsigned int num_devices_ = 2;
   bool new_press_key[num_devices_][input_device::count];
@@ -96,21 +87,5 @@ void InputManager::update(const bool debug_mode) noexcept {
       edge_key_[i][j] = !press_key_[i][j] && new_press_key[i][j];
       press_key_[i][j] = new_press_key[i][j];
     }
-  }
-}
-
-bool InputManager::edge_key_p(const unsigned char player_type,
-                              const unsigned char button) const noexcept {
-  return edge_key_[player_type][button];
-}
-
-bool InputManager::press_key_p(const unsigned char player_type,
-                               const unsigned char button) const noexcept {
-  return press_key_[player_type][button];
-}
-
-InputManager::~InputManager() noexcept {
-  for (unsigned int i = 0; i < num_joysticks_; ++i) {
-    SDL_JoystickClose(joystick_[i]);
   }
 }
