@@ -243,8 +243,8 @@ class Pacman {
       }
 
       std::stringstream ss;
-      ss << "FrameRate[" << std::setprecision(2) << setiosflags(std::ios::fixed)
-         << frame_rate << "]";
+      ss << "FrameRate[" << std::setprecision(2)
+         << std::setiosflags(std::ios::fixed) << frame_rate << "]";
       draw_text(font_size::x16, rgb::white, Point{screen::offset_x + 15, 16},
                 ss.str().c_str());
     }
