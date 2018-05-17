@@ -6,36 +6,31 @@
 #include "map.hpp"
 
 void Map::init(const game_mode mode) noexcept {
-  // TODO: use enum class
-  // TODO: create other maps
-  // 0: can move, 1: cannot move, 2: enemy's house
-  // 3: player 1, 4: counter food, {5,6,7}: warp, 8: player 2
-  unsigned int block_src[block::count_y][block::count_x] = {
-  // 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 1
-    {1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1}, // 2
-    {1, 4, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 4, 1}, // 3
-    {1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1}, // 4
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 5
-    {1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1}, // 6
-    {1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1}, // 7
-    {1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1}, // 8
-    {1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1}, // 9
-    {1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1}, // 10
-    {1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1}, // 11
-    {6, 5, 5, 5, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 5, 5, 5, 7}, // 12
-    {1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1}, // 13
-    {1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1}, // 14
-    {1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1}, // 15
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 16
-    {1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1}, // 17
-    {1, 4, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 1}, // 18
-    {1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1}, // 19
-    {1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1}, // 20
-    {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1}, // 21
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, // 22
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 23
+  map_state block_src[block::count_y][block::count_x] = {
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
+    {map_state::block, map_state::counter_food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::counter_food, map_state::block},
+    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::enemy_house, map_state::enemy_house, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::left_warp_pos, map_state::warp_street, map_state::warp_street, map_state::warp_street, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::enemy_house, map_state::enemy_house, map_state::enemy_house, map_state::enemy_house, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::warp_street, map_state::warp_street, map_state::warp_street, map_state::right_warp_pos},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
+    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
+    {map_state::block, map_state::counter_food, map_state::food, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::init_p1_pos, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::food, map_state::counter_food, map_state::block},
+    {map_state::block, map_state::block, map_state::food, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::food, map_state::block, map_state::block},
+    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block},
+    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
+    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block},
   };
 
   for (unsigned int y = 0; y < block::count_y; ++y) {
@@ -45,7 +40,7 @@ void Map::init(const game_mode mode) noexcept {
   }
 
   if (mode == game_mode::battle) {
-    block_[18][14] = 8;
+    block_[18][14] = map_state::init_p2_pos;
   }
 
   // 1: enemy house, 0: cannot move
@@ -109,14 +104,24 @@ void Map::draw(SDL_Surface *screen, const ImageManager &image_manager,
       for (unsigned int x = 0; x < block::count_x; ++x) {
         SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                         static_cast<Sint16>(block::size * y), 0, 0};
-        int mut_block = block_[y][x];
-        if ((mut_block == 2) || (mut_block == 3) || (mut_block == 4) ||
-            (mut_block == 5) || (mut_block == 6) || (mut_block == 7) ||
-            (mut_block == 8)) {
-          mut_block = 0;
+        switch (block_[y][x]) {
+          case map_state::food:
+          case map_state::counter_food:
+          case map_state::enemy_house:
+          case map_state::init_p1_pos:
+          case map_state::init_p2_pos:
+          case map_state::left_warp_pos:
+          case map_state::right_warp_pos:
+          case map_state::warp_street:
+            SDL_BlitSurface(p_surface, &src[0], screen, &dst);
+            break;
+          case map_state::block:
+            SDL_BlitSurface(p_surface, &src[1], screen, &dst);
+            break;
+          default:
+            // NOTREACHED
+            break;
         }
-        const int block = mut_block;
-        SDL_BlitSurface(p_surface, &src[block], screen, &dst);
       }
     }
   }
@@ -124,17 +129,25 @@ void Map::draw(SDL_Surface *screen, const ImageManager &image_manager,
     SDL_Rect src = {block::size, block::size, block::size, block::size / 2};
     for (unsigned int y = 0; y < block::count_y - 1; ++y) {
       for (unsigned int x = 0; x < block::count_x; ++x) {
-        const int block = block_[y][x];
-        int mut_under_block = block_[y + 1][x];
-        if ((mut_under_block == 2) || (mut_under_block == 3) ||
-            (mut_under_block == 4) || (mut_under_block == 5) ||
-            (mut_under_block == 6) || (mut_under_block == 7) ||
-            (mut_under_block == 8)) {
-          mut_under_block = 0;
+        const map_state block = block_[y][x];
+        map_state mut_under_block = block_[y + 1][x];
+        switch (mut_under_block) {
+          case map_state::counter_food:
+          case map_state::enemy_house:
+          case map_state::init_p1_pos:
+          case map_state::init_p2_pos:
+          case map_state::left_warp_pos:
+          case map_state::right_warp_pos:
+          case map_state::warp_street:
+            mut_under_block = map_state::food;
+            break;
+          default:
+            // do nothing
+            break;
         }
-        const int under_block = mut_under_block;
+        const map_state under_block = mut_under_block;
 
-        if ((block == 1) && (under_block == 0)) {
+        if ((block == map_state::block) && (under_block == map_state::food)) {
           SDL_Rect dst = {static_cast<Sint16>(block::size * x),
                           static_cast<Sint16>(block::size * y + block::size / 2),
                           0, 0};
@@ -148,11 +161,11 @@ void Map::draw(SDL_Surface *screen, const ImageManager &image_manager,
 // Don't modify parameter type as unsigned int
 // TODO: Why is the parameter of x=-1 and y=12 OK?
 // Cf. https://ideone.com/u1QKTJ
-unsigned int Map::check_state(const Point &p) const noexcept {
+map_state Map::check_state(const Point &p) const noexcept {
   return block_[p.y][p.x];
 }
 
-unsigned int Map::check_state(const Point &&p) const noexcept {
+map_state Map::check_state(const Point &&p) const noexcept {
   return check_state(p);
 }
 

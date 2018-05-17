@@ -10,10 +10,10 @@
 void Food::init(const Map &map) noexcept {
   for (int y = 0; y < block::count_y; ++y) {
     for (int x = 0; x < block::count_x; ++x) {
-      const unsigned int state = map.check_state(Point{x, y});
-      if (state == 0) {
+      const map_state state = map.check_state(Point{x, y});
+      if (state == map_state::food) {
         food_[y][x] = food_state::food;
-      } else if (state == 4) {
+      } else if (state == map_state::counter_food) {
         food_[y][x] = food_state::counter_food;
       } else {
         food_[y][x] = food_state::nothing;

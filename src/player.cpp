@@ -118,25 +118,31 @@ void Player::move(const InputManager &input_manager, const Map &map,
   }
   const Point dst_block = mut_dst_block;
 
-  const unsigned int dst_block_state = map.check_state(dst_block);
-  const unsigned int dst_right_block_state =
+  const map_state dst_block_state = map.check_state(dst_block);
+  const map_state dst_right_block_state =
       map.check_state(Point{dst_block.x + 1, dst_block.y});
-  const unsigned int dst_left_block_state =
+  const map_state dst_left_block_state =
       map.check_state(Point{dst_block.x - 1, dst_block.y});
-  if ((dst_block_state == 0) || (dst_block_state == 3) ||
-      (dst_block_state == 4) || (dst_block_state == 5) ||
-      (dst_block_state == 6) || (dst_right_block_state == 6) ||
-      (dst_block_state == 7) || (dst_left_block_state == 7) ||
-      (dst_block_state == 8)) {
+  if ((dst_block_state == map_state::food) ||
+      (dst_block_state == map_state::init_p1_pos) ||
+      (dst_block_state == map_state::init_p2_pos) ||
+      (dst_block_state == map_state::counter_food) ||
+      (dst_block_state == map_state::warp_street) ||
+      (dst_block_state == map_state::left_warp_pos) ||
+      (dst_right_block_state == map_state::left_warp_pos) ||
+      (dst_block_state == map_state::right_warp_pos) ||
+      (dst_left_block_state == map_state::right_warp_pos)) {
     next_block_ = dst_block;
   }
 
   // Circle corner
-  if (map.check_state(Point{dst_block.x + 2, dst_block.y}) == 6) {
+  if (map.check_state(Point{dst_block.x + 2, dst_block.y}) ==
+      map_state::left_warp_pos) {
     next_block_.x = block::count_x;
     pos_.x = block::size * next_block_.x;
   }
-  if (map.check_state(Point{dst_block.x - 2, dst_block.y}) == 7) {
+  if (map.check_state(Point{dst_block.x - 2, dst_block.y}) ==
+      map_state::right_warp_pos) {
     next_block_.x = -1;
     pos_.x = block::size * next_block_.x;
   }
