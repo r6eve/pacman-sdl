@@ -11,6 +11,18 @@
 #include "player.hpp"
 #include "wipe.hpp"
 
+struct RGB {
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+};
+
+namespace rgb {
+const RGB black = RGB{0x00, 0x00, 0x00};
+const RGB red = RGB{0xff, 0x00, 0x00};
+const RGB white = RGB{0xff, 0xff, 0xff};
+}  // namespace rgb
+
 class Pacman {
   enum class game_state {
     title,
@@ -20,12 +32,6 @@ class Pacman {
     playing,
     gameover,
     pause,
-  };
-
-  struct RGB {
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
   };
 
   const bool debug_mode_;
@@ -67,7 +73,7 @@ class Pacman {
   void draw_text(const unsigned char font_size, const RGB &&rgb,
                  const Point &&p, const char *str) const noexcept;
 
-  void draw_score() noexcept;
+  void draw_score() const noexcept;
   bool poll_event() const noexcept;
   void wait_game() const noexcept;
   void draw_fps() const noexcept;
