@@ -34,12 +34,12 @@ void Enemy::init() noexcept {
 
 void Enemy::draw(SDL_Surface *screen, const ImageManager &image_manager) const
     noexcept {
-  SDL_Surface *p_surface[enemy_character::count + 1];
-  p_surface[0] = image_manager.get(image::akabei);
-  p_surface[1] = image_manager.get(image::pinky);
-  p_surface[2] = image_manager.get(image::aosuke);
-  p_surface[3] = image_manager.get(image::guzuta);
-  p_surface[4] = image_manager.get(image::mon_run);
+  SDL_Surface *enemies_surface[enemy_character::count];
+  enemies_surface[enemy_character::akabei] = image_manager.get(image::akabei);
+  enemies_surface[enemy_character::pinky] = image_manager.get(image::pinky);
+  enemies_surface[enemy_character::aosuke] = image_manager.get(image::aosuke);
+  enemies_surface[enemy_character::guzuta] = image_manager.get(image::guzuta);
+  SDL_Surface *mon_run_surface = image_manager.get(image::mon_run);
   for (unsigned int i = 0; i < enemy_character::count; ++i) {
     SDL_Rect dst = {static_cast<Sint16>(enemies_[i].pos.x),
                     static_cast<Sint16>(enemies_[i].pos.y), 0, 0};
@@ -49,14 +49,14 @@ void Enemy::draw(SDL_Surface *screen, const ImageManager &image_manager) const
             static_cast<Sint16>(block::size * enemies_[i].dir),
             static_cast<Sint16>(block::size * enemies_[i].anime_count),
             block::size, block::size};
-        SDL_BlitSurface(p_surface[i], &src, screen, &dst);
+        SDL_BlitSurface(enemies_surface[i], &src, screen, &dst);
         break;
       }
       case enemy_state::lose: {
         SDL_Rect src = {
             0, static_cast<Sint16>(block::size * enemies_[i].anime_count),
             block::size, block::size};
-        SDL_BlitSurface(p_surface[4], &src, screen, &dst);
+        SDL_BlitSurface(mon_run_surface, &src, screen, &dst);
         break;
       }
       default:
