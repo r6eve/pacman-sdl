@@ -34,7 +34,7 @@ void Enemy::init() noexcept {
 
 void Enemy::draw(SDL_Surface *screen, const ImageManager &image_manager) const
     noexcept {
-  SDL_Surface *p_surface[5];  // TODO: 5
+  SDL_Surface *p_surface[enemy_character::count + 1];
   p_surface[0] = image_manager.get(image::akabei);
   p_surface[1] = image_manager.get(image::pinky);
   p_surface[2] = image_manager.get(image::aosuke);
