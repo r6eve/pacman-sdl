@@ -57,6 +57,14 @@ struct Point {
     return static_cast<unsigned int>(
         hypot(static_cast<double>(x - rhs.x), static_cast<double>(y - rhs.y)));
   }
+
+  Point add_x(const int x_arg) const noexcept {
+    return Point{x + x_arg, y};
+  }
+
+  Point add_y(const int y_arg) const noexcept {
+    return Point{x, y + y_arg};
+  }
 };
 
 #endif

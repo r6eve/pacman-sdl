@@ -615,56 +615,66 @@ void Pacman::draw_text(const unsigned char font_size, const RGB &&rgb,
   draw_text(font_size, rgb, p, str);
 }
 
-// TODO: reduce magic numbers
 void Pacman::draw_score() const noexcept {
+  // Draw the plate of background.
   {
     SDL_Surface *p_surface = image_manager_.get(image::plate);
     SDL_Rect dst = {screen::offset_x, 0, 0, 0};
     SDL_BlitSurface(p_surface, nullptr, screen_, &dst);
   }
+
+  // Draw the score itself.
   {
+    const unsigned int x1 = screen::offset_x + 20;
+    const unsigned int y1 = screen::height / 7 + 10;
+    const unsigned int x2 = x1 + 40;
+    const unsigned int y2 = y1 + 30;
+    const unsigned int x3 = x2 + 30;
+    const unsigned int y3 = y2;
+
     stringstream score;
     score << "S c o r e  :  " << setw(6) << p1_.get_score();
-    draw_text(font_size::x16, rgb::white,
-              Point{screen::offset_x + 20, screen::height / 7 + 10},
-              score.str().c_str());
+    draw_text(font_size::x16, rgb::white, Point{x1, y1}, score.str().c_str());
+
     SDL_Surface *p_surface = image_manager_.get(image::p1);
     SDL_Rect src = {block::size, 0, block::size, block::size};
-    SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 32) - 5, 0, 0};
+    SDL_Rect dst = {x2, y2, 0, 0};
     SDL_BlitSurface(p_surface, &src, screen_, &dst);
+
     stringstream life;
     life << "x  " << p1_.get_life();
-    draw_text(font_size::x16, rgb::white,
-              Point{screen::offset_x + 90, screen::height / 7 + 40},
-              life.str().c_str());
+    draw_text(font_size::x16, rgb::white, Point{x3, y3}, life.str().c_str());
+
     if (game_mode_ == game_mode::battle) {
+      const unsigned int offset_y = 80;
       stringstream score;
       score << "S c o r e  :  " << setw(6) << p2_.get_score();
-      draw_text(font_size::x16, rgb::white,
-                Point{screen::offset_x + 20, screen::height / 7 + 90},
+      draw_text(font_size::x16, rgb::white, Point{x1, y1 + offset_y},
                 score.str().c_str());
+
       SDL_Surface *p_surface = image_manager_.get(image::p2);
       SDL_Rect src = {block::size, 0, block::size, block::size};
-      SDL_Rect dst = {screen::offset_x + 60, (screen::height / 6 + 112) - 5, 0,
-                      0};
+      SDL_Rect dst = {x2, y2 + offset_y, 0, 0};
       SDL_BlitSurface(p_surface, &src, screen_, &dst);
+
       stringstream life;
       life << "x  " << p2_.get_life();
-      draw_text(font_size::x16, rgb::white,
-                Point{screen::offset_x + 90, screen::height / 7 + 122},
+      draw_text(font_size::x16, rgb::white, Point{x3, y3 + offset_y},
                 life.str().c_str());
     }
   }
+
+  // Draw the rest time of power mode.
   {
+    const unsigned int x = screen::offset_x + 10;
+    const unsigned int y = screen::height / 6 * 4;
     if (p1_.get_power_mode()) {
-      SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4,
-                      static_cast<Uint16>(p1_.get_power_mode() / 4),
+      SDL_Rect dst = {x, y, static_cast<Uint16>(p1_.get_power_mode() / 4),
                       block::size};
       SDL_FillRect(screen_, &dst, 0xffff00);
     }
     if (p2_.get_power_mode()) {
-      SDL_Rect dst = {screen::offset_x + 10, screen::height / 6 * 4 + 30,
-                      static_cast<Uint16>(p2_.get_power_mode() / 4),
+      SDL_Rect dst = {x, y + 30, static_cast<Uint16>(p2_.get_power_mode() / 4),
                       block::size};
       SDL_FillRect(screen_, &dst, 0x808080);
     }
