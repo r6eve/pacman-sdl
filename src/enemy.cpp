@@ -121,38 +121,33 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
 
       const Point front_block =
           enemies_[enemy_type].block + front_pos[enemies_[enemy_type].dir];
-      map_state mut_front_block_state = map.check_state(front_block);
-      if ((mut_front_block_state == map_state::init_p1_pos) ||
-          (mut_front_block_state == map_state::init_p2_pos) ||
-          (mut_front_block_state == map_state::counter_food) ||
-          (mut_front_block_state == map_state::left_warp_pos) ||
-          (mut_front_block_state == map_state::right_warp_pos) ||
-          (mut_front_block_state == map_state::warp_street)) {
-        mut_front_block_state = map_state::food;
-      }
-      const map_state front_block_state = mut_front_block_state;
+      const map_state front_block_state = map.check_state(front_block);
+      const bool move_to_front_block_p =
+          ((front_block_state == map_state::init_p1_pos) ||
+           (front_block_state == map_state::init_p2_pos) ||
+           (front_block_state == map_state::food) ||
+           (front_block_state == map_state::counter_food) ||
+           (front_block_state == map_state::left_warp_pos) ||
+           (front_block_state == map_state::right_warp_pos) ||
+           (front_block_state == map_state::warp_street));
 
       const Point left_block =
           enemies_[enemy_type].block + left_pos[enemies_[enemy_type].dir];
-      map_state mut_left_block_state = map.check_state(left_block);
-      if ((mut_left_block_state == map_state::init_p1_pos) ||
-          (mut_left_block_state == map_state::init_p2_pos) ||
-          (mut_left_block_state == map_state::counter_food) ||
-          (front_block_state == map_state::left_warp_pos)) {
-        mut_left_block_state = map_state::food;
-      }
-      const map_state left_block_state = mut_left_block_state;
+      const map_state left_block_state = map.check_state(left_block);
+      const bool move_to_left_block_p =
+          ((left_block_state == map_state::food) ||
+           (left_block_state == map_state::init_p1_pos) ||
+           (left_block_state == map_state::init_p2_pos) ||
+           (left_block_state == map_state::counter_food));
 
       const Point right_block =
           enemies_[enemy_type].block + right_pos[enemies_[enemy_type].dir];
-      map_state mut_right_block_state = map.check_state(right_block);
-      if ((mut_right_block_state == map_state::init_p1_pos) ||
-          (mut_right_block_state == map_state::init_p2_pos) ||
-          (mut_right_block_state == map_state::counter_food) ||
-          (front_block_state == map_state::left_warp_pos)) {
-        mut_right_block_state = map_state::food;
-      }
-      const map_state right_block_state = mut_right_block_state;
+      const map_state right_block_state = map.check_state(right_block);
+      const bool move_to_right_block_p =
+          ((right_block_state == map_state::food) ||
+           (right_block_state == map_state::init_p1_pos) ||
+           (right_block_state == map_state::init_p2_pos) ||
+           (right_block_state == map_state::counter_food));
 
       // move back at random
       if (((rand() % 100) == 0) ||
@@ -173,9 +168,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move front/left/right at random
-      if ((front_block_state == map_state::food) &&
-          (left_block_state == map_state::food) &&
-          (right_block_state == map_state::food)) {
+      if (move_to_front_block_p && move_to_left_block_p &&
+          move_to_right_block_p) {
         const unsigned int next = rand() % 3;
         if (next == 0) {
           enemies_[enemy_type].next_block = front_block;
@@ -192,9 +186,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move front/left at random
-      if ((front_block_state == map_state::food) &&
-          (left_block_state == map_state::food) &&
-          (right_block_state != map_state::food)) {
+      if (move_to_front_block_p && move_to_left_block_p &&
+          !move_to_right_block_p) {
         const unsigned int next = rand() % 2;
         if (next == 0) {
           enemies_[enemy_type].next_block = front_block;
@@ -207,9 +200,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move front/right at random
-      if ((front_block_state == map_state::food) &&
-          (left_block_state != map_state::food) &&
-          (right_block_state == map_state::food)) {
+      if (move_to_front_block_p && !move_to_left_block_p &&
+          move_to_right_block_p) {
         const unsigned int next = rand() % 2;
         if (next == 0) {
           enemies_[enemy_type].next_block = front_block;
@@ -222,17 +214,15 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move front
-      if ((front_block_state == map_state::food) &&
-          (left_block_state != map_state::food) &&
-          (right_block_state != map_state::food)) {
+      if (move_to_front_block_p && !move_to_left_block_p &&
+          !move_to_right_block_p) {
         enemies_[enemy_type].next_block = front_block;
         return;
       }
 
       // move left/right at random
-      if ((front_block_state != map_state::food) &&
-          (left_block_state == map_state::food) &&
-          (right_block_state == map_state::food)) {
+      if (!move_to_front_block_p && move_to_left_block_p &&
+          move_to_right_block_p) {
         const unsigned int next = rand() % 2;
         if (next == 0) {
           enemies_[enemy_type].next_block = left_block;
@@ -247,9 +237,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move left
-      if ((front_block_state != map_state::food) &&
-          (left_block_state == map_state::food) &&
-          (right_block_state != map_state::food)) {
+      if (!move_to_front_block_p && move_to_left_block_p &&
+          !move_to_right_block_p) {
         enemies_[enemy_type].next_block = left_block;
         enemies_[enemy_type].dir += 3;
         enemies_[enemy_type].dir %= 4;
@@ -257,9 +246,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move right
-      if ((front_block_state != map_state::food) &&
-          (left_block_state != map_state::food) &&
-          (right_block_state == map_state::food)) {
+      if (!move_to_front_block_p && !move_to_left_block_p &&
+          move_to_right_block_p) {
         enemies_[enemy_type].next_block = right_block;
         ++enemies_[enemy_type].dir;
         enemies_[enemy_type].dir %= 4;
@@ -267,9 +255,8 @@ void Enemy::move_normal_enemy(const unsigned int enemy_type, const Map &map,
       }
 
       // move back
-      if ((front_block_state != map_state::food) &&
-          (left_block_state != map_state::food) &&
-          (right_block_state != map_state::food)) {
+      if (!move_to_front_block_p && !move_to_left_block_p &&
+          !move_to_right_block_p) {
         enemies_[enemy_type].next_block += back_pos[enemies_[enemy_type].dir];
         enemies_[enemy_type].dir += 2;
         enemies_[enemy_type].dir %= 4;
