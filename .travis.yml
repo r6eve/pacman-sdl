@@ -85,6 +85,7 @@ before_install:
 
 script:
   - make CXX=${CXX}
+  - ./pacman-sdl --version
 
 notifications:
   email:
