@@ -13,11 +13,15 @@ environment:
 install:
   - mkdir %SDLDIR%
   - mkdir %LIBDIR%
-  - cd %TEMP%
   - IF NOT EXIST SDL-devel-1.2.15-VC.zip curl -fsS -O https://libsdl.org/release/SDL-devel-1.2.15-mingw32.tar.gz
   - IF NOT EXIST SDL_image-devel-1.2.12-VC.zip curl -fsS -O https://libsdl.org/projects/SDL_image/release/SDL_image-devel-1.2.12-VC.zip
   - IF NOT EXIST SDL_mixer-devel-1.2.12-VC.zip curl -fsS -O https://libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip
   - IF NOT EXIST SDL_ttf-devel-2.0.11-VC.zip curl -fsS -O https://libsdl.org/projects/SDL_ttf/release/SDL_ttf-devel-2.0.11-VC.zip
+  - copy SDL-devel-1.2.15-mingw32.tar.gz %TEMP% > nul
+  - copy SDL_image-devel-1.2.12-VC.zip %TEMP% > nul
+  - copy SDL_mixer-devel-1.2.12-VC.zip %TEMP% > nul
+  - copy SDL_ttf-devel-2.0.11-VC.zip %TEMP% > nul
+  - cd %TEMP%
   - tar xf SDL-devel-1.2.15-mingw32.tar.gz > nul
   - 7z x SDL_image-devel-1.2.12-VC.zip > nul
   - 7z x SDL_mixer-devel-1.2.12-VC.zip > nul
@@ -35,7 +39,6 @@ install:
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/; make LDFLAGS='-I/cygdrive/c/mylibs/include -D_GNU_SOURCE=1 -D_REENTRANT -L/cygdrive/c/mylibs/lib -lSDL -lpthread -lSDL_image -lSDL_mixer -lSDL_ttf -lm'")
-  - ./pacman-sdl --version
 
 test: off
 deploy: off
