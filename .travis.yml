@@ -11,6 +11,7 @@ matrix:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       addons:
         apt:
+          update: true
           sources:
             - ubuntu-toolchain-r-test
           packages:
@@ -26,6 +27,7 @@ matrix:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
       addons:
         apt:
+          update: true
           sources:
             - llvm-toolchain-trusty-5.0
             - ubuntu-toolchain-r-test
@@ -43,6 +45,7 @@ matrix:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       addons:
         apt:
+          update: true
           sources:
             - ubuntu-toolchain-r-test
           packages:
@@ -58,6 +61,7 @@ matrix:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
       addons:
         apt:
+          update: true
           sources:
             - llvm-toolchain-trusty-5.0
             - ubuntu-toolchain-r-test
