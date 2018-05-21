@@ -2,7 +2,7 @@
 #include <iostream>
 #include "pacman.hpp"
 
-using namespace std;
+const std::string Version = "v0.2.0";
 
 bool parse_options(const int argc, char **argv) noexcept {
   bool ret = false;
@@ -10,36 +10,41 @@ bool parse_options(const int argc, char **argv) noexcept {
   const option long_options[] = {
       {"debug", no_argument, nullptr, 'd'},
       {"help", no_argument, nullptr, 'h'},
+      {"version", no_argument, nullptr, 'v'},
       {nullptr, 0, nullptr, 0},
   };
 
   for (;;) {
     const int curind = optind;
-    const int c = getopt_long(argc, argv, "dh", long_options, nullptr);
+    const int c = getopt_long(argc, argv, "dhv", long_options, nullptr);
     if (c == -1) {
       break;
     }
 
     switch (c) {
       case 'h':
-        cout << R"(Usage: pacman-sdl [options]
+        std::cout << R"(Usage: pacman-sdl [options]
 
 Options:
     -d  --debug         debug mode
     -h, --help          print this help menu
+    -v, --version       print version
 )";
         exit(EXIT_SUCCESS);
       case 'd':
         ret = true;
         break;
+      case 'v':
+        std::cout << Version << '\n';
+        exit(EXIT_SUCCESS);
       case '?': {
-        string av(argv[curind]);
+        std::string av(argv[curind]);
         int n = 0;
         while (av[n] == '-') {
           ++n;
         }
         av.erase(av.begin(), av.begin() + n);
-        cerr << "Unrecognized option: '" << av << "'\n";
+        std::cerr << "Unrecognized option: '" << av << "'\n";
         exit(EXIT_FAILURE);
       }
       default:

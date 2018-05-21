@@ -40,6 +40,7 @@ Usage: pacman-sdl [options]
 Options:
     -d  --debug         debug mode
     -h, --help          print this help menu
+    -v, --version       print version
 > ./pacman-sdl  # normal mode
 > ./pacman-sdl -d  # debug mode
 ```
