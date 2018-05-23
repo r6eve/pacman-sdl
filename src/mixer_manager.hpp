@@ -17,12 +17,12 @@ enum {
 }  // namespace music_type
 
 class MixerManager {
-  Mix_Music *music_[music_type::count];
+  Mix_Music *music_list_[music_type::count];
   std::unique_ptr<Mix_Chunk> se_;
 
   inline void load_music(const char *path, const unsigned char music_type) {
-    music_[music_type] = Mix_LoadMUS(path);
-    if (!music_[music_type]) {
+    music_list_[music_type] = Mix_LoadMUS(path);
+    if (!music_list_[music_type]) {
       throw Mix_GetError();
     }
   }
@@ -56,7 +56,7 @@ class MixerManager {
   }
 
   inline Mix_Music *get_music(const unsigned char music_type) const noexcept {
-    return music_[music_type];
+    return music_list_[music_type];
   }
 
   inline Mix_Chunk *get_se() const noexcept { return se_.get(); }
@@ -64,8 +64,8 @@ class MixerManager {
   ~MixerManager() noexcept {
     Mix_HaltMusic();
     Mix_HaltChannel(-1);
-    for (unsigned int i = 0; i < music_type::count; ++i) {
-      Mix_FreeMusic(music_[i]);
+    for (const auto &music : music_list_) {
+      Mix_FreeMusic(music);
     }
     Mix_FreeChunk(se_.get());
     Mix_CloseAudio();

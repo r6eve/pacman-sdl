@@ -28,7 +28,7 @@ enum {
 }  // namespace image
 
 class ImageManager {
-  std::unique_ptr<SDL_Surface> image_array_[image::count];
+  std::unique_ptr<SDL_Surface> images_[image::count];
 
   // In macOS, using the following type makes `error: static_assert failed "the
   // specified hash does not meet the Hash requirements"`. Therefore, use an
@@ -40,7 +40,7 @@ class ImageManager {
     if (!image) {
       throw IMG_GetError();
     }
-    image_array_[image_type] = std::make_unique<SDL_Surface>(*image);
+    images_[image_type] = std::make_unique<SDL_Surface>(*image);
   }
 
  public:
@@ -73,7 +73,7 @@ class ImageManager {
   }
 
   inline SDL_Surface *get(const unsigned char image_type) const noexcept {
-    return image_array_[image_type].get();
+    return images_[image_type].get();
   }
 
   ~ImageManager() noexcept { atexit(IMG_Quit); }

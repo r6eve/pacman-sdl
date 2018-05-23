@@ -13,12 +13,12 @@ enum {
 }  // namespace font_size
 
 class FontManager {
-  TTF_Font *font_array_[font_size::count];
+  TTF_Font *fonts_[font_size::count];
 
   inline void load(const char *path, unsigned int size,
                    const unsigned char font_size) {
-    font_array_[font_size] = TTF_OpenFont(path, size);
-    if (!font_array_[font_size]) {
+    fonts_[font_size] = TTF_OpenFont(path, size);
+    if (!fonts_[font_size]) {
       throw TTF_GetError();
     }
   }
@@ -40,12 +40,12 @@ class FontManager {
   }
 
   inline TTF_Font *get(const unsigned char font_size) const noexcept {
-    return font_array_[font_size];
+    return fonts_[font_size];
   }
 
   ~FontManager() noexcept {
-    for (unsigned int i = 0; i < font_size::count; ++i) {
-      TTF_CloseFont(font_array_[i]);
+    for (const auto &font : fonts_) {
+      TTF_CloseFont(font);
     }
     atexit(TTF_Quit);
   }
