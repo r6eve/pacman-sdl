@@ -6,7 +6,7 @@
 
 void Player::move(const InputManager &input_manager, const Map &map,
                   const game_mode mode) noexcept {
-  if ((player_type_ == player_type::p2) && (mode != game_mode::battle)) {
+  if ((type_ == player_type::p2) && (mode != game_mode::battle)) {
     return;
   }
 
@@ -38,16 +38,16 @@ void Player::move(const InputManager &input_manager, const Map &map,
 
   // 同時押しの場合，優先順位は Down > Left > Up > Right
   Point mut_dst_block = next_block_;
-  if (input_manager.press_key_p(player_type_, input_device::down)) {
+  if (input_manager.press_key_p(type_, input_device::down)) {
     dir_ = 0;
     ++mut_dst_block.y;
-  } else if (input_manager.press_key_p(player_type_, input_device::left)) {
+  } else if (input_manager.press_key_p(type_, input_device::left)) {
     dir_ = 1;
     --mut_dst_block.x;
-  } else if (input_manager.press_key_p(player_type_, input_device::up)) {
+  } else if (input_manager.press_key_p(type_, input_device::up)) {
     dir_ = 2;
     --mut_dst_block.y;
-  } else if (input_manager.press_key_p(player_type_, input_device::right)) {
+  } else if (input_manager.press_key_p(type_, input_device::right)) {
     dir_ = 3;
     ++mut_dst_block.x;
   }

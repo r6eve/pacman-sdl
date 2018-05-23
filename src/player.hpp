@@ -16,7 +16,7 @@ enum {
 }  // namespace player_type
 
 class Player {
-  const unsigned char player_type_;
+  const unsigned char type_;
   Point pos_;
   Point block_;
   Point next_block_;
@@ -29,10 +29,10 @@ class Player {
   unsigned int power_mode_;  // 0: not power mode, not 0: power mode
 
  public:
-  Player(const unsigned char player_type) : player_type_(player_type) {}
+  Player(const unsigned char player_type) : type_(player_type) {}
 
   inline void init_pos() noexcept {
-    switch (player_type_) {
+    switch (type_) {
       case player_type::p1: {
         pos_ = {block::size * 9, block::size * 18};
         block_ = {9, 18};
@@ -59,7 +59,7 @@ class Player {
 
   inline void draw(SDL_Surface *screen, const ImageManager &image_manager,
                    const game_mode mode) const noexcept {
-    switch (player_type_) {
+    switch (type_) {
       case player_type::p1: {
         SDL_Surface *p_surface = image_manager.get(image::p1);
         SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
