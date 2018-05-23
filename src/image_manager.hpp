@@ -3,7 +3,7 @@
 
 #include <SDL/SDL_image.h>
 #include <iostream>
-#include <memory>
+#include <vector>
 
 namespace image {
 
@@ -28,7 +28,7 @@ enum {
 }  // namespace image
 
 class ImageManager {
-  std::unique_ptr<SDL_Surface> images_[image::count];
+  std::vector<SDL_Surface*> images_;
 
   // In macOS, using the following type makes `error: static_assert failed "the
   // specified hash does not meet the Hash requirements"`. Therefore, use an
@@ -40,11 +40,13 @@ class ImageManager {
     if (!image) {
       throw IMG_GetError();
     }
-    images_[image_type] = std::make_unique<SDL_Surface>(*image);
+    images_[image_type] = image;
   }
 
  public:
   ImageManager() noexcept {
+    images_.reserve(image::count);
+
     const int flag = IMG_INIT_PNG;
     if (IMG_Init(flag) != flag) {
       std::cerr << "error: " << IMG_GetError() << '\n';
@@ -73,7 +75,7 @@ class ImageManager {
   }
 
   inline SDL_Surface *get(const unsigned char image_type) const noexcept {
-    return images_[image_type].get();
+    return images_[image_type];
   }
 
   ~ImageManager() noexcept { atexit(IMG_Quit); }
