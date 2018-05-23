@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include <memory>
+#include <vector>
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
@@ -25,7 +26,7 @@ class Enemy {
     lose,
   };
 
-  typedef struct {
+  struct Enemy_data {
     Point pos;
     Point block;
     Point next_block;
@@ -33,30 +34,30 @@ class Enemy {
     unsigned char anime_count;   // 0 or 1
     unsigned char anime_weight;  // max value is 8
     enemy_state state;
-  } Enemy_data;
+  };
 
   // TODO: Why create those in heap?
-  std::unique_ptr<Enemy_data[]> enemies_;
+  std::vector<Enemy_data> enemies_;
 
   inline void update() noexcept {
-    for (unsigned int i = 0; i < enemy_character::count; ++i) {
-      ++enemies_[i].anime_weight;
-      if (enemies_[i].anime_weight >= 8) {
-        enemies_[i].anime_weight = 0;
-        ++enemies_[i].anime_count;
-        enemies_[i].anime_count %= 2;
+    for (auto &enemy : enemies_) {
+      ++enemy.anime_weight;
+      if (enemy.anime_weight >= 8) {
+        enemy.anime_weight = 0;
+        ++enemy.anime_count;
+        enemy.anime_count %= 2;
       }
     }
   }
 
-  void move_normal_enemy(const unsigned int enemy_type, const Map &map,
-                         const Player &p1, const Player &p2) noexcept;
+  void move_normal_enemy(Enemy_data &enemy, const Map &map, const Player &p1,
+                         const Player &p2) noexcept;
 
-  void move_lose_enemy(const unsigned int enemy_type, const Map &map,
-                       const Player &p1, const Player &p2) noexcept;
+  void move_lose_enemy(Enemy_data &enemy, const Map &map, const Player &p1,
+                       const Player &p2) noexcept;
 
  public:
-  Enemy() : enemies_(std::make_unique<Enemy_data[]>(enemy_character::count)) {}
+  Enemy() : enemies_(enemy_character::count, Enemy_data()) {}
 
   inline void init() noexcept {
     const Point start_block[enemy_character::count] = {
@@ -107,13 +108,13 @@ class Enemy {
     }
   }
 
-  inline void move(const bool debug_lose_enemy, const Map &map, const Player &p1,
-            const Player &p2) noexcept {
+  inline void move(const bool debug_lose_enemy, const Map &map,
+                   const Player &p1, const Player &p2) noexcept {
     for (unsigned int i = 0; i < enemy_character::count; ++i) {
       if (debug_lose_enemy || (enemies_[i].state == enemy_state::lose)) {
-        move_lose_enemy(i, map, p1, p2);
+        move_lose_enemy(enemies_[i], map, p1, p2);
       } else {
-        move_normal_enemy(i, map, p1, p2);
+        move_normal_enemy(enemies_[i], map, p1, p2);
       }
     }
   }
@@ -122,8 +123,7 @@ class Enemy {
    * Return true if the player whose state is normal hits enemy, and false
    * otherwise.
    */
-  bool check_hit_enemy(const game_mode mode, Player &p1, Player &p2) const
-      noexcept;
+  bool check_hit_enemy(const game_mode mode, Player &p1, Player &p2) noexcept;
 
   ~Enemy() {}
 };
