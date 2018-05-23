@@ -79,7 +79,6 @@ void Map::init(const game_mode mode) noexcept {
   }
 }
 
-// TODO: reduce magic numbers
 void Map::draw(SDL_Surface *screen, const ImageManager &image_manager,
                const unsigned int game_level) const noexcept {
   SDL_Rect dst = {0, 0, screen::width, screen::height};
