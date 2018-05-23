@@ -48,3 +48,7 @@ cache:
   - SDL_image-devel-1.2.12-VC.zip
   - SDL_mixer-devel-1.2.12-VC.zip
   - SDL_ttf-devel-2.0.11-VC.zip
+
+branches:
+  only:
+    - master
