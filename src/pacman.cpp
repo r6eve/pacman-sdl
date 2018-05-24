@@ -1,6 +1,6 @@
 #define PACMAN_CPP
 
-#include <SDL/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include "pacman.hpp"
 #include <time.h>
 #include <sstream>

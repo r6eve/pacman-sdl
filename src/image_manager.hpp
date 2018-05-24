@@ -1,7 +1,7 @@
 #ifndef IMAGE_MANAGER_H
 #define IMAGE_MANAGER_H
 
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <vector>
 
@@ -48,7 +48,7 @@ class ImageManager {
     images_.reserve(image::count);
 
     const int flag = IMG_INIT_PNG;
-    if (IMG_Init(flag) != flag) {
+    if ((IMG_Init(flag) & flag) != flag) {
       std::cerr << "error: " << IMG_GetError() << '\n';
       exit(EXIT_FAILURE);
     }

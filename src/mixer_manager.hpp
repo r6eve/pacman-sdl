@@ -1,7 +1,7 @@
 #ifndef MIXER_MANAGER_H
 #define MIXER_MANAGER_H
 
-#include <SDL/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include <iostream>
 #include <memory>
 
