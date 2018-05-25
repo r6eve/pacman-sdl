@@ -34,7 +34,7 @@ install:
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
-  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/; make LDFLAGS='-I/cygdrive/c/mylibs/include -Dmain=SDL_main -L/cygdrive/c/mylibs/lib -lpthread -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm'")
+  - c:\cygwin\bin\sh -lc ("cd /cygdrive/c/projects/pacman-sdl/; make LDFLAGS='-I/cygdrive/c/mylibs/include -Dmain=SDL_main -L/cygdrive/c/mylibs/lib -lpthread -mwindows -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm'")
 
 test: off
 deploy: off
