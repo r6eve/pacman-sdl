@@ -90,10 +90,14 @@ class Enemy {
     enemies_texture[enemy_character::guzuta] = image_manager.get(renderer, image::guzuta);
     SDL_Texture *mon_run_texture = image_manager.get(renderer, image::mon_run);
     for (const auto &enemy : enemies_) {
-      SDL_Rect dst = {static_cast<Sint16>(enemy.pos.x),
-                      static_cast<Sint16>(enemy.pos.y), 0, 0};
+      SDL_Rect dst;
+      dst.x = static_cast<Sint16>(enemy.pos.x);
+      dst.y = static_cast<Sint16>(enemy.pos.y);
       switch (enemy.state) {
         case enemy_state::normal: {
+          // SDL_QueryTexture(enemies_texture[enemy.type], nullptr, nullptr, &dst.w, &dst.h);
+          dst.w = block::size;
+          dst.h = block::size;
           SDL_Rect src = {static_cast<Sint16>(block::size * enemy.dir),
                           static_cast<Sint16>(block::size * enemy.anime_count),
                           block::size, block::size};
@@ -101,6 +105,9 @@ class Enemy {
           break;
         }
         case enemy_state::lose: {
+          // SDL_QueryTexture(mon_run_texture, nullptr, nullptr, &dst.w, &dst.h);
+          dst.w = block::size;
+          dst.h = block::size;
           SDL_Rect src = {0,
                           static_cast<Sint16>(block::size * enemy.anime_count),
                           block::size, block::size};
@@ -112,6 +119,11 @@ class Enemy {
           break;
       }
     }
+
+    for (auto &t : enemies_texture) {
+      SDL_DestroyTexture(t);
+    }
+    SDL_DestroyTexture(mon_run_texture);
   }
 
   inline void move(const bool debug_lose_enemy, const Map &map,

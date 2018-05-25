@@ -66,8 +66,9 @@ class Player {
                         static_cast<Sint16>(block::size * anime_count_),
                         block::size, block::size};
         SDL_Rect dst = {static_cast<Sint16>(pos_.x),
-                        static_cast<Sint16>(pos_.y), 0, 0};
+                        static_cast<Sint16>(pos_.y), block::size, block::size};
         SDL_RenderCopy(renderer, p_texture, &src, &dst);
+        SDL_DestroyTexture(p_texture);
         return;
       }
       case player_type::p2: {
@@ -79,8 +80,9 @@ class Player {
                         static_cast<Sint16>(block::size * anime_count_),
                         block::size, block::size};
         SDL_Rect dst = {static_cast<Sint16>(pos_.x),
-                        static_cast<Sint16>(pos_.y), 0, 0};
+                        static_cast<Sint16>(pos_.y), block::size, block::size};
         SDL_RenderCopy(renderer, p_texture, &src, &dst);
+        SDL_DestroyTexture(p_texture);
         return;
       }
       default:

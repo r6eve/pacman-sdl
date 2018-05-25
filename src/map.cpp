@@ -101,8 +101,12 @@ void Map::draw(SDL_Renderer *renderer, const ImageManager &image_manager,
                        {block::size, 0, block::size, block::size}};
     for (unsigned int y = 0; y < block::count_y; ++y) {
       for (unsigned int x = 0; x < block::count_x; ++x) {
-        SDL_Rect dst = {static_cast<Sint16>(block::size * x),
-                        static_cast<Sint16>(block::size * y), 0, 0};
+        SDL_Rect dst;
+        dst.x = static_cast<Sint16>(block::size * x);
+        dst.y = static_cast<Sint16>(block::size * y);
+        // SDL_QueryTexture(p_texture, nullptr, nullptr, &dst.w, &dst.h);
+        dst.w = block::size;
+        dst.h = block::size;
         switch (block_[y][x]) {
           case map_state::food:
           case map_state::counter_food:
@@ -147,12 +151,16 @@ void Map::draw(SDL_Renderer *renderer, const ImageManager &image_manager,
         const map_state under_block = mut_under_block;
 
         if ((block == map_state::block) && (under_block == map_state::food)) {
-          SDL_Rect dst = {static_cast<Sint16>(block::size * x),
-                          static_cast<Sint16>(block::size * y + block::size / 2),
-                          0, 0};
+          SDL_Rect dst;
+          dst.x = static_cast<Sint16>(block::size * x);
+          dst.y = static_cast<Sint16>(block::size * y + block::size / 2);
+          // SDL_QueryTexture(p_texture, nullptr, nullptr, &dst.w, &dst.h);
+          dst.w = block::size;
+          dst.h = block::size;
           SDL_RenderCopy(renderer, p_texture, &src, &dst);
         }
       }
     }
   }
+  SDL_DestroyTexture(p_texture);
 }

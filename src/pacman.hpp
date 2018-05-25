@@ -109,15 +109,19 @@ class Pacman {
 
   inline void draw_text(const unsigned char font_size, const RGB &rgb,
                         const Point &p, const char *str) const noexcept {
-    const SDL_Color color = {rgb.r, rgb.g, rgb.b, 0};
+    const SDL_Color color = {rgb.r, rgb.g, rgb.b, 255};
     SDL_Surface *font_surface =
         TTF_RenderUTF8_Blended(font_manager_.get(font_size), str, color);
     SDL_Texture *font_texture =
         SDL_CreateTextureFromSurface(renderer_, font_surface);
     SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
                     static_cast<Uint16>(font_surface->h)};
-    SDL_Rect dst = {static_cast<Sint16>(p.x), static_cast<Sint16>(p.y), 0, 0};
+    SDL_Rect dst;
+    dst.x = static_cast<Sint16>(p.x);
+    dst.y = static_cast<Sint16>(p.y);
+    SDL_QueryTexture(font_texture, nullptr, nullptr, &dst.w, &dst.h);
     SDL_RenderCopy(renderer_, font_texture, &src, &dst);
+    SDL_DestroyTexture(font_texture);
   }
 
   inline void draw_text(const unsigned char font_size, const RGB &&rgb,
@@ -139,8 +143,12 @@ class Pacman {
     // Draw the plate of background.
     {
       SDL_Texture *p_texture = image_manager_.get(renderer_, image::plate);
-      SDL_Rect dst = {screen::offset_x, 0, 0, 0};
+      SDL_Rect dst;
+      dst.x = screen::offset_x;
+      dst.y = 0;
+      SDL_QueryTexture(p_texture, nullptr, nullptr, &dst.w, &dst.h);
       SDL_RenderCopy(renderer_, p_texture, nullptr, &dst);
+      SDL_DestroyTexture(p_texture);
     }
 
     // Draw the score itself.
@@ -158,8 +166,9 @@ class Pacman {
 
       SDL_Texture *p_texture = image_manager_.get(renderer_, image::p1);
       SDL_Rect src = {block::size, 0, block::size, block::size};
-      SDL_Rect dst = {x2, y2, 0, 0};
+      SDL_Rect dst = {x2, y2, block::size, block::size};
       SDL_RenderCopy(renderer_, p_texture, &src, &dst);
+      SDL_DestroyTexture(p_texture);
 
       std::stringstream life;
       life << "x  " << p1_.get_life();
@@ -174,8 +183,9 @@ class Pacman {
 
         SDL_Texture *p_texture = image_manager_.get(renderer_, image::p2);
         SDL_Rect src = {block::size, 0, block::size, block::size};
-        SDL_Rect dst = {x2, y2 + offset_y, 0, 0};
+        SDL_Rect dst = {x2, y2 + offset_y, block::size, block::size};
         SDL_RenderCopy(renderer_, p_texture, &src, &dst);
+        SDL_DestroyTexture(p_texture);
 
         std::stringstream life;
         life << "x  " << p2_.get_life();
@@ -284,8 +294,10 @@ class Pacman {
     }
     SDL_Texture *trans_texture =
         SDL_CreateTextureFromSurface(renderer_, trans_surface);
-    SDL_Rect dst = {0, 0, 0, 0};
+    SDL_FreeSurface(trans_surface);
+    SDL_Rect dst = {0, 0, screen::width, screen::height};
     SDL_RenderCopy(renderer_, trans_texture, nullptr, &dst);
+    SDL_DestroyTexture(trans_texture);
     if (blink_count_ < 30) {
       draw_text(font_size::x36, rgb::white, Point{165, 170}, "P a u s e");
       ++blink_count_;
