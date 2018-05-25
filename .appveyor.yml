@@ -23,6 +23,7 @@ install:
   - tar xf SDL2_image-devel-2.0.3-mingw.tar.gz > nul
   - tar xf SDL2_mixer-devel-2.0.2-mingw.tar.gz > nul
   - tar xf SDL2_ttf-devel-2.0.14-mingw.tar.gz > nul
+  - SDL2-2.0.8\i686-w64-mingw32\bin\sdl2-config --cflags --libs
   - copy SDL2-2.0.8\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
   - copy SDL2_image-2.0.3\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
   - copy SDL2_mixer-2.0.2\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
