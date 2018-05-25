@@ -2,9 +2,6 @@ version: "{build}"
 
 clone_depth: 3
 
-platform:
-  - x86
-
 environment:
   BASEDIR: c:\mylibs
   SDLDIR: c:\mylibs\include\SDL2
@@ -26,14 +23,14 @@ install:
   - tar xf SDL2_image-devel-2.0.3-mingw.tar.gz > nul
   - tar xf SDL2_mixer-devel-2.0.2-mingw.tar.gz > nul
   - tar xf SDL2_ttf-devel-2.0.14-mingw.tar.gz > nul
-  - copy SDL2-2.0.8\x86_64-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2_image-2.0.3\x86_64-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2_mixer-2.0.2\x86_64-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2_ttf-2.0.14\x86_64-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2-2.0.8\x86_64-w64-mingw32\lib\* %LIBDIR% > nul
-  - copy SDL2_image-2.0.3\x86_64-w64-mingw32\lib\* %LIBDIR% > nul
-  - copy SDL2_mixer-2.0.2\x86_64-w64-mingw32\lib\* %LIBDIR% > nul
-  - copy SDL2_ttf-2.0.14\x86_64-w64-mingw32\lib\* %LIBDIR% > nul
+  - copy SDL2-2.0.8\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
+  - copy SDL2_image-2.0.3\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
+  - copy SDL2_mixer-2.0.2\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
+  - copy SDL2_ttf-2.0.14\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
+  - copy SDL2-2.0.8\i686-w64-mingw32\lib\* %LIBDIR% > nul
+  - copy SDL2_image-2.0.3\i686-w64-mingw32\lib\* %LIBDIR% > nul
+  - copy SDL2_mixer-2.0.2\i686-w64-mingw32\lib\* %LIBDIR% > nul
+  - copy SDL2_ttf-2.0.14\i686-w64-mingw32\lib\* %LIBDIR% > nul
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
