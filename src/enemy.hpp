@@ -81,14 +81,14 @@ class Enemy {
     }
   }
 
-  inline void draw(SDL_Surface *screen, const ImageManager &image_manager) const
+  inline void draw(SDL_Renderer *renderer, const ImageManager &image_manager) const
       noexcept {
-    SDL_Surface *enemies_surface[enemy_character::count];
-    enemies_surface[enemy_character::akabei] = image_manager.get(image::akabei);
-    enemies_surface[enemy_character::pinky] = image_manager.get(image::pinky);
-    enemies_surface[enemy_character::aosuke] = image_manager.get(image::aosuke);
-    enemies_surface[enemy_character::guzuta] = image_manager.get(image::guzuta);
-    SDL_Surface *mon_run_surface = image_manager.get(image::mon_run);
+    SDL_Texture *enemies_texture[enemy_character::count];
+    enemies_texture[enemy_character::akabei] = image_manager.get(renderer, image::akabei);
+    enemies_texture[enemy_character::pinky] = image_manager.get(renderer, image::pinky);
+    enemies_texture[enemy_character::aosuke] = image_manager.get(renderer, image::aosuke);
+    enemies_texture[enemy_character::guzuta] = image_manager.get(renderer, image::guzuta);
+    SDL_Texture *mon_run_texture = image_manager.get(renderer, image::mon_run);
     for (const auto &enemy : enemies_) {
       SDL_Rect dst = {static_cast<Sint16>(enemy.pos.x),
                       static_cast<Sint16>(enemy.pos.y), 0, 0};
@@ -97,14 +97,14 @@ class Enemy {
           SDL_Rect src = {static_cast<Sint16>(block::size * enemy.dir),
                           static_cast<Sint16>(block::size * enemy.anime_count),
                           block::size, block::size};
-          SDL_BlitSurface(enemies_surface[enemy.type], &src, screen, &dst);
+          SDL_RenderCopy(renderer, enemies_texture[enemy.type], &src, &dst);
           break;
         }
         case enemy_state::lose: {
           SDL_Rect src = {0,
                           static_cast<Sint16>(block::size * enemy.anime_count),
                           block::size, block::size};
-          SDL_BlitSurface(mon_run_surface, &src, screen, &dst);
+          SDL_RenderCopy(renderer, mon_run_texture, &src, &dst);
           break;
         }
         default:

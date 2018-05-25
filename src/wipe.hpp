@@ -38,13 +38,14 @@ class Wipe {
    * `limit_x` is the limit for the x-axis to draw. It's bounded on closed
    * interval [0-screen::width] .
    */
-  inline void draw(SDL_Surface *screen, const unsigned int limit_x) const
+  inline void draw(SDL_Renderer *renderer, const unsigned int limit_x) const
       noexcept {
     SDL_Rect dst = {0, 0, static_cast<Uint16>(limit_x),
                     static_cast<Uint16>(wipe_count_)};
     const unsigned int dy = screen::height / 10;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (dst.y = 0; dst.y < screen::height; dst.y += dy) {
-      SDL_FillRect(screen, &dst, 0x00000000);
+        SDL_RenderFillRect(renderer, &dst);
     }
   }
 

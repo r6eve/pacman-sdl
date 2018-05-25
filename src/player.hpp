@@ -57,30 +57,30 @@ class Player {
     }
   }
 
-  inline void draw(SDL_Surface *screen, const ImageManager &image_manager,
+  inline void draw(SDL_Renderer *renderer, const ImageManager &image_manager,
                    const game_mode mode) const noexcept {
     switch (type_) {
       case player_type::p1: {
-        SDL_Surface *p_surface = image_manager.get(image::p1);
+        SDL_Texture *p_texture = image_manager.get(renderer, image::p1);
         SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
                         static_cast<Sint16>(block::size * anime_count_),
                         block::size, block::size};
         SDL_Rect dst = {static_cast<Sint16>(pos_.x),
                         static_cast<Sint16>(pos_.y), 0, 0};
-        SDL_BlitSurface(p_surface, &src, screen, &dst);
+        SDL_RenderCopy(renderer, p_texture, &src, &dst);
         return;
       }
       case player_type::p2: {
         if (mode != game_mode::battle) {
           return;
         }
-        SDL_Surface *p_surface = image_manager.get(image::p2);
+        SDL_Texture *p_texture = image_manager.get(renderer, image::p2);
         SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
                         static_cast<Sint16>(block::size * anime_count_),
                         block::size, block::size};
         SDL_Rect dst = {static_cast<Sint16>(pos_.x),
                         static_cast<Sint16>(pos_.y), 0, 0};
-        SDL_BlitSurface(p_surface, &src, screen, &dst);
+        SDL_RenderCopy(renderer, p_texture, &src, &dst);
         return;
       }
       default:

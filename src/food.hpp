@@ -37,7 +37,7 @@ class Food {
     }
   }
 
-  inline void draw(SDL_Surface *screen,
+  inline void draw(SDL_Renderer *renderer,
                    const ImageManager &image_manager) noexcept {
     SDL_Rect src = {0, 0, block::size, block::size};
     for (unsigned int y = 0; y < block::count_y; ++y) {
@@ -46,13 +46,13 @@ class Food {
                         static_cast<Sint16>(block::size * y), 0, 0};
         switch (food_[y][x]) {
           case food_state::food: {
-            SDL_Surface *p_surface = image_manager.get(image::food);
-            SDL_BlitSurface(p_surface, &src, screen, &dst);
+            SDL_Texture *p_texture = image_manager.get(renderer, image::food);
+            SDL_RenderCopy(renderer, p_texture, &src, &dst);
             break;
           }
           case food_state::counter_food: {
-            SDL_Surface *p_surface = image_manager.get(image::food_counter);
-            SDL_BlitSurface(p_surface, &src, screen, &dst);
+            SDL_Texture *p_texture = image_manager.get(renderer, image::food_counter);
+            SDL_RenderCopy(renderer, p_texture, &src, &dst);
             break;
           }
           default:
