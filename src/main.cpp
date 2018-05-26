@@ -2,7 +2,7 @@
 #include <iostream>
 #include "pacman.hpp"
 
-const std::string Version = "v0.2.0";
+const std::string Version = "v0.3.0";
 
 bool parse_options(const int argc, char **argv) noexcept {
   bool ret = false;
