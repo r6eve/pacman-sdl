@@ -37,22 +37,25 @@ class Food {
     }
   }
 
-  inline void draw(SDL_Surface *screen,
+  inline void draw(SDL_Renderer *renderer,
                    const ImageManager &image_manager) noexcept {
     SDL_Rect src = {0, 0, block::size, block::size};
+    SDL_Texture *food_texture = image_manager.get(renderer, image::food);
+    SDL_Texture *food_counter_texture = image_manager.get(renderer, image::food_counter);
     for (unsigned int y = 0; y < block::count_y; ++y) {
       for (unsigned int x = 0; x < block::count_x; ++x) {
-        SDL_Rect dst = {static_cast<Sint16>(block::size * x),
-                        static_cast<Sint16>(block::size * y), 0, 0};
+        SDL_Rect dst;
+        dst.x = static_cast<Sint16>(block::size * x);
+        dst.y = static_cast<Sint16>(block::size * y);
         switch (food_[y][x]) {
           case food_state::food: {
-            SDL_Surface *p_surface = image_manager.get(image::food);
-            SDL_BlitSurface(p_surface, &src, screen, &dst);
+            SDL_QueryTexture(food_texture, nullptr, nullptr, &dst.w, &dst.h);
+            SDL_RenderCopy(renderer, food_texture, &src, &dst);
             break;
           }
           case food_state::counter_food: {
-            SDL_Surface *p_surface = image_manager.get(image::food_counter);
-            SDL_BlitSurface(p_surface, &src, screen, &dst);
+            SDL_QueryTexture(food_counter_texture, nullptr, nullptr, &dst.w, &dst.h);
+            SDL_RenderCopy(renderer, food_counter_texture, &src, &dst);
             break;
           }
           default:
@@ -61,6 +64,8 @@ class Food {
         }
       }
     }
+    SDL_DestroyTexture(food_texture);
+    SDL_DestroyTexture(food_counter_texture);
   }
 
   /**

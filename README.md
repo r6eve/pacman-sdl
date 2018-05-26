@@ -13,13 +13,13 @@ Pacman written in C++.
 
 ```console
 # Arch
-> pacman -S sdl sdl_image sdl_mixer sdl_ttf
+> pacman -S sdl2 sdl2_image sdl2_mixer sdl2_ttf
 # Ubuntu
-> apt-get -y install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+> apt-get -y install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
 
 # macOS
 > brew update
-> brew install sdl sdl_image sdl_mixer sdl_ttf
+> brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
 
 # Windows
 # Cf. .appveyor.yml
@@ -55,10 +55,10 @@ Options:
 ## Requirement
 
 * g++ / clang++
-* [SDL 1.2][]
-* [SDL_image 1.2][]
-* [SDL_mixer 1.2][]
-* [SDL_ttf for SDL 1.2][]
+* [SDL 2.0][]
+* [SDL_image 2.0][]
+* [SDL_mixer 2.0][]
+* [SDL_ttf 2.0][]
 
 ## Used Resources
 
@@ -68,7 +68,6 @@ Options:
 
 ## TODO
 
-* Support Version 2 of SDL
 * Record Score
 
 [Build Status on Travis CI]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
@@ -77,10 +76,10 @@ Options:
 [AppVeyor Results]: https://ci.appveyor.com/project/r6eve/pacman-sdl
 [Demo Image]: http://img.youtube.com/vi/jTj5H4HFE68/0.jpg
 [Demo Video]: https://youtu.be/jTj5H4HFE68
-[SDL 1.2]: http://www.libsdl.org/
-[SDL_image 1.2]: https://www.libsdl.org/projects/SDL_image/release-1.2.html
-[SDL_mixer 1.2]: https://www.libsdl.org/projects/SDL_mixer/release-1.2.html
-[SDL_ttf for SDL 1.2]: https://www.libsdl.org/projects/SDL_ttf/release-1.2.html
+[SDL 2.0]: http://www.libsdl.org/
+[SDL_image 2.0]: https://www.libsdl.org/projects/SDL_image/
+[SDL_mixer 2.0]: https://www.libsdl.org/projects/SDL_mixer/
+[SDL_ttf 2.0]: https://www.libsdl.org/projects/SDL_ttf/
 [源暎ゴシックP]: https://okoneya.jp/font/genei-antique.html
 [Classic Gaming]: http://www.classicgaming.cc/classics/pac-man/sounds.php
 [Sound FX Center]: http://soundfxcenter.com/download-sound/pacman-siren-sound-effect/

@@ -1,7 +1,7 @@
 #ifndef IMAGE_MANAGER_H
 #define IMAGE_MANAGER_H
 
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <vector>
 
@@ -28,7 +28,7 @@ enum {
 }  // namespace image
 
 class ImageManager {
-  std::vector<SDL_Surface*> images_;
+  std::vector<SDL_Surface *> images_;
 
   // In macOS, using the following type makes `error: static_assert failed "the
   // specified hash does not meet the Hash requirements"`. Therefore, use an
@@ -48,7 +48,7 @@ class ImageManager {
     images_.reserve(image::count);
 
     const int flag = IMG_INIT_PNG;
-    if (IMG_Init(flag) != flag) {
+    if ((IMG_Init(flag) & flag) != flag) {
       std::cerr << "error: " << IMG_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
@@ -74,8 +74,9 @@ class ImageManager {
     }
   }
 
-  inline SDL_Surface *get(const unsigned char image_type) const noexcept {
-    return images_[image_type];
+  inline SDL_Texture *get(SDL_Renderer *renderer,
+                          const unsigned char image_type) const noexcept {
+    return SDL_CreateTextureFromSurface(renderer, images_[image_type]);
   }
 
   ~ImageManager() noexcept { atexit(IMG_Quit); }

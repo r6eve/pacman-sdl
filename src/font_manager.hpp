@@ -1,7 +1,7 @@
 #ifndef FONT_MANAGER_H
 #define FONT_MANAGER_H
 
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 
 namespace font_size {
@@ -25,7 +25,7 @@ class FontManager {
 
  public:
   FontManager() noexcept {
-    if (TTF_Init() != 0) {
+    if (TTF_Init() == -1) {
       std::cerr << "error: " << TTF_GetError() << '\n';
       exit(EXIT_FAILURE);
     }

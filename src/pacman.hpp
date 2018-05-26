@@ -40,7 +40,8 @@ class Pacman {
 
   const bool debug_mode_;
 
-  SDL_Surface *screen_;
+  SDL_Window *window_;
+  SDL_Renderer *renderer_;
   game_state game_state_;
   unsigned int game_level_;
   game_mode game_mode_;
@@ -64,16 +65,22 @@ class Pacman {
       throw SDL_GetError();
     }
 
-    SDL_WM_SetCaption("pacman-sdl", nullptr);
     if (debug_mode_) {
-      screen_ = SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
-                                 SDL_HWSURFACE | SDL_DOUBLEBUF);
+      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
+                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
+                                 screen::height, SDL_WINDOW_SHOWN);
     } else {
-      screen_ =
-          SDL_SetVideoMode(screen::width, screen::height, screen::bpp,
-                           SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
+                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
+                                 screen::height,
+                                 SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
     }
-    if (!screen_) {
+    if (window_ == nullptr) {
+      throw SDL_GetError();
+    }
+
+    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer_ == nullptr) {
       throw SDL_GetError();
     }
 
@@ -88,11 +95,11 @@ class Pacman {
   void game_over() noexcept;
 
   inline void game_pause() noexcept {
-    map_.draw(screen_, image_manager_, game_level_);
-    food_.draw(screen_, image_manager_);
-    enemy_.draw(screen_, image_manager_);
-    p1_.draw(screen_, image_manager_, game_mode_);
-    p2_.draw(screen_, image_manager_, game_mode_);
+    map_.draw(renderer_, image_manager_, game_level_);
+    food_.draw(renderer_, image_manager_);
+    enemy_.draw(renderer_, image_manager_);
+    p1_.draw(renderer_, image_manager_, game_mode_);
+    p2_.draw(renderer_, image_manager_, game_mode_);
     draw_score();
     draw_translucence();
     if (input_manager_.edge_key_p(player_type::p1, input_device::space)) {
@@ -102,13 +109,19 @@ class Pacman {
 
   inline void draw_text(const unsigned char font_size, const RGB &rgb,
                         const Point &p, const char *str) const noexcept {
-    const SDL_Color color = {rgb.r, rgb.g, rgb.b, 0};
+    const SDL_Color color = {rgb.r, rgb.g, rgb.b, 255};
     SDL_Surface *font_surface =
         TTF_RenderUTF8_Blended(font_manager_.get(font_size), str, color);
+    SDL_Texture *font_texture =
+        SDL_CreateTextureFromSurface(renderer_, font_surface);
     SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
                     static_cast<Uint16>(font_surface->h)};
-    SDL_Rect dst = {static_cast<Sint16>(p.x), static_cast<Sint16>(p.y), 0, 0};
-    SDL_BlitSurface(font_surface, &src, screen_, &dst);
+    SDL_Rect dst;
+    dst.x = static_cast<Sint16>(p.x);
+    dst.y = static_cast<Sint16>(p.y);
+    SDL_QueryTexture(font_texture, nullptr, nullptr, &dst.w, &dst.h);
+    SDL_RenderCopy(renderer_, font_texture, &src, &dst);
+    SDL_DestroyTexture(font_texture);
   }
 
   inline void draw_text(const unsigned char font_size, const RGB &&rgb,
@@ -129,9 +142,13 @@ class Pacman {
   inline void draw_score() const noexcept {
     // Draw the plate of background.
     {
-      SDL_Surface *p_surface = image_manager_.get(image::plate);
-      SDL_Rect dst = {screen::offset_x, 0, 0, 0};
-      SDL_BlitSurface(p_surface, nullptr, screen_, &dst);
+      SDL_Texture *p_texture = image_manager_.get(renderer_, image::plate);
+      SDL_Rect dst;
+      dst.x = screen::offset_x;
+      dst.y = 0;
+      SDL_QueryTexture(p_texture, nullptr, nullptr, &dst.w, &dst.h);
+      SDL_RenderCopy(renderer_, p_texture, nullptr, &dst);
+      SDL_DestroyTexture(p_texture);
     }
 
     // Draw the score itself.
@@ -147,10 +164,11 @@ class Pacman {
       score << "S c o r e  :  " << std::setw(6) << p1_.get_score();
       draw_text(font_size::x16, rgb::white, Point{x1, y1}, score.str().c_str());
 
-      SDL_Surface *p_surface = image_manager_.get(image::p1);
+      SDL_Texture *p_texture = image_manager_.get(renderer_, image::p1);
       SDL_Rect src = {block::size, 0, block::size, block::size};
-      SDL_Rect dst = {x2, y2, 0, 0};
-      SDL_BlitSurface(p_surface, &src, screen_, &dst);
+      SDL_Rect dst = {x2, y2, block::size, block::size};
+      SDL_RenderCopy(renderer_, p_texture, &src, &dst);
+      SDL_DestroyTexture(p_texture);
 
       std::stringstream life;
       life << "x  " << p1_.get_life();
@@ -163,10 +181,11 @@ class Pacman {
         draw_text(font_size::x16, rgb::white, Point{x1, y1 + offset_y},
                   score.str().c_str());
 
-        SDL_Surface *p_surface = image_manager_.get(image::p2);
+        SDL_Texture *p_texture = image_manager_.get(renderer_, image::p2);
         SDL_Rect src = {block::size, 0, block::size, block::size};
-        SDL_Rect dst = {x2, y2 + offset_y, 0, 0};
-        SDL_BlitSurface(p_surface, &src, screen_, &dst);
+        SDL_Rect dst = {x2, y2 + offset_y, block::size, block::size};
+        SDL_RenderCopy(renderer_, p_texture, &src, &dst);
+        SDL_DestroyTexture(p_texture);
 
         std::stringstream life;
         life << "x  " << p2_.get_life();
@@ -180,15 +199,17 @@ class Pacman {
       const unsigned int x = screen::offset_x + 10;
       const unsigned int y = screen::height / 6 * 4;
       if (p1_.get_power_mode()) {
+        SDL_SetRenderDrawColor(renderer_, 255, 255, 0, 255);
         SDL_Rect dst = {x, y, static_cast<Uint16>(p1_.get_power_mode() / 4),
                         block::size};
-        SDL_FillRect(screen_, &dst, 0xffff00);
+        SDL_RenderFillRect(renderer_, &dst);
       }
       if (p2_.get_power_mode()) {
+        SDL_SetRenderDrawColor(renderer_, 128, 128, 0, 255);
         SDL_Rect dst = {x, y + 30,
                         static_cast<Uint16>(p2_.get_power_mode() / 4),
                         block::size};
-        SDL_FillRect(screen_, &dst, 0x808080);
+        SDL_RenderFillRect(renderer_, &dst);
       }
     }
   }
@@ -253,7 +274,6 @@ class Pacman {
 
   inline void draw_translucence() noexcept {
     Uint32 rmask, gmask, bmask, amask;
-    const Uint8 alpha = 128;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rmask = 0xff000000;
     gmask = 0x00ff0000;
@@ -265,16 +285,19 @@ class Pacman {
     bmask = 0x00ff0000;
     amask = 0xff000000;
 #endif
-    SDL_Rect dst = {0, 0, 0, 0};
     SDL_Surface *trans_surface =
         SDL_CreateRGBSurface(SDL_SWSURFACE, screen::width, screen::height, 32,
                              rmask, gmask, bmask, amask);
-    if (!trans_surface) {
+    if (trans_surface == nullptr) {
       std::cerr << "CreateRGBSurface failed: " << SDL_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
-    SDL_SetAlpha(trans_surface, SDL_SRCALPHA, alpha);
-    SDL_BlitSurface(trans_surface, nullptr, screen_, &dst);
+    SDL_Texture *trans_texture =
+        SDL_CreateTextureFromSurface(renderer_, trans_surface);
+    SDL_FreeSurface(trans_surface);
+    SDL_Rect dst = {0, 0, screen::width, screen::height};
+    SDL_RenderCopy(renderer_, trans_texture, nullptr, &dst);
+    SDL_DestroyTexture(trans_texture);
     if (blink_count_ < 30) {
       draw_text(font_size::x36, rgb::white, Point{165, 170}, "P a u s e");
       ++blink_count_;
@@ -288,7 +311,8 @@ class Pacman {
  public:
   Pacman(const bool debug_mode) noexcept
       : debug_mode_(debug_mode),
-        screen_(nullptr),
+        window_(nullptr),
+        renderer_(nullptr),
         game_state_(game_state::title),
         game_mode_(game_mode::single),
         blink_count_(0),
@@ -339,12 +363,16 @@ class Pacman {
       if (debug_mode_) {
         draw_fps();
       }
-      SDL_Flip(screen_);
+      SDL_RenderPresent(renderer_);
       wait_game();
     }
   }
 
-  ~Pacman() noexcept { atexit(SDL_Quit); }
+  ~Pacman() noexcept {
+    SDL_DestroyRenderer(renderer_);
+    SDL_DestroyWindow(window_);
+    atexit(SDL_Quit);
+  }
 };
 
 #endif
