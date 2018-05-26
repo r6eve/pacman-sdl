@@ -2,6 +2,9 @@ version: "{build}"
 
 clone_depth: 3
 
+paltform:
+  - x86
+
 environment:
   BASEDIR: c:\mylibs
   SDLDIR: c:\mylibs\include\SDL2
@@ -10,27 +13,27 @@ environment:
 install:
   - mkdir %SDLDIR%
   - mkdir %LIBDIR%
-  - IF NOT EXIST SDL2-devel-2.0.8-mingw.tar.gz curl -fsS -O https://libsdl.org/release/SDL2-devel-2.0.8-mingw.tar.gz
-  - IF NOT EXIST SDL2_image-devel-2.0.3-mingw.tar.gz curl -fsS -O https://libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.3-mingw.tar.gz
-  - IF NOT EXIST SDL2_mixer-devel-2.0.2-mingw.tar.gz curl -fsS -O https://libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.2-mingw.tar.gz
-  - IF NOT EXIST SDL2_ttf-devel-2.0.14-mingw.tar.gz curl -fsS -O https://libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.14-mingw.tar.gz
-  - copy SDL2-devel-2.0.8-mingw.tar.gz %TEMP% > nul
-  - copy SDL2_image-devel-2.0.3-mingw.tar.gz %TEMP% > nul
-  - copy SDL2_mixer-devel-2.0.2-mingw.tar.gz %TEMP% > nul
-  - copy SDL2_ttf-devel-2.0.14-mingw.tar.gz %TEMP% > nul
+  - IF NOT EXIST SDL2-devel-2.0.8-VC.zip curl -fsS -O https://libsdl.org/release/SDL2-devel-2.0.8-VC.zip
+  - IF NOT EXIST SDL2_image-devel-2.0.3-VC.zip curl -fsS -O https://libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.3-VC.zip
+  - IF NOT EXIST SDL2_mixer-devel-2.0.2-VC.zip curl -fsS -O https://libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.2-VC.zip
+  - IF NOT EXIST SDL2_ttf-devel-2.0.14-VC.zip curl -fsS -O https://libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.14-VC.zip
+  - copy SDL2-devel-2.0.8-VC.zip %TEMP% > nul
+  - copy SDL2_image-devel-2.0.3-VC.zip %TEMP% > nul
+  - copy SDL2_mixer-devel-2.0.2-VC.zip %TEMP% > nul
+  - copy SDL2_ttf-devel-2.0.14-VC.zip %TEMP% > nul
   - cd %TEMP%
-  - tar xf SDL2-devel-2.0.8-mingw.tar.gz > nul
-  - tar xf SDL2_image-devel-2.0.3-mingw.tar.gz > nul
-  - tar xf SDL2_mixer-devel-2.0.2-mingw.tar.gz > nul
-  - tar xf SDL2_ttf-devel-2.0.14-mingw.tar.gz > nul
-  - copy SDL2-2.0.8\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2_image-2.0.3\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2_mixer-2.0.2\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2_ttf-2.0.14\i686-w64-mingw32\include\SDL2\* %SDLDIR% > nul
-  - copy SDL2-2.0.8\i686-w64-mingw32\lib\* %LIBDIR% > nul
-  - copy SDL2_image-2.0.3\i686-w64-mingw32\lib\* %LIBDIR% > nul
-  - copy SDL2_mixer-2.0.2\i686-w64-mingw32\lib\* %LIBDIR% > nul
-  - copy SDL2_ttf-2.0.14\i686-w64-mingw32\lib\* %LIBDIR% > nul
+  - 7z x SDL2-devel-2.0.8-VC.zip > nul
+  - 7z x SDL2_image-devel-2.0.3-VC.zip > nul
+  - 7z x SDL2_mixer-devel-2.0.2-VC.zip > nul
+  - 7z x SDL2_ttf-devel-2.0.14-VC.zip > nul
+  - copy SDL2-2.0.8\include\* %SDLDIR% > nul
+  - copy SDL2_image-2.0.3\include\* %SDLDIR% > nul
+  - copy SDL2_mixer-2.0.2include\* %SDLDIR% > nul
+  - copy SDL2_ttf-2.0.14\include\* %SDLDIR% > nul
+  - copy SDL2-2.0.8\lib\x86\* %LIBDIR% > nul
+  - copy SDL2_image-2.0.3\lib\x86\* %LIBDIR% > nul
+  - copy SDL2_mixer-2.0.2\lib\x86\* %LIBDIR% > nul
+  - copy SDL2_ttf-2.0.14\lib\x86\* %LIBDIR% > nul
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
@@ -40,7 +43,7 @@ test: off
 deploy: off
 
 cache:
-  - SDL2-devel-2.0.8-mingw.tar.gz
-  - SDL2_image-devel-2.0.3-mingw.tar.gz
-  - SDL2_mixer-devel-2.0.2-mingw.tar.gz
-  - SDL2_ttf-devel-2.0.14-mingw.tar.gz
+  - SDL2-devel-2.0.8-VC.zip
+  - SDL2_image-devel-2.0.3-VC.zip
+  - SDL2_mixer-devel-2.0.2-VC.zip
+  - SDL2_ttf-devel-2.0.14-VC.zip
