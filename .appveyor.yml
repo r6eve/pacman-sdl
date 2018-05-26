@@ -28,7 +28,7 @@ install:
   - 7z x SDL2_ttf-devel-2.0.14-VC.zip > nul
   - copy SDL2-2.0.8\include\* %SDLDIR% > nul
   - copy SDL2_image-2.0.3\include\* %SDLDIR% > nul
-  - copy SDL2_mixer-2.0.2include\* %SDLDIR% > nul
+  - copy SDL2_mixer-2.0.2\include\* %SDLDIR% > nul
   - copy SDL2_ttf-2.0.14\include\* %SDLDIR% > nul
   - copy SDL2-2.0.8\lib\x86\* %LIBDIR% > nul
   - copy SDL2_image-2.0.3\lib\x86\* %LIBDIR% > nul
