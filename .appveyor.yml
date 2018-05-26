@@ -2,7 +2,7 @@ version: "{build}"
 
 clone_depth: 3
 
-paltform:
+platform:
   - x86
 
 environment:
