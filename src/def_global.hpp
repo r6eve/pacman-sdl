@@ -35,25 +35,25 @@ struct Point {
   int x;
   int y;
 
-  bool operator==(const Point &rhs) const noexcept {
+  inline bool operator==(const Point &rhs) const noexcept {
     return ((x == rhs.x) && (y == rhs.y));
   }
 
-  bool operator!=(const Point &rhs) const noexcept {
+  inline bool operator!=(const Point &rhs) const noexcept {
     return ((x != rhs.x) || (y != rhs.y));
   }
 
-  Point operator+(const Point &rhs) const noexcept {
+  inline Point operator+(const Point &rhs) const noexcept {
     return Point{x + rhs.x, y + rhs.y};
   }
 
-  void operator+=(const Point &rhs) noexcept {
+  inline void operator+=(const Point &rhs) noexcept {
     x += rhs.x;
     y += rhs.y;
   }
 
  public:
-  unsigned int distance(const Point &rhs) const noexcept {
+  inline unsigned int distance(const Point &rhs) const noexcept {
     return static_cast<unsigned int>(
         hypot(static_cast<double>(x - rhs.x), static_cast<double>(y - rhs.y)));
   }
