@@ -16,10 +16,11 @@ class FontManager {
   TTF_Font *fonts_[font_size::count];
 
   inline void load(const char *path, unsigned int size,
-                   const unsigned char font_size) {
+                   const unsigned char font_size) noexcept {
     fonts_[font_size] = TTF_OpenFont(path, size);
     if (!fonts_[font_size]) {
-      throw TTF_GetError();
+      std::cerr << "error: " << TTF_GetError() << '\n';
+      exit(EXIT_FAILURE);
     }
   }
 
@@ -29,14 +30,8 @@ class FontManager {
       std::cerr << "error: " << TTF_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
-
-    try {
-      load("./data/GenEiGothicP-Heavy.otf", 36, font_size::x36);
-      load("./data/GenEiGothicP-Regular.otf", 16, font_size::x16);
-    } catch (const char &e) {
-      std::cerr << "error: " << e << '\n';
-      exit(EXIT_FAILURE);
-    }
+    load("./data/GenEiGothicP-Heavy.otf", 36, font_size::x36);
+    load("./data/GenEiGothicP-Regular.otf", 16, font_size::x16);
   }
 
   inline TTF_Font *get(const unsigned char font_size) const noexcept {

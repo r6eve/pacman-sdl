@@ -35,10 +35,11 @@ class ImageManager {
   // array to manage images.
   //
   // `std::unordered_map<std::string, std::unique_ptr<SDL_Surface>> image_map_`
-  inline void load(const char *path, const unsigned char image_type) {
+  inline void load(const char *path, const unsigned char image_type) noexcept {
     SDL_Surface *image = IMG_Load(path);
     if (!image) {
-      throw IMG_GetError();
+      std::cerr << "error: " << IMG_GetError() << '\n';
+      exit(EXIT_FAILURE);
     }
     images_[image_type] = image;
   }
@@ -53,25 +54,20 @@ class ImageManager {
       exit(EXIT_FAILURE);
     }
 
-    try {
-      load("./data/player1.png", image::p1);
-      load("./data/player2.png", image::p2);
-      load("./data/bg.png", image::bg);
-      load("./data/bg_red.png", image::bg_red);
-      load("./data/bg_green.png", image::bg_green);
-      load("./data/bg_blue.png", image::bg_blue);
-      load("./data/food.png", image::food);
-      load("./data/food_counter.png", image::food_counter);
-      load("./data/akabei.png", image::akabei);
-      load("./data/pinky.png", image::pinky);
-      load("./data/aosuke.png", image::aosuke);
-      load("./data/guzuta.png", image::guzuta);
-      load("./data/mon_run.png", image::mon_run);
-      load("./data/plate.png", image::plate);
-    } catch (const char &e) {
-      std::cerr << "error: " << e << '\n';
-      exit(EXIT_FAILURE);
-    }
+    load("./data/player1.png", image::p1);
+    load("./data/player2.png", image::p2);
+    load("./data/bg.png", image::bg);
+    load("./data/bg_red.png", image::bg_red);
+    load("./data/bg_green.png", image::bg_green);
+    load("./data/bg_blue.png", image::bg_blue);
+    load("./data/food.png", image::food);
+    load("./data/food_counter.png", image::food_counter);
+    load("./data/akabei.png", image::akabei);
+    load("./data/pinky.png", image::pinky);
+    load("./data/aosuke.png", image::aosuke);
+    load("./data/guzuta.png", image::guzuta);
+    load("./data/mon_run.png", image::mon_run);
+    load("./data/plate.png", image::plate);
   }
 
   inline SDL_Texture *get(SDL_Renderer *renderer,

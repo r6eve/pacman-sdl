@@ -60,33 +60,6 @@ class Pacman {
   InputManager input_manager_;
   MixerManager mixer_manager_;
 
-  inline void init_sdl() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-      throw SDL_GetError();
-    }
-
-    if (debug_mode_) {
-      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
-                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
-                                 screen::height, SDL_WINDOW_SHOWN);
-    } else {
-      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
-                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
-                                 screen::height,
-                                 SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
-    }
-    if (window_ == nullptr) {
-      throw SDL_GetError();
-    }
-
-    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer_ == nullptr) {
-      throw SDL_GetError();
-    }
-
-    SDL_ShowCursor(SDL_DISABLE);
-  }
-
   void game_title() noexcept;
   void game_start() noexcept;
   void play_game() noexcept;
@@ -320,12 +293,34 @@ class Pacman {
         debug_lose_enemy_(false),
         p1_(player_type::p1),
         p2_(player_type::p2) {
-    try {
-      init_sdl();
-    } catch (const char &e) {
-      std::cerr << "error: " << e << '\n';
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+      std::cerr << "error: " << SDL_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
+
+    if (debug_mode_) {
+      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
+                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
+                                 screen::height, SDL_WINDOW_SHOWN);
+    } else {
+      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
+                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
+                                 screen::height,
+                                 SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+    }
+    if (window_ == nullptr) {
+      std::cerr << "error: " << SDL_GetError() << '\n';
+      exit(EXIT_FAILURE);
+    }
+
+    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer_ == nullptr) {
+      std::cerr << "error: " << SDL_GetError() << '\n';
+      exit(EXIT_FAILURE);
+    }
+
+    SDL_ShowCursor(SDL_DISABLE);
   }
 
   inline void run() noexcept {

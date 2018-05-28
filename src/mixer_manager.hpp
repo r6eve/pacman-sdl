@@ -20,17 +20,19 @@ class MixerManager {
   Mix_Music *music_list_[music_type::count];
   std::unique_ptr<Mix_Chunk> se_;
 
-  inline void load_music(const char *path, const unsigned char music_type) {
+  inline void load_music(const char *path, const unsigned char music_type) noexcept {
     music_list_[music_type] = Mix_LoadMUS(path);
     if (!music_list_[music_type]) {
-      throw Mix_GetError();
+      std::cerr << "error: " << Mix_GetError() << '\n';
+      exit(EXIT_FAILURE);
     }
   }
 
-  inline void load_se(const char *path) {
+  inline void load_se(const char *path) noexcept {
     const Mix_Chunk *se = Mix_LoadWAV(path);
     if (!se) {
-      throw Mix_GetError();
+      std::cerr << "error: " << Mix_GetError() << '\n';
+      exit(EXIT_FAILURE);
     }
     se_ = std::make_unique<Mix_Chunk>(*se);
   }
@@ -43,16 +45,11 @@ class MixerManager {
       exit(EXIT_FAILURE);
     }
 
-    try {
-      load_music("./data/66376e_Pacman_Siren_Sound_Effect.mp3",
-                 music_type::siren);
-      load_music("./data/pacman_beginning.wav", music_type::beginning);
-      load_music("./data/pacman_death.wav", music_type::death);
-      load_se("./data/pacman_chomp.wav");
-    } catch (const char &e) {
-      std::cerr << "error: " << e << '\n';
-      exit(EXIT_FAILURE);
-    }
+    load_music("./data/66376e_Pacman_Siren_Sound_Effect.mp3",
+               music_type::siren);
+    load_music("./data/pacman_beginning.wav", music_type::beginning);
+    load_music("./data/pacman_death.wav", music_type::death);
+    load_se("./data/pacman_chomp.wav");
   }
 
   inline Mix_Music *get_music(const unsigned char music_type) const noexcept {
