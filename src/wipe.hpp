@@ -45,7 +45,7 @@ class Wipe {
     const unsigned int dy = screen::height / 10;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (dst.y = 0; dst.y < screen::height; dst.y += dy) {
-        SDL_RenderFillRect(renderer, &dst);
+      SDL_RenderFillRect(renderer, &dst);
     }
   }
 
