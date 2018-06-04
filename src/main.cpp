@@ -4,10 +4,12 @@
 
 const std::string Version = "v0.3.0";
 
-bool parse_options(const int argc, char **argv) noexcept {
-  bool ret = false;
+std::pair<bool, bool> parse_options(const int argc, char **argv) noexcept {
+  bool fullscreen_mode = false;
+  bool debug_mode = false;
   opterr = 0;
   const option long_options[] = {
+      {"fullscreen", no_argument, nullptr, 'f'},
       {"debug", no_argument, nullptr, 'd'},
       {"help", no_argument, nullptr, 'h'},
       {"version", no_argument, nullptr, 'v'},
@@ -16,7 +18,7 @@ bool parse_options(const int argc, char **argv) noexcept {
 
   for (;;) {
     const int curind = optind;
-    const int c = getopt_long(argc, argv, "dhv", long_options, nullptr);
+    const int c = getopt_long(argc, argv, "fdhv", long_options, nullptr);
     if (c == -1) {
       break;
     }
@@ -26,13 +28,17 @@ bool parse_options(const int argc, char **argv) noexcept {
         std::cout << R"(Usage: pacman-sdl [options]
 
 Options:
+    -f  --fullscreen    fullscreen mode
     -d  --debug         debug mode
     -h, --help          print this help menu
     -v, --version       print version
 )";
         exit(EXIT_SUCCESS);
+      case 'f':
+        fullscreen_mode = true;
+        break;
       case 'd':
-        ret = true;
+        debug_mode = true;
         break;
       case 'v':
         std::cout << Version << '\n';
@@ -53,12 +59,12 @@ Options:
     }
   }
 
-  return ret;
+  return std::make_pair(fullscreen_mode, debug_mode);
 }
 
 int main(int argc, char **argv) {
-  const bool debug_mode = parse_options(argc, argv);
-  Pacman pacman(debug_mode);
+  const std::pair<bool, bool> opts = parse_options(argc, argv);
+  Pacman pacman(opts.first, opts.second);
   pacman.run();
   exit(EXIT_SUCCESS);
 }

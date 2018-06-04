@@ -38,6 +38,7 @@ class Pacman {
     pause,
   };
 
+  const bool fullscreen_mode_;
   const bool debug_mode_;
 
   SDL_Window *window_;
@@ -282,8 +283,9 @@ class Pacman {
   }
 
  public:
-  Pacman(const bool debug_mode) noexcept
-      : debug_mode_(debug_mode),
+  Pacman(const bool fullscreen_mode, const bool debug_mode) noexcept
+      : fullscreen_mode_(fullscreen_mode),
+        debug_mode_(debug_mode),
         window_(nullptr),
         renderer_(nullptr),
         game_state_(game_state::title),
@@ -293,22 +295,18 @@ class Pacman {
         debug_lose_enemy_(false),
         p1_(player_type::p1),
         p2_(player_type::p2) {
-
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
       std::cerr << "error: " << SDL_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
 
-    if (debug_mode_) {
-      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
-                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
-                                 screen::height, SDL_WINDOW_SHOWN);
-    } else {
-      window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
-                                 SDL_WINDOWPOS_UNDEFINED, screen::width,
-                                 screen::height,
-                                 SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+    Uint32 flags = SDL_WINDOW_SHOWN;
+    if (fullscreen_mode_) {
+      flags |= SDL_WINDOW_FULLSCREEN;
     }
+    window_ = SDL_CreateWindow("pacman-sdl", SDL_WINDOWPOS_UNDEFINED,
+                               SDL_WINDOWPOS_UNDEFINED, screen::width,
+                               screen::height, flags);
     if (window_ == nullptr) {
       std::cerr << "error: " << SDL_GetError() << '\n';
       exit(EXIT_FAILURE);
