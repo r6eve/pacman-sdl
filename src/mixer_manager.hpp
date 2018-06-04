@@ -5,36 +5,36 @@
 #include <iostream>
 #include <memory>
 
-namespace music_type {
+namespace se_type {
 
 enum {
   siren = 0,
   beginning,
   death,
+  chomp,
   count,
 };
 
-}  // namespace music_type
+}  // namespace se_type
 
 class MixerManager {
-  Mix_Music *music_list_[music_type::count];
-  std::unique_ptr<Mix_Chunk> se_;
+  Mix_Music *music_;
+  Mix_Chunk *se_list_[se_type::count];
 
-  inline void load_music(const char *path, const unsigned char music_type) noexcept {
-    music_list_[music_type] = Mix_LoadMUS(path);
-    if (!music_list_[music_type]) {
+  inline void load_music(const char *path) noexcept {
+    music_ = Mix_LoadMUS(path);
+    if (!music_) {
       std::cerr << "error: " << Mix_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
   }
 
-  inline void load_se(const char *path) noexcept {
-    const Mix_Chunk *se = Mix_LoadWAV(path);
-    if (!se) {
+  inline void load_se(const char *path, const unsigned char se_type) noexcept {
+    se_list_[se_type] = Mix_LoadWAV(path);
+    if (!se_list_[se_type]) {
       std::cerr << "error: " << Mix_GetError() << '\n';
       exit(EXIT_FAILURE);
     }
-    se_ = std::make_unique<Mix_Chunk>(*se);
   }
 
  public:
@@ -45,26 +45,26 @@ class MixerManager {
       exit(EXIT_FAILURE);
     }
 
-    load_music("./data/66376e_Pacman_Siren_Sound_Effect.mp3",
-               music_type::siren);
-    load_music("./data/pacman_beginning.wav", music_type::beginning);
-    load_music("./data/pacman_death.wav", music_type::death);
-    load_se("./data/pacman_chomp.wav");
+    load_music("./data/luminousparticle.mp3");
+    load_se("./data/66376e_Pacman_Siren_Sound_Effect.wav", se_type::siren);
+    load_se("./data/pacman_beginning.wav", se_type::beginning);
+    load_se("./data/pacman_death.wav", se_type::death);
+    load_se("./data/pacman_chomp.wav", se_type::chomp);
   }
 
-  inline Mix_Music *get_music(const unsigned char music_type) const noexcept {
-    return music_list_[music_type];
-  }
+  inline Mix_Music *get_music() const noexcept { return music_; }
 
-  inline Mix_Chunk *get_se() const noexcept { return se_.get(); }
+  inline Mix_Chunk *get_se(const unsigned char se_type) const noexcept {
+    return se_list_[se_type];
+  }
 
   ~MixerManager() noexcept {
     Mix_HaltMusic();
     Mix_HaltChannel(-1);
-    for (const auto &music : music_list_) {
-      Mix_FreeMusic(music);
+    Mix_FreeMusic(music_);
+    for (const auto &se : se_list_) {
+      Mix_FreeChunk(se);
     }
-    Mix_FreeChunk(se_.get());
     Mix_CloseAudio();
     atexit(Mix_Quit);
   }

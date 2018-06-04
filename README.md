@@ -63,6 +63,7 @@ Options:
 ## Used Resources
 
 * [源暎ゴシックP][]
+* [Ramine / music][]
 * [Classic Gaming][]
 * [Sound FX Center][]
 
@@ -81,5 +82,6 @@ Options:
 [SDL_mixer 2.0]: https://www.libsdl.org/projects/SDL_mixer/
 [SDL_ttf 2.0]: https://www.libsdl.org/projects/SDL_ttf/
 [源暎ゴシックP]: https://okoneya.jp/font/genei-antique.html
+[Ramine / music]: http://2ram.com/music.php
 [Classic Gaming]: http://www.classicgaming.cc/classics/pac-man/sounds.php
 [Sound FX Center]: http://soundfxcenter.com/download-sound/pacman-siren-sound-effect/

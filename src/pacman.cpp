@@ -161,6 +161,8 @@ void Pacman::game_title() noexcept {
         game_level_ = 1;
 
         srand((unsigned int)time(nullptr));
+
+        Mix_PlayMusic(mixer_manager_.get_music(), -1);
       }
       break;
     }
@@ -181,7 +183,7 @@ void Pacman::game_start() noexcept {
     case 0: {
       // TODO: Is it correct?
       if ((p1_.get_life() == 2) && (p2_.get_life() == 2)) {
-        Mix_PlayMusic(mixer_manager_.get_music(music_type::beginning), 0);
+        Mix_PlayChannel(-1, mixer_manager_.get_se(se_type::beginning), 0);
       }
       wipe_.set_wipe_in();
       wipe_.draw(renderer_, screen::offset_x);
@@ -292,7 +294,8 @@ void Pacman::game_miss() noexcept {
   draw_score();
 
   if (game_count_ == 0) {
-    Mix_PlayMusic(mixer_manager_.get_music(music_type::death), 0);
+    Mix_HaltChannel(-1);
+    Mix_PlayChannel(-1, mixer_manager_.get_se(se_type::death), 0);
     wipe_.set_wipe_out();
     if ((p1_.get_life() == 0) || (p2_.get_life() == 0)) {
       wipe_.draw(renderer_, screen::width);
@@ -388,6 +391,7 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
             game_count_ = 0;
             game_state_ = game_state::title;
+            Mix_HaltMusic();
           }
           break;
         }
