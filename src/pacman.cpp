@@ -183,7 +183,7 @@ void Pacman::game_start() noexcept {
     case 0: {
       // TODO: Is it correct?
       if ((p1_.get_life() == 2) && (p2_.get_life() == 2)) {
-        Mix_PlayChannel(-1, mixer_manager_.get_se(se_type::beginning), 0);
+        Mix_PlayChannel(se_type::beginning, mixer_manager_.get_se(se_type::beginning), 0);
       }
       wipe_.set_wipe_in();
       wipe_.draw(renderer_, screen::offset_x);
