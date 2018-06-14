@@ -2,6 +2,7 @@
 #define INPUT_MANAGER_H
 
 #include <vector>
+#include <iostream>
 #include "def_global.hpp"
 
 // Keyboard and Joystick
@@ -35,18 +36,25 @@ enum {
 }  // namespace input_device
 
 class InputManager {
-  unsigned int num_joysticks_;
-  std::vector<SDL_Joystick *> joystick_;
+  std::vector<SDL_Joystick *> joysticks_;
   bool edge_key_[2][input_device::count];
   bool press_key_[2][input_device::count];
 
  public:
   InputManager() noexcept {
-    // SDL_NumJoysticks() definitely returns int type. However, as far as I read
-    // source code, it always returns unsigned int type.
-    num_joysticks_ = static_cast<unsigned int>(SDL_NumJoysticks());
-    for (unsigned int i = 0; i < num_joysticks_; ++i) {
-      joystick_[i] = SDL_JoystickOpen(i);
+    const int n = SDL_NumJoysticks();
+    if (n < 0) {
+      std::cerr << "error: " << SDL_GetError() << '\n';
+      exit(EXIT_FAILURE);
+    }
+
+    if (n == 0) {
+      // JoySticks not found.
+      return;
+    }
+
+    for (int i = 0; i < n; ++i) {
+      joysticks_.push_back(SDL_JoystickOpen(i));
     }
   }
 
@@ -59,41 +67,42 @@ class InputManager {
       }
     }
 
-    for (unsigned int i = 0; i < num_joysticks_; ++i) {
-      if (joystick_[i]) {
+    const unsigned int num_joysticks = joysticks_.size();
+    for (unsigned int i = 0; i < num_joysticks; ++i) {
+      if (joysticks_[i]) {
         SDL_JoystickUpdate();
         new_press_key[i][input_device::x] =
-            SDL_JoystickGetButton(joystick_[i], 0) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 0) == SDL_PRESSED;
         new_press_key[i][input_device::c] =
-            SDL_JoystickGetButton(joystick_[i], 1) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 1) == SDL_PRESSED;
         new_press_key[i][input_device::button_2] =
-            SDL_JoystickGetButton(joystick_[i], 2) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 2) == SDL_PRESSED;
         new_press_key[i][input_device::button_3] =
-            SDL_JoystickGetButton(joystick_[i], 3) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 3) == SDL_PRESSED;
         new_press_key[i][input_device::button_4] =
-            SDL_JoystickGetButton(joystick_[i], 4) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 4) == SDL_PRESSED;
         new_press_key[i][input_device::button_5] =
-            SDL_JoystickGetButton(joystick_[i], 5) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 5) == SDL_PRESSED;
         new_press_key[i][input_device::button_6] =
-            SDL_JoystickGetButton(joystick_[i], 6) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 6) == SDL_PRESSED;
         new_press_key[i][input_device::button_7] =
-            SDL_JoystickGetButton(joystick_[i], 7) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 7) == SDL_PRESSED;
         new_press_key[i][input_device::button_8] =
-            SDL_JoystickGetButton(joystick_[i], 8) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 8) == SDL_PRESSED;
         new_press_key[i][input_device::button_9] =
-            SDL_JoystickGetButton(joystick_[i], 9) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 9) == SDL_PRESSED;
         new_press_key[i][input_device::start] =
-            SDL_JoystickGetButton(joystick_[i], 10) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 10) == SDL_PRESSED;
         new_press_key[i][input_device::select] =
-            SDL_JoystickGetButton(joystick_[i], 11) == SDL_PRESSED;
+            SDL_JoystickGetButton(joysticks_[i], 11) == SDL_PRESSED;
         new_press_key[i][input_device::up] =
-            SDL_JoystickGetAxis(joystick_[i], 1) < -256;
+            SDL_JoystickGetAxis(joysticks_[i], 1) < -256;
         new_press_key[i][input_device::down] =
-            SDL_JoystickGetAxis(joystick_[i], 1) > 256;
+            SDL_JoystickGetAxis(joysticks_[i], 1) > 256;
         new_press_key[i][input_device::left] =
-            SDL_JoystickGetAxis(joystick_[i], 0) < -256;
+            SDL_JoystickGetAxis(joysticks_[i], 0) < -256;
         new_press_key[i][input_device::right] =
-            SDL_JoystickGetAxis(joystick_[i], 0) > 256;
+            SDL_JoystickGetAxis(joysticks_[i], 0) > 256;
       }
     }
 
@@ -140,8 +149,8 @@ class InputManager {
   }
 
   ~InputManager() noexcept {
-    for (unsigned int i = 0; i < num_joysticks_; ++i) {
-      SDL_JoystickClose(joystick_[i]);
+    for (auto &joystick : joysticks_) {
+      SDL_JoystickClose(joystick);
     }
   }
 };
