@@ -121,9 +121,6 @@ void Map::draw(SDL_Renderer *renderer, const ImageManager &image_manager,
           case map_state::block:
             SDL_RenderCopy(renderer, p_texture, &src[1], &dst);
             break;
-          default:
-            // NOTREACHED
-            break;
         }
       }
     }

@@ -87,9 +87,6 @@ void Pacman::game_title() noexcept {
           draw_text(font_size::x16, rgb::white, vs_mode_pos, vs_mode_str);
           break;
         }
-        default:
-          // NOTREACHED
-          break;
       }
 
       if (input_manager_.press_key_p(player_type::p1, input_device::x) ||
@@ -133,9 +130,6 @@ void Pacman::game_title() noexcept {
           draw_text(font_size::x16, rgb::white, vs_mode_pos, vs_mode_str);
           break;
         }
-        default:
-          // NOTREACHED
-          break;
       }
 
       wipe_.draw(renderer_, screen::width);
@@ -472,8 +466,5 @@ void Pacman::game_over() noexcept {
       }
       break;
     }
-    default:
-      // NOTREACHED
-      break;
   }
 }

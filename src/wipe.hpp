@@ -64,9 +64,6 @@ class Wipe {
       case wipe_type::out:
         ++wipe_count_;
         break;
-      default:
-        // NOTREACHED
-        break;
     }
     return false;
   }

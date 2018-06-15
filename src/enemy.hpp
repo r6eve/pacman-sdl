@@ -114,9 +114,6 @@ class Enemy {
           SDL_RenderCopy(renderer, mon_run_texture, &src, &dst);
           break;
         }
-        default:
-          // NOTREACHED
-          break;
       }
     }
 

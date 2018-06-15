@@ -346,9 +346,6 @@ class Pacman {
         case game_state::pause:
           game_pause();
           break;
-        default:
-          // NOTREACHED
-          break;
       }
       if (!poll_event()) {
         return;

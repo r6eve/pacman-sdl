@@ -51,9 +51,6 @@ class Player {
         anime_weight_ = 0;
         return;
       }
-      default:
-        // NOTREACHED
-        return;
     }
   }
 
@@ -85,9 +82,6 @@ class Player {
         SDL_DestroyTexture(p_texture);
         return;
       }
-      default:
-        // NOTREACHED
-        return;
     }
   }
 
