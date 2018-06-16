@@ -59,7 +59,7 @@ class Enemy {
                        const Player &p2) noexcept;
 
  public:
-  Enemy() {
+  Enemy() noexcept {
     enemies_.reserve(enemy_character::count);
     for (unsigned char i = 0; i < enemy_character::count; ++i) {
       enemies_.push_back(Enemy_data(i));
@@ -140,7 +140,7 @@ class Enemy {
    */
   bool check_hit_enemy(const game_mode mode, Player &p1, Player &p2) noexcept;
 
-  ~Enemy() {}
+  ~Enemy() noexcept {}
 };
 
 #endif
