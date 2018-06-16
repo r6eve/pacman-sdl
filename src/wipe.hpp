@@ -11,7 +11,7 @@ class Wipe {
   unsigned int wipe_count_reach_;
 
  public:
-  Wipe() {}
+  Wipe() noexcept {}
 
   /**
    * Set wipe-in mode for drawing.
@@ -68,7 +68,7 @@ class Wipe {
     return false;
   }
 
-  ~Wipe() {}
+  ~Wipe() noexcept {}
 };
 
 #endif

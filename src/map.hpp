@@ -21,7 +21,7 @@ class Map {
   unsigned int home_distance_[block::count_y][block::count_x];
 
  public:
-  Map() {}
+  Map() noexcept {}
 
   void init(const game_mode mode) noexcept;
 
@@ -47,7 +47,7 @@ class Map {
     return get_home_distance(p);
   }
 
-  ~Map() {}
+  ~Map() noexcept {}
 };
 
 #endif

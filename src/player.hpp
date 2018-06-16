@@ -29,7 +29,7 @@ class Player {
   unsigned int power_mode_;  // 0: not power mode, not 0: power mode
 
  public:
-  Player(const unsigned char player_type) : type_(player_type) {}
+  Player(const unsigned char player_type) noexcept : type_(player_type) {}
 
   inline void init_pos() noexcept {
     switch (type_) {
@@ -115,7 +115,7 @@ class Player {
     power_mode_ = power_mode;
   }
 
-  ~Player() {}
+  ~Player() noexcept {}
 };
 
 #endif

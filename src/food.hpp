@@ -17,7 +17,7 @@ class Food {
   food_state food_[block::count_y][block::count_x];
 
  public:
-  Food() {}
+  Food() noexcept {}
 
   inline void init(const Map &map) noexcept {
     for (int y = 0; y < block::count_y; ++y) {
@@ -74,7 +74,7 @@ class Food {
   bool check_state(const game_mode mode, const MixerManager &mixer_manager,
                    Player &p1, Player &p2) noexcept;
 
-  ~Food() {}
+  ~Food() noexcept {}
 };
 
 #endif
