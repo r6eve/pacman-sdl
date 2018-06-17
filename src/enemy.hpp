@@ -40,6 +40,7 @@ class Enemy {
   };
 
   std::vector<Enemy_data> enemies_;
+  const ImageManager *image_manager_;
 
   inline void update() noexcept {
     for (auto &enemy : enemies_) {
@@ -59,7 +60,8 @@ class Enemy {
                        const Player &p2) noexcept;
 
  public:
-  Enemy() noexcept {
+  Enemy(const ImageManager *image_manager) noexcept
+      : image_manager_(image_manager) {
     enemies_.reserve(enemy_character::count);
     for (unsigned char i = 0; i < enemy_character::count; ++i) {
       enemies_.push_back(Enemy_data(i));
@@ -81,37 +83,37 @@ class Enemy {
     }
   }
 
-  inline void draw(SDL_Renderer *renderer, const ImageManager &image_manager) const
-      noexcept {
+  inline void draw() const noexcept {
     SDL_Texture *enemies_texture[enemy_character::count];
-    enemies_texture[enemy_character::akabei] = image_manager.get(renderer, image::akabei);
-    enemies_texture[enemy_character::pinky] = image_manager.get(renderer, image::pinky);
-    enemies_texture[enemy_character::aosuke] = image_manager.get(renderer, image::aosuke);
-    enemies_texture[enemy_character::guzuta] = image_manager.get(renderer, image::guzuta);
-    SDL_Texture *mon_run_texture = image_manager.get(renderer, image::mon_run);
+    enemies_texture[enemy_character::akabei] =
+        image_manager_->get(image::akabei);
+    enemies_texture[enemy_character::pinky] = image_manager_->get(image::pinky);
+    enemies_texture[enemy_character::aosuke] =
+        image_manager_->get(image::aosuke);
+    enemies_texture[enemy_character::guzuta] =
+        image_manager_->get(image::guzuta);
+    SDL_Texture *mon_run_texture = image_manager_->get(image::mon_run);
     for (const auto &enemy : enemies_) {
       SDL_Rect dst;
       dst.x = static_cast<Sint16>(enemy.pos.x);
       dst.y = static_cast<Sint16>(enemy.pos.y);
       switch (enemy.state) {
         case enemy_state::normal: {
-          // SDL_QueryTexture(enemies_texture[enemy.type], nullptr, nullptr, &dst.w, &dst.h);
           dst.w = block::size;
           dst.h = block::size;
           SDL_Rect src = {static_cast<Sint16>(block::size * enemy.dir),
                           static_cast<Sint16>(block::size * enemy.anime_count),
                           block::size, block::size};
-          SDL_RenderCopy(renderer, enemies_texture[enemy.type], &src, &dst);
+          image_manager_->render_copy(*enemies_texture[enemy.type], src, dst);
           break;
         }
         case enemy_state::lose: {
-          // SDL_QueryTexture(mon_run_texture, nullptr, nullptr, &dst.w, &dst.h);
           dst.w = block::size;
           dst.h = block::size;
           SDL_Rect src = {0,
                           static_cast<Sint16>(block::size * enemy.anime_count),
                           block::size, block::size};
-          SDL_RenderCopy(renderer, mon_run_texture, &src, &dst);
+          image_manager_->render_copy(*mon_run_texture, src, dst);
           break;
         }
       }

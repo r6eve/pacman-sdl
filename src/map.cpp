@@ -79,21 +79,20 @@ void Map::init(const game_mode mode) noexcept {
   }
 }
 
-void Map::draw(SDL_Renderer *renderer, const ImageManager &image_manager,
-               const unsigned int game_level) const noexcept {
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_RenderClear(renderer);
+void Map::draw(const unsigned int game_level) const noexcept {
+  SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
+  SDL_RenderClear(renderer_);
 
   SDL_Texture *p_texture = nullptr;
   const unsigned int mod = game_level % 4;
   if (mod == 1) {
-    p_texture = image_manager.get(renderer, image::bg);
+    p_texture = image_manager_->get(image::bg);
   } else if (mod == 2) {
-    p_texture = image_manager.get(renderer, image::bg_red);
+    p_texture = image_manager_->get(image::bg_red);
   } else if (mod == 3) {
-    p_texture = image_manager.get(renderer, image::bg_green);
+    p_texture = image_manager_->get(image::bg_green);
   } else {
-    p_texture = image_manager.get(renderer, image::bg_blue);
+    p_texture = image_manager_->get(image::bg_blue);
   }
 
   {
@@ -116,10 +115,10 @@ void Map::draw(SDL_Renderer *renderer, const ImageManager &image_manager,
           case map_state::left_warp_pos:
           case map_state::right_warp_pos:
           case map_state::warp_street:
-            SDL_RenderCopy(renderer, p_texture, &src[0], &dst);
+            image_manager_->render_copy(*p_texture, src[0], dst);
             break;
           case map_state::block:
-            SDL_RenderCopy(renderer, p_texture, &src[1], &dst);
+            image_manager_->render_copy(*p_texture, src[1], dst);
             break;
         }
       }
@@ -154,7 +153,7 @@ void Map::draw(SDL_Renderer *renderer, const ImageManager &image_manager,
           // SDL_QueryTexture(p_texture, nullptr, nullptr, &dst.w, &dst.h);
           dst.w = block::size;
           dst.h = block::size;
-          SDL_RenderCopy(renderer, p_texture, &src, &dst);
+          image_manager_->render_copy(*p_texture, src, dst);
         }
       }
     }

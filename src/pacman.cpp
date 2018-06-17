@@ -1,5 +1,5 @@
-#include <SDL2/SDL_mixer.h>
 #include "pacman.hpp"
+#include <SDL2/SDL_mixer.h>
 #include <time.h>
 #include <sstream>
 #include "def_global.hpp"
@@ -27,15 +27,15 @@ void Pacman::game_title() noexcept {
   SDL_Rect vs_str_dst = {250, 348, 112, 26};
   switch (game_count_) {
     case 0: {
-      wipe_.set_wipe_in();
-      wipe_.draw(renderer_, screen::width);
+      wipe_->set_wipe_in();
+      wipe_->draw(screen::width);
       ++game_count_;
       break;
     }
     case 1: {
       draw_text(font_size::x36, rgb::black, title_pos, title_str);
-      wipe_.draw(renderer_, screen::width);
-      if (wipe_.update()) {
+      wipe_->draw(screen::width);
+      if (wipe_->update()) {
         ++game_count_;
       }
       break;
@@ -52,9 +52,9 @@ void Pacman::game_title() noexcept {
         blink_count_ = 0;
       }
 
-      if (input_manager_.edge_key_p(player_type::p1, input_device::x) ||
-          input_manager_.edge_key_p(player_type::p2, input_device::x) ||
-          input_manager_.edge_key_p(player_type::p1, input_device::space)) {
+      if (input_manager_->edge_key_p(player_type::p1, input_device::x) ||
+          input_manager_->edge_key_p(player_type::p2, input_device::x) ||
+          input_manager_->edge_key_p(player_type::p1, input_device::space)) {
         ++game_count_;
         blink_count_ = 0;
       }
@@ -62,9 +62,9 @@ void Pacman::game_title() noexcept {
     }
     case 3: {
       draw_text(font_size::x36, rgb::black, title_pos, title_str);
-      if (!input_manager_.press_key_p(player_type::p1, input_device::x) &&
-          !input_manager_.press_key_p(player_type::p2, input_device::x) &&
-          !input_manager_.press_key_p(player_type::p1, input_device::space)) {
+      if (!input_manager_->press_key_p(player_type::p1, input_device::x) &&
+          !input_manager_->press_key_p(player_type::p2, input_device::x) &&
+          !input_manager_->press_key_p(player_type::p1, input_device::space)) {
         ++game_count_;
       }
       break;
@@ -89,27 +89,29 @@ void Pacman::game_title() noexcept {
         }
       }
 
-      if (input_manager_.press_key_p(player_type::p1, input_device::x) ||
-          input_manager_.press_key_p(player_type::p2, input_device::x) ||
-          input_manager_.press_key_p(player_type::p1, input_device::space)) {
-        wipe_.set_wipe_out();
-        wipe_.draw(renderer_, screen::width);
+      if (input_manager_->press_key_p(player_type::p1, input_device::x) ||
+          input_manager_->press_key_p(player_type::p2, input_device::x) ||
+          input_manager_->press_key_p(player_type::p1, input_device::space)) {
+        wipe_->set_wipe_out();
+        wipe_->draw(screen::width);
         ++game_count_;
       }
 
-      if (input_manager_.press_key_p(player_type::p1, input_device::button_2) ||
-          input_manager_.press_key_p(player_type::p2, input_device::button_2)) {
+      if (input_manager_->press_key_p(player_type::p1,
+                                      input_device::button_2) ||
+          input_manager_->press_key_p(player_type::p2,
+                                      input_device::button_2)) {
         game_count_ -= 2;
         game_mode_ = game_mode::single;
       }
 
-      if (input_manager_.press_key_p(player_type::p1, input_device::down) ||
-          input_manager_.press_key_p(player_type::p2, input_device::down)) {
+      if (input_manager_->press_key_p(player_type::p1, input_device::down) ||
+          input_manager_->press_key_p(player_type::p2, input_device::down)) {
         game_mode_ = game_mode::battle;
-      } else if (input_manager_.press_key_p(player_type::p1,
-                                            input_device::up) ||
-                 input_manager_.press_key_p(player_type::p2,
-                                            input_device::up)) {
+      } else if (input_manager_->press_key_p(player_type::p1,
+                                             input_device::up) ||
+                 input_manager_->press_key_p(player_type::p2,
+                                             input_device::up)) {
         game_mode_ = game_mode::single;
       }
       break;
@@ -132,23 +134,23 @@ void Pacman::game_title() noexcept {
         }
       }
 
-      wipe_.draw(renderer_, screen::width);
+      wipe_->draw(screen::width);
 
       // initialize globals
-      if (wipe_.update()) {
-        map_.init(game_mode_);
-        food_.init(map_);
-        enemy_.init();
-        p1_.init_pos();
-        p2_.init_pos();
-        p1_.set_life(2);
-        p2_.set_life(2);
-        p1_.set_score(0);
-        p2_.set_score(0);
-        p1_.set_damaged(false);
-        p2_.set_damaged(false);
-        p1_.set_power_mode(0);
-        p2_.set_power_mode(0);
+      if (wipe_->update()) {
+        map_->init(game_mode_);
+        food_->init(*map_);
+        enemy_->init();
+        p1_->init_pos();
+        p2_->init_pos();
+        p1_->set_life(2);
+        p2_->set_life(2);
+        p1_->set_score(0);
+        p2_->set_score(0);
+        p1_->set_damaged(false);
+        p2_->set_damaged(false);
+        p1_->set_power_mode(0);
+        p2_->set_power_mode(0);
 
         game_count_ = 0;
         game_state_ = game_state::start;
@@ -156,7 +158,7 @@ void Pacman::game_title() noexcept {
 
         srand((unsigned int)time(nullptr));
 
-        Mix_PlayMusic(mixer_manager_.get_music(), -1);
+        Mix_PlayMusic(mixer_manager_->get_music(), -1);
       }
       break;
     }
@@ -167,26 +169,27 @@ void Pacman::game_title() noexcept {
 }
 
 void Pacman::game_start() noexcept {
-  map_.draw(renderer_, image_manager_, game_level_);
-  food_.draw(renderer_, image_manager_);
-  enemy_.draw(renderer_, image_manager_);
-  p1_.draw(renderer_, image_manager_, game_mode_);
-  p2_.draw(renderer_, image_manager_, game_mode_);
+  map_->draw(game_level_);
+  food_->draw();
+  enemy_->draw();
+  p1_->draw(game_mode_);
+  p2_->draw(game_mode_);
   draw_score();
   switch (game_count_) {
     case 0: {
       // TODO: Is it correct?
-      if ((p1_.get_life() == 2) && (p2_.get_life() == 2)) {
-        Mix_PlayChannel(se_type::beginning, mixer_manager_.get_se(se_type::beginning), 0);
+      if ((p1_->get_life() == 2) && (p2_->get_life() == 2)) {
+        Mix_PlayChannel(se_type::beginning,
+                        mixer_manager_->get_se(se_type::beginning), 0);
       }
-      wipe_.set_wipe_in();
-      wipe_.draw(renderer_, screen::offset_x);
+      wipe_->set_wipe_in();
+      wipe_->draw(screen::offset_x);
       ++game_count_;
       break;
     }
     case 1: {
-      wipe_.draw(renderer_, screen::offset_x);
-      if (wipe_.update()) {
+      wipe_->draw(screen::offset_x);
+      if (wipe_->update()) {
         ++game_count_;
       }
       break;
@@ -206,64 +209,64 @@ void Pacman::game_start() noexcept {
   if (game_count_ > 220) {
     game_count_ = 0;
     game_state_ = game_state::playing;
-    p1_.set_power_mode(0);
-    p2_.set_power_mode(0);
+    p1_->set_power_mode(0);
+    p2_->set_power_mode(0);
   }
 }
 
 void Pacman::play_game() noexcept {
-  map_.draw(renderer_, image_manager_, game_level_);
-  food_.draw(renderer_, image_manager_);
-  enemy_.draw(renderer_, image_manager_);
-  p1_.draw(renderer_, image_manager_, game_mode_);
-  p2_.draw(renderer_, image_manager_, game_mode_);
+  map_->draw(game_level_);
+  food_->draw();
+  enemy_->draw();
+  p1_->draw(game_mode_);
+  p2_->draw(game_mode_);
   draw_score();
-  enemy_.move(debug_lose_enemy_, map_, p1_, p2_);
-  p1_.move(input_manager_, map_, game_mode_);
-  p2_.move(input_manager_, map_, game_mode_);
-  if (p1_.get_power_mode()) {
-    p1_.set_power_mode(p1_.get_power_mode() - 1);
+  enemy_->move(debug_lose_enemy_, *map_, *p1_, *p2_);
+  p1_->move(*map_, game_mode_);
+  p2_->move(*map_, game_mode_);
+  if (p1_->get_power_mode()) {
+    p1_->set_power_mode(p1_->get_power_mode() - 1);
   }
-  if (p2_.get_power_mode()) {
-    p2_.set_power_mode(p2_.get_power_mode() - 1);
+  if (p2_->get_power_mode()) {
+    p2_->set_power_mode(p2_->get_power_mode() - 1);
   }
 
   // すべてのエサ取得と敵衝突が同時なら，すべてのエサ取得を優先しクリアへ
   const bool food_state =
-      food_.check_state(game_mode_, mixer_manager_, p1_, p2_);
-  const bool hit_enemy = enemy_.check_hit_enemy(game_mode_, p1_, p2_);
+      food_->check_state(game_mode_, *p1_, *p2_);
+  const bool hit_enemy = enemy_->check_hit_enemy(game_mode_, *p1_, *p2_);
   if (food_state) {
     game_state_ = game_state::clear;
   } else if (hit_enemy) {
     game_state_ = game_state::miss;
   }
 
-  if (input_manager_.edge_key_p(player_type::p1, input_device::space)) {
+  if (input_manager_->edge_key_p(player_type::p1, input_device::space)) {
     game_state_ = game_state::pause;
   }
 
-  if (input_manager_.edge_key_p(player_type::p1, input_device::b)) {
+  if (input_manager_->edge_key_p(player_type::p1, input_device::b)) {
     debug_lose_enemy_ = !debug_lose_enemy_;
   }
 }
 
 void Pacman::game_clear() noexcept {
-  map_.draw(renderer_, image_manager_, game_level_);
-  food_.draw(renderer_, image_manager_);
-  enemy_.draw(renderer_, image_manager_);
-  p1_.draw(renderer_, image_manager_, game_mode_);
-  p2_.draw(renderer_, image_manager_, game_mode_);
+  map_->draw(game_level_);
+  food_->draw();
+  enemy_->draw();
+  p1_->draw(game_mode_);
+  p2_->draw(game_mode_);
   draw_score();
 
   if (game_count_ == 0) {
-    wipe_.set_wipe_out();
-    wipe_.draw(renderer_, screen::offset_x);
+    wipe_->set_wipe_out();
+    wipe_->draw(screen::offset_x);
     ++game_count_;
     return;
   }
 
-  wipe_.draw(renderer_, screen::offset_x);
-  if (wipe_.update()) {
+  wipe_->draw(screen::offset_x);
+  if (wipe_->update()) {
     if (game_level_ >= 256) {
       game_count_ = 0;
       game_state_ = game_state::gameover;
@@ -271,55 +274,55 @@ void Pacman::game_clear() noexcept {
       game_count_ = 0;
       game_state_ = game_state::start;
       ++game_level_;
-      food_.init(map_);
-      enemy_.init();
-      p1_.init_pos();
-      p2_.init_pos();
+      food_->init(*map_);
+      enemy_->init();
+      p1_->init_pos();
+      p2_->init_pos();
     }
   }
 }
 
 void Pacman::game_miss() noexcept {
-  map_.draw(renderer_, image_manager_, game_level_);
-  food_.draw(renderer_, image_manager_);
-  enemy_.draw(renderer_, image_manager_);
-  p1_.draw(renderer_, image_manager_, game_mode_);
-  p2_.draw(renderer_, image_manager_, game_mode_);
+  map_->draw(game_level_);
+  food_->draw();
+  enemy_->draw();
+  p1_->draw(game_mode_);
+  p2_->draw(game_mode_);
   draw_score();
 
   if (game_count_ == 0) {
     Mix_HaltChannel(-1);
-    Mix_PlayChannel(-1, mixer_manager_.get_se(se_type::death), 0);
-    wipe_.set_wipe_out();
-    if ((p1_.get_life() == 0) || (p2_.get_life() == 0)) {
-      wipe_.draw(renderer_, screen::width);
+    Mix_PlayChannel(-1, mixer_manager_->get_se(se_type::death), 0);
+    wipe_->set_wipe_out();
+    if ((p1_->get_life() == 0) || (p2_->get_life() == 0)) {
+      wipe_->draw(screen::width);
     } else {
-      wipe_.draw(renderer_, screen::offset_x);
+      wipe_->draw(screen::offset_x);
     }
     ++game_count_;
     return;
   }
 
-  if ((p1_.get_life() == 0) || (p2_.get_life() == 0)) {
-    wipe_.draw(renderer_, screen::width);
+  if ((p1_->get_life() == 0) || (p2_->get_life() == 0)) {
+    wipe_->draw(screen::width);
   } else {
-    wipe_.draw(renderer_, screen::offset_x);
+    wipe_->draw(screen::offset_x);
   }
 
-  Player &p = p1_.get_damaged() ? p1_ : p2_;
-  Point pos = p.get_pos();
-  p.set_pos(Point{pos.x, pos.y - 1});
-  if (wipe_.update()) {
-    const int life = p.get_life() - 1;
-    p.set_life(life);
+  Player *p = p1_->get_damaged() ? p1_.get() : p2_.get();
+  const Point pos = p->get_pos();
+  p->set_pos(Point{pos.x, pos.y - 1});
+  if (wipe_->update()) {
+    const int life = p->get_life() - 1;
+    p->set_life(life);
     if (life >= 0) {
       game_count_ = 0;
       game_state_ = game_state::start;
-      enemy_.init();
-      p1_.init_pos();
-      p2_.init_pos();
-      p1_.set_damaged(false);
-      p2_.set_damaged(false);
+      enemy_->init();
+      p1_->init_pos();
+      p2_->init_pos();
+      p1_->set_damaged(false);
+      p2_->set_damaged(false);
     } else {
       game_count_ = 0;
       blink_count_ = 0;
@@ -339,15 +342,15 @@ void Pacman::game_over() noexcept {
       switch (game_count_) {
         case 0: {
           draw_text(font_size::x36, rgb::red, gameover_pos, gameover_str);
-          wipe_.set_wipe_in();
-          wipe_.draw(renderer_, screen::width);
+          wipe_->set_wipe_in();
+          wipe_->draw(screen::width);
           ++game_count_;
           break;
         }
         case 1: {
           draw_text(font_size::x36, rgb::red, gameover_pos, gameover_str);
-          wipe_.draw(renderer_, screen::width);
-          if (wipe_.update()) {
+          wipe_->draw(screen::width);
+          if (wipe_->update()) {
             ++game_count_;
           }
           break;
@@ -355,7 +358,7 @@ void Pacman::game_over() noexcept {
         case 2: {
           draw_text(font_size::x36, rgb::red, gameover_pos, gameover_str);
           std::stringstream ss;
-          ss << "Y o u r  S c o r e   " << p1_.get_score();
+          ss << "Y o u r  S c o r e   " << p1_->get_score();
           draw_text(font_size::x36, rgb::black, Point{120, 220},
                     ss.str().c_str());
 
@@ -369,19 +372,19 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
           }
 
-          if (input_manager_.press_key_p(player_type::p1, input_device::x) ||
-              input_manager_.press_key_p(player_type::p2, input_device::x) ||
-              input_manager_.press_key_p(player_type::p1,
-                                         input_device::space)) {
+          if (input_manager_->press_key_p(player_type::p1, input_device::x) ||
+              input_manager_->press_key_p(player_type::p2, input_device::x) ||
+              input_manager_->press_key_p(player_type::p1,
+                                          input_device::space)) {
             ++game_count_;
-            wipe_.set_wipe_out();
-            wipe_.draw(renderer_, screen::width);
+            wipe_->set_wipe_out();
+            wipe_->draw(screen::width);
           }
           break;
         }
         case 3: {
-          wipe_.draw(renderer_, screen::width);
-          if (wipe_.update()) {
+          wipe_->draw(screen::width);
+          if (wipe_->update()) {
             blink_count_ = 0;
             game_count_ = 0;
             game_state_ = game_state::title;
@@ -399,15 +402,15 @@ void Pacman::game_over() noexcept {
       switch (game_count_) {
         case 0: {
           draw_text(font_size::x36, rgb::red, gameover_pos, gameover_str);
-          wipe_.set_wipe_in();
-          wipe_.draw(renderer_, screen::width);
+          wipe_->set_wipe_in();
+          wipe_->draw(screen::width);
           ++game_count_;
           break;
         }
         case 1: {
           draw_text(font_size::x36, rgb::red, gameover_pos, gameover_str);
-          wipe_.draw(renderer_, screen::width);
-          if (wipe_.update()) {
+          wipe_->draw(screen::width);
+          if (wipe_->update()) {
             ++game_count_;
           }
           break;
@@ -415,8 +418,8 @@ void Pacman::game_over() noexcept {
         case 2: {
           draw_text(font_size::x36, rgb::red, gameover_pos, gameover_str);
           std::stringstream ss;
-          const unsigned int p1_score = p1_.get_score();
-          const unsigned int p2_score = p2_.get_score();
+          const unsigned int p1_score = p1_->get_score();
+          const unsigned int p2_score = p2_->get_score();
           if (p1_score > p2_score) {
             ss << "1 P  W I N  " << p1_score;
             draw_text(font_size::x36, rgb::black, Point{170, 240},
@@ -441,19 +444,19 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
           }
 
-          if (input_manager_.press_key_p(player_type::p1, input_device::x) ||
-              input_manager_.press_key_p(player_type::p2, input_device::x) ||
-              input_manager_.press_key_p(player_type::p1,
-                                         input_device::space)) {
+          if (input_manager_->press_key_p(player_type::p1, input_device::x) ||
+              input_manager_->press_key_p(player_type::p2, input_device::x) ||
+              input_manager_->press_key_p(player_type::p1,
+                                          input_device::space)) {
             ++game_count_;
-            wipe_.set_wipe_out();
-            wipe_.draw(renderer_, screen::width);
+            wipe_->set_wipe_out();
+            wipe_->draw(screen::width);
           }
           break;
         }
         case 3: {
-          wipe_.draw(renderer_, screen::width);
-          if (wipe_.update()) {
+          wipe_->draw(screen::width);
+          if (wipe_->update()) {
             blink_count_ = 0;
             game_count_ = 0;
             game_state_ = game_state::title;

@@ -17,16 +17,18 @@ enum class map_state {
 };
 
 class Map {
+  SDL_Renderer *renderer_;
+  const ImageManager *image_manager_;
   map_state block_[block::count_y][block::count_x];
   unsigned int home_distance_[block::count_y][block::count_x];
 
  public:
-  Map() noexcept {}
+  Map(SDL_Renderer *renderer, const ImageManager *image_manager) noexcept
+      : renderer_(renderer), image_manager_(image_manager) {}
 
   void init(const game_mode mode) noexcept;
 
-  void draw(SDL_Renderer *renderer, const ImageManager &image_manager,
-            const unsigned int game_level) const noexcept;
+  void draw(const unsigned int game_level) const noexcept;
 
   // Don't modify parameter type as unsigned int
   // TODO: Why is the parameter of x=-1 and y=12 OK?

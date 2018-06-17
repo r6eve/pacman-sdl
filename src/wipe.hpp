@@ -9,9 +9,10 @@ class Wipe {
   wipe_type wipe_variation_;
   unsigned int wipe_count_;
   unsigned int wipe_count_reach_;
+  SDL_Renderer *renderer_;
 
  public:
-  Wipe() noexcept {}
+  Wipe(SDL_Renderer *renderer) noexcept : renderer_(renderer) {}
 
   /**
    * Set wipe-in mode for drawing.
@@ -38,14 +39,13 @@ class Wipe {
    * `limit_x` is the limit for the x-axis to draw. It's bounded on closed
    * interval [0-screen::width] .
    */
-  inline void draw(SDL_Renderer *renderer, const unsigned int limit_x) const
-      noexcept {
+  inline void draw(const unsigned int limit_x) const noexcept {
     SDL_Rect dst = {0, 0, static_cast<Uint16>(limit_x),
                     static_cast<Uint16>(wipe_count_)};
     const unsigned int dy = screen::height / 10;
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
     for (dst.y = 0; dst.y < screen::height; dst.y += dy) {
-      SDL_RenderFillRect(renderer, &dst);
+      SDL_RenderFillRect(renderer_, &dst);
     }
   }
 
