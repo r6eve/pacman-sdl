@@ -23,8 +23,8 @@ void Pacman::game_title() noexcept {
   const char *title_str = "P  a  c  -  M  a  n";
   const char *p1_mode_str = "1P MODE";
   const char *vs_mode_str = "VS MODE";
-  SDL_Rect p1_str_dst = {250, 298, 112, 26};
-  SDL_Rect vs_str_dst = {250, 348, 112, 26};
+  const SDL_Rect p1_str_dst = {250, 298, 112, 26};
+  const SDL_Rect vs_str_dst = {250, 348, 112, 26};
   switch (game_count_) {
     case 0: {
       wipe_->set_wipe_in();

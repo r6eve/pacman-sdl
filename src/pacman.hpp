@@ -88,8 +88,8 @@ class Pacman {
         TTF_RenderUTF8_Blended(font_manager_.get(font_size), str, color);
     SDL_Texture *font_texture =
         SDL_CreateTextureFromSurface(renderer_, font_surface);
-    SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
-                    static_cast<Uint16>(font_surface->h)};
+    const SDL_Rect src = {0, 0, static_cast<Uint16>(font_surface->w),
+                          static_cast<Uint16>(font_surface->h)};
     SDL_Rect dst;
     dst.x = static_cast<Sint16>(p.x);
     dst.y = static_cast<Sint16>(p.y);
@@ -156,8 +156,8 @@ class Pacman {
                   score.str().c_str());
 
         SDL_Texture *p_texture = image_manager_->get(image::p2);
-        SDL_Rect src = {block::size, 0, block::size, block::size};
-        SDL_Rect dst = {x2, y2 + offset_y, block::size, block::size};
+        const SDL_Rect src = {block::size, 0, block::size, block::size};
+        const SDL_Rect dst = {x2, y2 + offset_y, block::size, block::size};
         SDL_RenderCopy(renderer_, p_texture, &src, &dst);
         SDL_DestroyTexture(p_texture);
 
@@ -174,15 +174,15 @@ class Pacman {
       const unsigned int y = screen::height / 6 * 4;
       if (p1_->get_power_mode()) {
         SDL_SetRenderDrawColor(renderer_, 255, 255, 0, 255);
-        SDL_Rect dst = {x, y, static_cast<Uint16>(p1_->get_power_mode() / 4),
-                        block::size};
+        const SDL_Rect dst = {
+            x, y, static_cast<Uint16>(p1_->get_power_mode() / 4), block::size};
         SDL_RenderFillRect(renderer_, &dst);
       }
       if (p2_->get_power_mode()) {
         SDL_SetRenderDrawColor(renderer_, 128, 128, 0, 255);
-        SDL_Rect dst = {x, y + 30,
-                        static_cast<Uint16>(p2_->get_power_mode() / 4),
-                        block::size};
+        const SDL_Rect dst = {x, y + 30,
+                              static_cast<Uint16>(p2_->get_power_mode() / 4),
+                              block::size};
         SDL_RenderFillRect(renderer_, &dst);
       }
     }
@@ -269,7 +269,7 @@ class Pacman {
     SDL_Texture *trans_texture =
         SDL_CreateTextureFromSurface(renderer_, trans_surface);
     SDL_FreeSurface(trans_surface);
-    SDL_Rect dst = {0, 0, screen::width, screen::height};
+    const SDL_Rect dst = {0, 0, screen::width, screen::height};
     SDL_RenderCopy(renderer_, trans_texture, nullptr, &dst);
     SDL_DestroyTexture(trans_texture);
     if (blink_count_ < 30) {
@@ -323,8 +323,10 @@ class Pacman {
     map_ = std::make_unique<Map>(renderer_, image_manager_.get());
     food_ = std::make_unique<Food>(image_manager_.get(), mixer_manager_.get());
     enemy_ = std::make_unique<Enemy>(image_manager_.get());
-    p1_ = std::make_unique<Player>(player_type::p1, image_manager_.get(), input_manager_.get());
-    p2_ = std::make_unique<Player>(player_type::p2, image_manager_.get(), input_manager_.get());
+    p1_ = std::make_unique<Player>(player_type::p1, image_manager_.get(),
+                                   input_manager_.get());
+    p2_ = std::make_unique<Player>(player_type::p2, image_manager_.get(),
+                                   input_manager_.get());
 
     SDL_ShowCursor(SDL_DISABLE);
   }

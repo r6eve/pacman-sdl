@@ -44,7 +44,7 @@ class Food {
   }
 
   inline void draw() noexcept {
-    SDL_Rect src = {0, 0, block::size, block::size};
+    const SDL_Rect src = {0, 0, block::size, block::size};
     SDL_Texture *food_texture = image_manager_->get(image::food);
     SDL_Texture *food_counter_texture =
         image_manager_->get(image::food_counter);

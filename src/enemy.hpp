@@ -94,21 +94,22 @@ class Enemy {
         image_manager_->get(image::guzuta);
     SDL_Texture *mon_run_texture = image_manager_->get(image::mon_run);
     for (const auto &enemy : enemies_) {
-      SDL_Rect dst = {static_cast<Sint16>(enemy.pos.x),
-                      static_cast<Sint16>(enemy.pos.y), block::size,
-                      block::size};
+      const SDL_Rect dst = {static_cast<Sint16>(enemy.pos.x),
+                            static_cast<Sint16>(enemy.pos.y), block::size,
+                            block::size};
       switch (enemy.state) {
         case enemy_state::normal: {
-          SDL_Rect src = {static_cast<Sint16>(block::size * enemy.dir),
-                          static_cast<Sint16>(block::size * enemy.anime_count),
-                          block::size, block::size};
+          const SDL_Rect src = {
+              static_cast<Sint16>(block::size * enemy.dir),
+              static_cast<Sint16>(block::size * enemy.anime_count), block::size,
+              block::size};
           image_manager_->render_copy(*enemies_texture[enemy.type], src, dst);
           break;
         }
         case enemy_state::lose: {
-          SDL_Rect src = {0,
-                          static_cast<Sint16>(block::size * enemy.anime_count),
-                          block::size, block::size};
+          const SDL_Rect src = {
+              0, static_cast<Sint16>(block::size * enemy.anime_count),
+              block::size, block::size};
           image_manager_->render_copy(*mon_run_texture, src, dst);
           break;
         }

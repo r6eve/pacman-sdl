@@ -64,11 +64,12 @@ class Player {
     switch (type_) {
       case player_type::p1: {
         SDL_Texture *p_texture = image_manager_->get(image::p1);
-        SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
-                        static_cast<Sint16>(block::size * anime_count_),
-                        block::size, block::size};
-        SDL_Rect dst = {static_cast<Sint16>(pos_.x),
-                        static_cast<Sint16>(pos_.y), block::size, block::size};
+        const SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
+                              static_cast<Sint16>(block::size * anime_count_),
+                              block::size, block::size};
+        const SDL_Rect dst = {static_cast<Sint16>(pos_.x),
+                              static_cast<Sint16>(pos_.y), block::size,
+                              block::size};
         image_manager_->render_copy(*p_texture, src, dst);
         SDL_DestroyTexture(p_texture);
         return;
@@ -78,11 +79,12 @@ class Player {
           return;
         }
         SDL_Texture *p_texture = image_manager_->get(image::p2);
-        SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
-                        static_cast<Sint16>(block::size * anime_count_),
-                        block::size, block::size};
-        SDL_Rect dst = {static_cast<Sint16>(pos_.x),
-                        static_cast<Sint16>(pos_.y), block::size, block::size};
+        const SDL_Rect src = {static_cast<Sint16>(block::size * dir_),
+                              static_cast<Sint16>(block::size * anime_count_),
+                              block::size, block::size};
+        const SDL_Rect dst = {static_cast<Sint16>(pos_.x),
+                              static_cast<Sint16>(pos_.y), block::size,
+                              block::size};
         image_manager_->render_copy(*p_texture, src, dst);
         SDL_DestroyTexture(p_texture);
         return;
