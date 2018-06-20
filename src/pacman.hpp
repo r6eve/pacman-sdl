@@ -322,7 +322,8 @@ class Pacman {
     wipe_ = std::make_unique<Wipe>(renderer_);
     map_ = std::make_unique<Map>(renderer_, image_manager_.get());
     food_ = std::make_unique<Food>(image_manager_.get(), mixer_manager_.get());
-    enemy_ = std::make_unique<Enemy>(image_manager_.get());
+    enemy_ =
+        std::make_unique<Enemy>(image_manager_.get(), mixer_manager_.get());
     p1_ = std::make_unique<Player>(player_type::p1, image_manager_.get(),
                                    input_manager_.get());
     p2_ = std::make_unique<Player>(player_type::p2, image_manager_.get(),

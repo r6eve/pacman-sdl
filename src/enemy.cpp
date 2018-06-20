@@ -1,8 +1,10 @@
 #include "enemy.hpp"
+#include <SDL2/SDL_mixer.h>
 #include <vector>
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
+#include "mixer_manager.hpp"
 #include "player.hpp"
 
 void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
@@ -248,6 +250,8 @@ bool Enemy::check_hit_enemy(const game_mode mode, Player &p1,
         return true;
       }
       if (enemy.state == enemy_state::normal) {
+        Mix_PlayChannel(se_type::beat_enemy,
+                        mixer_manager_->get_se(se_type::beat_enemy), 0);
         p1.set_score(p1.get_score() + 100);
       }
       enemy.state = enemy_state::lose;
@@ -264,6 +268,8 @@ bool Enemy::check_hit_enemy(const game_mode mode, Player &p1,
           return true;
         }
         if (enemy.state == enemy_state::normal) {
+          Mix_PlayChannel(se_type::beat_enemy,
+                          mixer_manager_->get_se(se_type::beat_enemy), 0);
           p2.set_score(p2.get_score() + 100);
         }
         enemy.state = enemy_state::lose;

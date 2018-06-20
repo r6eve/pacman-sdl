@@ -12,6 +12,7 @@ enum {
   beginning,
   death,
   chomp,
+  beat_enemy,
   count,
 };
 
@@ -50,6 +51,7 @@ class MixerManager {
     load_se("./data/pacman_beginning.wav", se_type::beginning);
     load_se("./data/pacman_death.wav", se_type::death);
     load_se("./data/pacman_chomp.wav", se_type::chomp);
+    load_se("./data/gun-gird1.wav", se_type::beat_enemy);
   }
 
   inline Mix_Music *get_music() const noexcept { return music_; }

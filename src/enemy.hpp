@@ -1,11 +1,13 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+#include <SDL2/SDL_mixer.h>
 #include <memory>
 #include <vector>
 #include "def_global.hpp"
 #include "image_manager.hpp"
 #include "map.hpp"
+#include "mixer_manager.hpp"
 #include "player.hpp"
 
 namespace enemy_character {
@@ -41,6 +43,7 @@ class Enemy {
 
   std::vector<Enemy_data> enemies_;
   const ImageManager *image_manager_;
+  const MixerManager *mixer_manager_;
 
   inline void update() noexcept {
     for (auto &enemy : enemies_) {
@@ -60,8 +63,9 @@ class Enemy {
                        const Player &p2) noexcept;
 
  public:
-  Enemy(const ImageManager *image_manager) noexcept
-      : image_manager_(image_manager) {
+  Enemy(const ImageManager *image_manager,
+        const MixerManager *mixer_manager) noexcept
+      : image_manager_(image_manager), mixer_manager_(mixer_manager) {
     enemies_.reserve(enemy_character::count);
     for (unsigned char i = 0; i < enemy_character::count; ++i) {
       enemies_.push_back(Enemy_data(i));
