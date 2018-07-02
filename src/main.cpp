@@ -1,5 +1,7 @@
 #include <getopt.h>
 #include <iostream>
+#include <string>
+#include <utility>
 #include "pacman.hpp"
 
 const char Version[] = "v0.3.0";
