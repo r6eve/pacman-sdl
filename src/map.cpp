@@ -107,7 +107,7 @@ void Map::init(const game_mode mode) noexcept {
   }
   const Point losed = Point{11, 12};  // Point where a losed enemy is gone.
   const Point dirs[4] = {
-      {0, -1}, {-1, 0}, {1, 0}, {0, 1}};  // down, left, up, right
+      {0, -1}, {-1, 0}, {0, 1}, {1, 0}};  // down, left, up, right
   home_distance_[losed.y][losed.x] = 1;
   reachedp[losed.y][losed.x] = true;
   std::queue<Point> que;
