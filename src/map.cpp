@@ -30,7 +30,7 @@ map_state char_to_map_state(const char c) {
 }
 
 void Map::init(const game_mode mode) noexcept {
-  std::string block_src =
+  const std::string block_src =
       "########################"
       "#..........##..........#"
       "#.##.#####.##.#####.##.#"
