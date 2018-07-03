@@ -5,15 +5,15 @@
 #include "image_manager.hpp"
 
 enum class map_state {
-  block,
-  food,
-  counter_food,
-  enemy_house,
-  init_p1_pos,
+  block, // #
+  food, // .
+  counter_food, // C
+  enemy_house, // E
+  init_p1_pos, // P
   init_p2_pos,
-  left_warp_pos,
-  right_warp_pos,
-  warp_street,
+  left_warp_pos, // L
+  right_warp_pos, // R
+  warp_street, // =
 };
 
 class Map {

@@ -5,37 +5,60 @@
 #include "image_manager.hpp"
 #include "map.hpp"
 
+map_state char_to_map_state(const char c) {
+  switch (c) {
+    case '#':
+      return map_state::block;
+    case '.':
+      return map_state::food;
+    case 'C':
+      return map_state::counter_food;
+    case 'E':
+      return map_state::enemy_house;
+    case 'P':
+      return map_state::init_p1_pos;
+    case 'L':
+      return map_state::left_warp_pos;
+    case 'R':
+      return map_state::right_warp_pos;
+    case '=':
+      return map_state::warp_street;
+    default:
+      std::cerr << "error: undefined character of map" << '\n';
+      exit(EXIT_FAILURE);
+  }
+}
+
 void Map::init(const game_mode mode) noexcept {
-  map_state block_src[block::count_y][block::count_x] = {
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
-    {map_state::block, map_state::counter_food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::counter_food, map_state::block},
-    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::enemy_house, map_state::enemy_house, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::left_warp_pos, map_state::warp_street, map_state::warp_street, map_state::warp_street, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::enemy_house, map_state::enemy_house, map_state::enemy_house, map_state::enemy_house, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::warp_street, map_state::warp_street, map_state::warp_street, map_state::right_warp_pos},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block},
-    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block},
-    {map_state::block, map_state::counter_food, map_state::food, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::init_p1_pos, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::food, map_state::counter_food, map_state::block},
-    {map_state::block, map_state::block, map_state::food, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::food, map_state::block, map_state::block},
-    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block, map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::food, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::food, map_state::block},
-    {map_state::block, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::food, map_state::block},
-    {map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block, map_state::block},
-  };
+  std::string block_src =
+      "########################"
+      "#..........##..........#"
+      "#.##.#####.##.#####.##.#"
+      "#C##.#####.##.#####.##C#"
+      "#.##.#####.##.#####.##.#"
+      "#......................#"
+      "#.##.##.########.##.##.#"
+      "#.##.##....##....##.##.#"
+      "#....#####.##.#####....#"
+      "####.#####.##.#####.####"
+      "####.##..........##.####"
+      "####.##.###EE###.##.####"
+      "L===....##EEEE##....===R"
+      "####.##.########.##.####"
+      "####.##..........##.####"
+      "####.##.########.##.####"
+      "#..........##..........#"
+      "#.##.#####.##.#####.##.#"
+      "#C.#.....P..........#.C#"
+      "##.#.##.########.##.#.##"
+      "#....##....##....##....#"
+      "#.########.##.########.#"
+      "#......................#"
+      "########################";
 
   for (unsigned int y = 0; y < block::count_y; ++y) {
     for (unsigned int x = 0; x < block::count_x; ++x) {
-      block_[y][x] = block_src[y][x];
+      block_[y][x] = char_to_map_state(block_src[y * block::count_x + x]);
     }
   }
 
