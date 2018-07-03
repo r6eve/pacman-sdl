@@ -1,7 +1,7 @@
 #include "map.hpp"
 #include <math.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <queue>
 #include "def_global.hpp"
 #include "image_manager.hpp"
