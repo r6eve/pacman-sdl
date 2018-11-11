@@ -5,9 +5,9 @@ Pacman-SDL
 
 Pacman written in C++.
 
-## Demo Video
+## Demo Video (Clickable)
 
-[![Demo Image][]][Demo Video (Clickable)]
+[![Demo Image][]][Demo Video]
 
 ## Installation
 
