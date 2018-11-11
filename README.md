@@ -7,7 +7,7 @@ Pacman written in C++.
 
 ## Demo Video
 
-[![Demo Image][]][Demo Video]
+[![Demo Image][]][Demo Video (Clickable)]
 
 ## Installation
 
