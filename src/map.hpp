@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
 #include "def_global.hpp"
 #include "image_manager.hpp"
@@ -60,5 +59,3 @@ class Map {
 
   ~Map() noexcept {}
 };
-
-#endif

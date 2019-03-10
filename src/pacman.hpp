@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef PACMAN_H
-#define PACMAN_H
+#pragma once
 
 #include <time.h>
 #include <iomanip>
@@ -384,5 +383,3 @@ class Pacman {
     atexit(SDL_Quit);
   }
 };
-
-#endif

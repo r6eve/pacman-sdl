@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include "def_global.hpp"
 #include "image_manager.hpp"
@@ -208,5 +207,3 @@ class Player {
 
   ~Player() noexcept {}
 };
-
-#endif

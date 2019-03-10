@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef ENEMY_H
-#define ENEMY_H
+#pragma once
 
 #include <SDL2/SDL_mixer.h>
 #include <memory>
@@ -154,5 +153,3 @@ class Enemy {
 
   ~Enemy() noexcept {}
 };
-
-#endif

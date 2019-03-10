@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef WIPE_H
-#define WIPE_H
+#pragma once
 
 #include "def_global.hpp"
 
@@ -79,5 +78,3 @@ class Wipe {
 
   ~Wipe() noexcept {}
 };
-
-#endif

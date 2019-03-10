@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef IMAGE_MANAGER_H
-#define IMAGE_MANAGER_H
+#pragma once
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -92,5 +91,3 @@ class ImageManager {
 
   ~ImageManager() noexcept { atexit(IMG_Quit); }
 };
-
-#endif

@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef DEF_GLOBAL_H
-#define DEF_GLOBAL_H
+#pragma once
 
 #include <SDL2/SDL.h>
 #include <math.h>
@@ -67,5 +66,3 @@ struct Point {
         hypot(static_cast<double>(x - rhs.x), static_cast<double>(y - rhs.y)));
   }
 };
-
-#endif

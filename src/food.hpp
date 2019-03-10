@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef FOOD_H
-#define FOOD_H
+#pragma once
 
 #include <SDL2/SDL_mixer.h>
 #include "def_global.hpp"
@@ -150,5 +149,3 @@ class Food {
 
   ~Food() noexcept {}
 };
-
-#endif

@@ -7,8 +7,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-#ifndef INPUT_MANAGER_H
-#define INPUT_MANAGER_H
+#pragma once
 
 #include <vector>
 #include <iostream>
@@ -170,5 +169,3 @@ class InputManager {
     }
   }
 };
-
-#endif
