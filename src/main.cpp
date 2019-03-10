@@ -13,7 +13,7 @@
 #include <utility>
 #include "pacman.hpp"
 
-const char Version[] = "v0.3.0";
+const char Version[] = "v0.3.1";
 
 std::pair<bool, bool> parse_options(const int argc, char **argv) noexcept {
   bool fullscreen_mode = false;
