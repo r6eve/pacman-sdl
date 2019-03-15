@@ -48,9 +48,9 @@ Options:
 ### Key Config
 
 * Player1
-  * UP: Up Arrow, LEFT: Left Arrow, DOWN: Down Arrow, RIGHT: Right Arrow
+  * UP, LEFT, DOWN, RIGHT: ↑ ← ↓ →
 * Player2
-  * UP: W, LEFT: A, DOWN: S, RIGHT: D
+  * UP, LEFT, DOWN, RIGHT: W A S D
 
 ## Requirement
 
