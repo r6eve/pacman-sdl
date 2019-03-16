@@ -120,6 +120,7 @@ class Pacman {
   }
 
   inline void draw_score() const noexcept {
+    // TODO: divide it into private functions
     // Draw the plate of background.
     {
       SDL_Texture *p_texture = image_manager_->get(image::plate);

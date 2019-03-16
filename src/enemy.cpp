@@ -52,37 +52,42 @@ void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
 
   const Point front_block = enemy.block + front_pos[enemy.dir];
   const map_state front_block_state = map.check_state(front_block);
+
+  // TODO: make private function
   const bool move_to_front_block_p =
-      ((front_block_state == map_state::init_p1_pos) ||
-       (front_block_state == map_state::init_p2_pos) ||
-       (front_block_state == map_state::food) ||
-       (front_block_state == map_state::counter_food) ||
-       (front_block_state == map_state::left_warp_pos) ||
-       (front_block_state == map_state::right_warp_pos) ||
-       (front_block_state == map_state::warp_street));
+    front_block_state == map_state::init_p1_pos
+    || front_block_state == map_state::init_p2_pos
+    || front_block_state == map_state::food
+    || front_block_state == map_state::counter_food
+    || front_block_state == map_state::left_warp_pos
+    || front_block_state == map_state::right_warp_pos
+    || front_block_state == map_state::warp_street;
 
   const Point left_block = enemy.block + left_pos[enemy.dir];
   const map_state left_block_state = map.check_state(left_block);
+  // TODO: make private function
   const bool move_to_left_block_p =
-      ((left_block_state == map_state::food) ||
-       (left_block_state == map_state::init_p1_pos) ||
-       (left_block_state == map_state::init_p2_pos) ||
-       (left_block_state == map_state::counter_food));
+    left_block_state == map_state::food
+    || left_block_state == map_state::init_p1_pos
+    || left_block_state == map_state::init_p2_pos
+    || left_block_state == map_state::counter_food;
 
   const Point right_block = enemy.block + right_pos[enemy.dir];
   const map_state right_block_state = map.check_state(right_block);
+  // TODO: make private function
   const bool move_to_right_block_p =
-      ((right_block_state == map_state::food) ||
-       (right_block_state == map_state::init_p1_pos) ||
-       (right_block_state == map_state::init_p2_pos) ||
-       (right_block_state == map_state::counter_food));
+    right_block_state == map_state::food
+    || right_block_state == map_state::init_p1_pos
+    || right_block_state == map_state::init_p2_pos
+    || right_block_state == map_state::counter_food;
 
   // move back at random
-  if (((rand() % 100) == 0) ||
-      ((390 <= p1.get_power_mode()) && (p1.get_power_mode() <= 400)) ||
-      ((390 <= p2.get_power_mode()) && (p2.get_power_mode() <= 400))) {
-    if (map.check_state(enemy.block + back_pos[enemy.dir]) ==
-        map_state::enemy_house) {
+  // TODO: make private function
+  if (rand() % 100 == 0
+      || (390 <= p1.get_power_mode() && p1.get_power_mode() <= 400)
+      || (390 <= p2.get_power_mode() && p2.get_power_mode() <= 400)) {
+    if (map.check_state(enemy.block + back_pos[enemy.dir])
+        == map_state::enemy_house) {
       enemy.next_block = left_block;
       enemy.dir += 3;
       enemy.dir %= 4;
@@ -95,6 +100,7 @@ void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
   }
 
   // move front/left/right at random
+  // TODO: make private function
   if (move_to_front_block_p && move_to_left_block_p && move_to_right_block_p) {
     const unsigned int next = rand() % 3;
     if (next == 0) {
@@ -138,14 +144,15 @@ void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
   }
 
   // move front
-  if (move_to_front_block_p && !move_to_left_block_p &&
-      !move_to_right_block_p) {
+  if (move_to_front_block_p && !move_to_left_block_p
+      && !move_to_right_block_p) {
     enemy.next_block = front_block;
     return;
   }
 
   // move left/right at random
-  if (!move_to_front_block_p && move_to_left_block_p && move_to_right_block_p) {
+  if (!move_to_front_block_p && move_to_left_block_p
+      && move_to_right_block_p) {
     const unsigned int next = rand() % 2;
     if (next == 0) {
       enemy.next_block = left_block;
@@ -160,8 +167,8 @@ void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
   }
 
   // move left
-  if (!move_to_front_block_p && move_to_left_block_p &&
-      !move_to_right_block_p) {
+  if (!move_to_front_block_p && move_to_left_block_p
+      && !move_to_right_block_p) {
     enemy.next_block = left_block;
     enemy.dir += 3;
     enemy.dir %= 4;
@@ -169,8 +176,8 @@ void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
   }
 
   // move right
-  if (!move_to_front_block_p && !move_to_left_block_p &&
-      move_to_right_block_p) {
+  if (!move_to_front_block_p && !move_to_left_block_p
+      && move_to_right_block_p) {
     enemy.next_block = right_block;
     ++enemy.dir;
     enemy.dir %= 4;
@@ -191,7 +198,7 @@ void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
 
 void Enemy::move_lose_enemy(Enemy_data &enemy, const Map &map, const Player &p1,
                             const Player &p2) noexcept {
-  if ((p1.get_power_mode() == 0) && (p2.get_power_mode() == 0)) {
+  if (p1.get_power_mode() == 0 && p2.get_power_mode() == 0) {
     enemy.state = enemy_state::normal;
   }
 
@@ -217,26 +224,26 @@ void Enemy::move_lose_enemy(Enemy_data &enemy, const Map &map, const Player &p1,
 
   enemy.block = enemy.next_block;
   const unsigned int now_value = map.get_home_distance(enemy.block);
-  if (now_value >
-      map.get_home_distance(Point{enemy.block.x, enemy.block.y - 1})) {
+  if (now_value
+      > map.get_home_distance(Point{enemy.block.x, enemy.block.y - 1})) {
     --enemy.next_block.y;
     return;
   }
 
-  if (now_value >
-      map.get_home_distance(Point{enemy.block.x - 1, enemy.block.y})) {
+  if (now_value
+      > map.get_home_distance(Point{enemy.block.x - 1, enemy.block.y})) {
     --enemy.next_block.x;
     return;
   }
 
-  if (now_value >
-      map.get_home_distance(Point{enemy.block.x + 1, enemy.block.y})) {
+  if (now_value
+      > map.get_home_distance(Point{enemy.block.x + 1, enemy.block.y})) {
     ++enemy.next_block.x;
     return;
   }
 
-  if (now_value >
-      map.get_home_distance(Point{enemy.block.x, enemy.block.y + 1})) {
+  if (now_value
+      > map.get_home_distance(Point{enemy.block.x, enemy.block.y + 1})) {
     ++enemy.next_block.y;
     return;
   }

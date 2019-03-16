@@ -59,9 +59,9 @@ void Pacman::game_title() noexcept {
         blink_count_ = 0;
       }
 
-      if (input_manager_->edge_key_p(player_type::p1, input_device::x) ||
-          input_manager_->edge_key_p(player_type::p2, input_device::x) ||
-          input_manager_->edge_key_p(player_type::p1, input_device::space)) {
+      if (input_manager_->edge_key_p(player_type::p1, input_device::x)
+          || input_manager_->edge_key_p(player_type::p2, input_device::x)
+          || input_manager_->edge_key_p(player_type::p1, input_device::space)) {
         ++game_count_;
         blink_count_ = 0;
       }
@@ -69,9 +69,9 @@ void Pacman::game_title() noexcept {
     }
     case 3: {
       draw_text(font_size::x36, rgb::black, title_pos, title_str);
-      if (!input_manager_->press_key_p(player_type::p1, input_device::x) &&
-          !input_manager_->press_key_p(player_type::p2, input_device::x) &&
-          !input_manager_->press_key_p(player_type::p1, input_device::space)) {
+      if (!input_manager_->press_key_p(player_type::p1, input_device::x)
+          && !input_manager_->press_key_p(player_type::p2, input_device::x)
+          && !input_manager_->press_key_p(player_type::p1, input_device::space)) {
         ++game_count_;
       }
       break;
@@ -96,29 +96,26 @@ void Pacman::game_title() noexcept {
         }
       }
 
-      if (input_manager_->press_key_p(player_type::p1, input_device::x) ||
-          input_manager_->press_key_p(player_type::p2, input_device::x) ||
-          input_manager_->press_key_p(player_type::p1, input_device::space)) {
+      if (input_manager_->press_key_p(player_type::p1, input_device::x)
+          || input_manager_->press_key_p(player_type::p2, input_device::x)
+          || input_manager_->press_key_p(player_type::p1, input_device::space)) {
         wipe_->set_wipe_out();
         wipe_->draw(screen::width);
         ++game_count_;
       }
 
-      if (input_manager_->press_key_p(player_type::p1,
-                                      input_device::button_2) ||
-          input_manager_->press_key_p(player_type::p2,
-                                      input_device::button_2)) {
+      if (input_manager_->press_key_p(player_type::p1, input_device::button_2)
+          || input_manager_->press_key_p(player_type::p2, input_device::button_2)) {
         game_count_ -= 2;
         game_mode_ = game_mode::single;
       }
 
-      if (input_manager_->press_key_p(player_type::p1, input_device::down) ||
-          input_manager_->press_key_p(player_type::p2, input_device::down)) {
+      if (input_manager_->press_key_p(player_type::p1, input_device::down)
+          || input_manager_->press_key_p(player_type::p2, input_device::down)) {
         game_mode_ = game_mode::battle;
-      } else if (input_manager_->press_key_p(player_type::p1,
-                                             input_device::up) ||
-                 input_manager_->press_key_p(player_type::p2,
-                                             input_device::up)) {
+      } else if (input_manager_->press_key_p(player_type::p1, input_device::up)
+                 || input_manager_->press_key_p(player_type::p2,
+                                                input_device::up)) {
         game_mode_ = game_mode::single;
       }
       break;
@@ -185,9 +182,10 @@ void Pacman::game_start() noexcept {
   switch (game_count_) {
     case 0: {
       // TODO: Is it correct?
-      if ((p1_->get_life() == 2) && (p2_->get_life() == 2)) {
+      if (p1_->get_life() == 2 && p2_->get_life() == 2) {
         Mix_PlayChannel(se_type::beginning,
-                        mixer_manager_->get_se(se_type::beginning), 0);
+                        mixer_manager_->get_se(se_type::beginning),
+                        0);
       }
       wipe_->set_wipe_in();
       wipe_->draw(screen::offset_x);
@@ -301,7 +299,7 @@ void Pacman::game_miss() noexcept {
     Mix_HaltChannel(-1);
     Mix_PlayChannel(-1, mixer_manager_->get_se(se_type::death), 0);
     wipe_->set_wipe_out();
-    if ((p1_->get_life() == 0) || (p2_->get_life() == 0)) {
+    if (p1_->get_life() == 0 || p2_->get_life() == 0) {
       wipe_->draw(screen::width);
     } else {
       wipe_->draw(screen::offset_x);
@@ -310,7 +308,7 @@ void Pacman::game_miss() noexcept {
     return;
   }
 
-  if ((p1_->get_life() == 0) || (p2_->get_life() == 0)) {
+  if (p1_->get_life() == 0 || p2_->get_life() == 0) {
     wipe_->draw(screen::width);
   } else {
     wipe_->draw(screen::offset_x);
@@ -379,10 +377,9 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
           }
 
-          if (input_manager_->press_key_p(player_type::p1, input_device::x) ||
-              input_manager_->press_key_p(player_type::p2, input_device::x) ||
-              input_manager_->press_key_p(player_type::p1,
-                                          input_device::space)) {
+          if (input_manager_->press_key_p(player_type::p1, input_device::x)
+              || input_manager_->press_key_p(player_type::p2, input_device::x)
+              || input_manager_->press_key_p(player_type::p1, input_device::space)) {
             ++game_count_;
             wipe_->set_wipe_out();
             wipe_->draw(screen::width);
@@ -451,10 +448,9 @@ void Pacman::game_over() noexcept {
             blink_count_ = 0;
           }
 
-          if (input_manager_->press_key_p(player_type::p1, input_device::x) ||
-              input_manager_->press_key_p(player_type::p2, input_device::x) ||
-              input_manager_->press_key_p(player_type::p1,
-                                          input_device::space)) {
+          if (input_manager_->press_key_p(player_type::p1, input_device::x)
+              || input_manager_->press_key_p(player_type::p2, input_device::x)
+              || input_manager_->press_key_p(player_type::p1, input_device::space)) {
             ++game_count_;
             wipe_->set_wipe_out();
             wipe_->draw(screen::width);
