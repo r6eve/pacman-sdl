@@ -95,31 +95,30 @@ class Enemy {
 
   inline void draw() const noexcept {
     SDL_Texture *enemies_texture[enemy_character::count];
-    enemies_texture[enemy_character::akabei] =
-        image_manager_->get(image::akabei);
+    enemies_texture[enemy_character::akabei] = image_manager_->get(image::akabei);
     enemies_texture[enemy_character::pinky] = image_manager_->get(image::pinky);
-    enemies_texture[enemy_character::aosuke] =
-        image_manager_->get(image::aosuke);
-    enemies_texture[enemy_character::guzuta] =
-        image_manager_->get(image::guzuta);
+    enemies_texture[enemy_character::aosuke] = image_manager_->get(image::aosuke);
+    enemies_texture[enemy_character::guzuta] = image_manager_->get(image::guzuta);
     SDL_Texture *mon_run_texture = image_manager_->get(image::mon_run);
     for (const auto &enemy : enemies_) {
       const SDL_Rect dst = {static_cast<Sint16>(enemy.pos.x),
-                            static_cast<Sint16>(enemy.pos.y), block::size,
+                            static_cast<Sint16>(enemy.pos.y),
+                            block::size,
                             block::size};
       switch (enemy.state) {
         case enemy_state::normal: {
-          const SDL_Rect src = {
-              static_cast<Sint16>(block::size * enemy.dir),
-              static_cast<Sint16>(block::size * enemy.anime_count), block::size,
-              block::size};
+          const SDL_Rect src = {static_cast<Sint16>(block::size * enemy.dir),
+                                static_cast<Sint16>(block::size * enemy.anime_count),
+                                block::size,
+                                block::size};
           image_manager_->render_copy(*enemies_texture[enemy.type], src, dst);
           break;
         }
         case enemy_state::lose: {
-          const SDL_Rect src = {
-              0, static_cast<Sint16>(block::size * enemy.anime_count),
-              block::size, block::size};
+          const SDL_Rect src = {0,
+                                static_cast<Sint16>(block::size * enemy.anime_count),
+                                block::size,
+                                block::size};
           image_manager_->render_copy(*mon_run_texture, src, dst);
           break;
         }
@@ -135,7 +134,7 @@ class Enemy {
   inline void move(const bool debug_lose_enemy, const Map &map,
                    const Player &p1, const Player &p2) noexcept {
     for (auto &enemy : enemies_) {
-      if (debug_lose_enemy || (enemy.state == enemy_state::lose)) {
+      if (debug_lose_enemy || enemy.state == enemy_state::lose) {
         move_lose_enemy(enemy, map, p1, p2);
       } else {
         move_normal_enemy(enemy, map, p1, p2);

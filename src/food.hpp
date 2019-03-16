@@ -52,8 +52,7 @@ class Food {
   inline void draw() noexcept {
     const SDL_Rect src = {0, 0, block::size, block::size};
     SDL_Texture *food_texture = image_manager_->get(image::food);
-    SDL_Texture *food_counter_texture =
-        image_manager_->get(image::food_counter);
+    SDL_Texture *food_counter_texture = image_manager_->get(image::food_counter);
     for (unsigned int y = 0; y < block::count_y; ++y) {
       for (unsigned int x = 0; x < block::count_x; ++x) {
         SDL_Rect dst;
@@ -126,8 +125,8 @@ class Food {
       }
     }
 
-    if (((p1.get_power_mode() != 0) && (p1.get_power_mode() % 80 == 0)) ||
-        ((p2.get_power_mode() != 0) && (p2.get_power_mode() % 80 == 0))) {
+    if ((p1.get_power_mode() != 0 && p1.get_power_mode() % 80 == 0)
+        || (p2.get_power_mode() != 0 && p2.get_power_mode() % 80 == 0)) {
       Mix_PlayChannel(se_type::siren, mixer_manager_->get_se(se_type::siren),
                       0);
     }
@@ -135,14 +134,14 @@ class Food {
     int rest_food = 0;
     for (unsigned int y = 0; y < block::count_y; ++y) {
       for (unsigned int x = 0; x < block::count_x; ++x) {
-        if ((food_[y][x] == food_state::food) ||
-            (food_[y][x] == food_state::counter_food)) {
+        if (food_[y][x] == food_state::food
+            || food_[y][x] == food_state::counter_food) {
           ++rest_food;
         }
       }
     }
 
-    return (rest_food == 0);
+    return rest_food == 0;
   }
 
   ~Food() noexcept {}

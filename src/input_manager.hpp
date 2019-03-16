@@ -115,28 +115,25 @@ class InputManager {
     const Uint8 *state = SDL_GetKeyboardState(nullptr);
 
     new_press_key[0][input_device::up] =
-        (state[SDL_SCANCODE_UP] == SDL_PRESSED) ||
-        (state[SDL_SCANCODE_K] == SDL_PRESSED);
+      state[SDL_SCANCODE_UP] == SDL_PRESSED
+      || state[SDL_SCANCODE_K] == SDL_PRESSED;
     new_press_key[0][input_device::down] =
-        (state[SDL_SCANCODE_DOWN] == SDL_PRESSED) ||
-        (state[SDL_SCANCODE_J] == SDL_PRESSED);
+      state[SDL_SCANCODE_DOWN] == SDL_PRESSED
+      || state[SDL_SCANCODE_J] == SDL_PRESSED;
     new_press_key[0][input_device::left] =
-        (state[SDL_SCANCODE_LEFT] == SDL_PRESSED) ||
-        (state[SDL_SCANCODE_H] == SDL_PRESSED);
+      state[SDL_SCANCODE_LEFT] == SDL_PRESSED
+      || state[SDL_SCANCODE_H] == SDL_PRESSED;
     new_press_key[0][input_device::right] =
-        (state[SDL_SCANCODE_RIGHT] == SDL_PRESSED) ||
-        (state[SDL_SCANCODE_L] == SDL_PRESSED);
+      state[SDL_SCANCODE_RIGHT] == SDL_PRESSED
+      || state[SDL_SCANCODE_L] == SDL_PRESSED;
 
     new_press_key[1][input_device::up] = state[SDL_SCANCODE_W] == SDL_PRESSED;
     new_press_key[1][input_device::down] = state[SDL_SCANCODE_S] == SDL_PRESSED;
     new_press_key[1][input_device::left] = state[SDL_SCANCODE_A] == SDL_PRESSED;
-    new_press_key[1][input_device::right] =
-        state[SDL_SCANCODE_D] == SDL_PRESSED;
+    new_press_key[1][input_device::right] = state[SDL_SCANCODE_D] == SDL_PRESSED;
 
-    new_press_key[0][input_device::space] =
-        state[SDL_SCANCODE_SPACE] == SDL_PRESSED;
-    new_press_key[1][input_device::space] =
-        state[SDL_SCANCODE_SPACE] == SDL_PRESSED;
+    new_press_key[0][input_device::space] = state[SDL_SCANCODE_SPACE] == SDL_PRESSED;
+    new_press_key[1][input_device::space] = state[SDL_SCANCODE_SPACE] == SDL_PRESSED;
 
     if (debug_mode) {
       new_press_key[0][input_device::b] = state[SDL_SCANCODE_B] == SDL_PRESSED;

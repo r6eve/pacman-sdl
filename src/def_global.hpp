@@ -42,11 +42,11 @@ struct Point {
   int y;
 
   inline bool operator==(const Point &rhs) const noexcept {
-    return ((x == rhs.x) && (y == rhs.y));
+    return x == rhs.x && y == rhs.y;
   }
 
   inline bool operator!=(const Point &rhs) const noexcept {
-    return ((x != rhs.x) || (y != rhs.y));
+    return x != rhs.x || y != rhs.y;
   }
 
   inline Point operator+(const Point &rhs) const noexcept {

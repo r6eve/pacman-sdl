@@ -125,8 +125,8 @@ void Map::init(const game_mode mode) noexcept {
     const unsigned int d = home_distance_[p.y][p.x] + 1;
     for (const Point &dir : dirs) {
       const Point e = p + dir;
-      if (e.x < 0 || e.x >= block::count_x || e.y < 0 ||
-          e.y >= block::count_y || reachedp[e.y][e.x]) {
+      if (e.x < 0 || e.x >= block::count_x || e.y < 0 || e.y >= block::count_y
+          || reachedp[e.y][e.x]) {
         continue;
       }
       reachedp[e.y][e.x] = true;
@@ -201,10 +201,10 @@ void Map::draw(const unsigned int game_level) const noexcept {
         }
         const map_state under_block = mut_under_block;
         if ((block == map_state::block) && (under_block == map_state::food)) {
-          const SDL_Rect dst = {
-              static_cast<Sint16>(block::size * x),
-              static_cast<Sint16>(block::size * y + block::size / 2),
-              block::size, block::size};
+          const SDL_Rect dst = {static_cast<Sint16>(block::size * x),
+                                static_cast<Sint16>(block::size * y + block::size / 2),
+                                block::size,
+                                block::size};
           image_manager_->render_copy(*p_texture, src, dst);
         }
       }
