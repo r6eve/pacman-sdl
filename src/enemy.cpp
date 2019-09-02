@@ -16,7 +16,7 @@
 
 void Enemy::move_normal_enemy(Enemy_data &enemy, const Map &map,
                               const Player &p1, const Player &p2) noexcept {
-  // TODO: change moving algorithm for each enemies.
+  // TODO: change moving algorithm for each enemy.
   const Point dst_pos = {enemy.next_block.x * block::size,
                          enemy.next_block.y * block::size};
   if (enemy.pos != dst_pos) {

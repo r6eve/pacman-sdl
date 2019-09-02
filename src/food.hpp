@@ -81,7 +81,7 @@ class Food {
   }
 
   /**
-   * Return true if all of the food are eaten, and false otherwise.
+   * Return true if all the foods are eaten, and false otherwise.
    */
   inline bool check_state(const game_mode mode, Player &p1,
                           Player &p2) noexcept {
