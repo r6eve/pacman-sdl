@@ -1,0 +1,57 @@
+name: main
+
+on: [push, pull_request]
+
+jobs:
+  linux-gcc:
+    runs-on: ubuntu-18.04
+    name: ubuntu-18.04 gcc-7
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install g++-7 libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+    - name: Build
+      run: |
+        make CXX=g++-7
+        ./pacman-sdl --version
+  linux-clang:
+    runs-on: ubuntu-18.04
+    name: ubuntu-18.04 clang-5.0
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install clang-5.0 libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+    - name: Build
+      run: |
+        make CXX=clang++-5.0
+        ./pacman-sdl --version
+  macos-gcc:
+    runs-on: macos-latest
+    name: macos-latest gcc
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install gcc sdl2 sdl2_image sdl2_mixer sdl2_ttf
+    - name: Build
+      run: |
+        make CXX=g++-9
+        ./pacman-sdl --version
+  macos-clang:
+    runs-on: macos-latest
+    name: macos-latest clang
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+    - name: Build
+      run: |
+        make CXX=clang++
+        ./pacman-sdl --version
