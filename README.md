@@ -1,6 +1,6 @@
 Pacman-SDL
 ==========
-[![Build Status on Travis CI][]][Travis CI Results]
+[![Build Status on GitHub Actions][]][GitHub Actions Results]
 [![Build Status on AppVeyor][]][AppVeyor Results]
 
 Pacman written in C++.
@@ -71,8 +71,8 @@ Options:
 
 * Record Score
 
-[Build Status on Travis CI]: https://travis-ci.org/r6eve/pacman-sdl.svg?branch=master
-[Travis CI Results]: https://travis-ci.org/r6eve/pacman-sdl
+[Build Status on GitHub Actions]: https://github.com/r6eve/pacman-sdl/workflows/main/badge.svg
+[GitHub Actions Results]: https://github.com/r6eve/pacman-sdl/actions
 [Build Status on AppVeyor]: https://ci.appveyor.com/api/projects/status/r0owflvuqcyl651d?svg=true
 [AppVeyor Results]: https://ci.appveyor.com/project/r6eve/pacman-sdl
 [Demo Image]: http://img.youtube.com/vi/jTj5H4HFE68/0.jpg
