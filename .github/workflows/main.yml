@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: ubuntu-18.04 gcc-7
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: ubuntu-18.04 clang-5.0
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -33,7 +33,7 @@ jobs:
     runs-on: macos-latest
     name: macos-latest gcc
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         brew update
@@ -46,7 +46,7 @@ jobs:
     runs-on: macos-latest
     name: macos-latest clang
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         brew update
