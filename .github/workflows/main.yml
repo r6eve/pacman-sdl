@@ -29,19 +29,6 @@ jobs:
       run: |
         make CXX=clang++-5.0
         ./pacman-sdl --version
-  macos-gcc:
-    runs-on: macos-latest
-    name: macos-latest gcc
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: |
-        brew update
-        brew install gcc sdl2 sdl2_image sdl2_mixer sdl2_ttf
-    - name: Build
-      run: |
-        make CXX=g++-9
-        ./pacman-sdl --version
   macos-clang:
     runs-on: macos-latest
     name: macos-latest clang
